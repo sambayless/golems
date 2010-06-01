@@ -1,0 +1,175 @@
+Known Bugs
+
+functional elements dont keep colour changes.
+a host of other small problems w/ the new menus
+springs are glitchy!
+cameras
+
+-These are all old bugs, they may be valid, they may not be.
+---------------------------------------------------------------
+-All changes to the scene graph must lock the game state or game before modification
+
+-before mvc
+
+the import but is probably because the old top level node model is refered to somewhere, and when it loads, randomly some of its old children are stolen from their new owners.
+wires become visible when copying objects.
+
+-Control-selecting multiple objects makes it impossible to move the camera! (not a bug, just an unintended feature)
+
+-when you group select then change color, static objects that were selected are no longer static
+
+-mouse button presses are not always correctly caught by the input system... fixed partially
+
+-Sometimes things stick together even when they shouldn't. Hah, that's vague. Involves axle, might involve undo or copy.
+-Loading a file with axles turns them 'grey' (in the wire menu) ?possibly fixed?
+-findOptimalLocalOrientation has a bug when control and shift are pressed together (patched temporarily with null checking)
+-Hi! Another one from Noah about cameras. Every time you stop and run again, the camera rotates a bit on the axis that shouldn't be rotatable! I'll look into it more. Maybe just every time you toggle between cameras?
+
+---Really old
+
+-There is still a group bug on loading (the scaleTest2 load file exhibits it). 
+-hinges dont control point rotate properly when they are part of groups
+-hinges don't account for rotation properly if part of a static object
+-after going into fengGUI dialog, the mouse pointer still has the hand icon, instead of returning to pointer icon
+-(maybe?) when a thin cylinder is stretched into a fat cylinder, they don't group properly? Copying may be involved
+-if you copy something that is in the ground, it doesn't change its group properly
+-deleting batteries causes a null pointer exception
+-if a hinge has both sides connected to the same object, it might crash
+-possible bug with collision system for constant sources - they sometimes drop out of groups if moved while not in wire mode
+-problem with buttons: if you are right at the edge of their detection zone, and click, then they go into active mode, and then into hover mode, but if you then move the mouse right off of them they dont do anti-hover
+-Control nodes detect sideways movement incorrectly if the camera is sideways
+
+Unknown:
+-?bug(possibly resolved): invalid operation in locked space. This might be caused by resizing the connection between slide nodes outside the physics thread
+-?Sometimes BSpace gets saved (possibly fixed)
+
+
+Fixed:
+*-capsules might sometimes have a control point bug where when you resize them lengthwise, they jump up to the closest grid size radially. Not confirmed. 
+*-Capsule resizing bug can happen when you undo a movement of them(?).
+*-Sensors don't copy properly
+*-wires attached to components that get deleted might not be deleted themselves... this was a problem only for multimeters, they werent calling delete on their ports
+*-deleting groups fails to remove them from physics. The problem was that collision members didn't know their physical structures, and weren't calling delete on them when the group was deleted. Fixed with listeners.
+*-Axles cannot be selected after loading. it appears their model bounds were not initiating.
+
+*-Copying groups currently fails to group together the copied objects correctly.
+*-scaling doesnt copy for axles - and, if you scale the axle length of one that was copied, it might screw up if it started in an impossible configuration
+*-New rotation method does not account for the initial mouse position
+*-Rotation error: replaced with new, non trigonmetric, rotation system
+*-bug with slide joints was caused by TriMesh physics
+*-The speed at which physics executes is highly variable - it seems to be closely dependant on how much time it has been since last running physics mode. Had to reset the timer after physics was set to disabled
+*-Running the game multiple times causes motors to exert to much force.
+*-after closing properties window, the mouse is clicked incorrectly
+*-after menu and properties displayed a few times, menu stops working
+*-listeners are getting over-added for main interface, either after running, or after menu/properties displayed
+*-if something is selected when you go to dialog mode, the selection pattern might not be removed afterwards
+*-after going to properties menu, and changing the function, then rotating a constant source crashes the game. Apparently this is because cameratool AND movement tool are both on
+*-Full screen mode causes lighting artifacts - fixed - had to set screen depth to 32
+*-initial collision detection on creation of an object fails (atleast to intersect with preexisting joiints)
+*-Collision bug: these steps: Create a joint, rotate to be vertical, copy. Move copy on x/y axis upwards directly still touching first joint. Move bottom joint slightly (still touching) then undo. Group mode on, select top joint, move away (glitch occurs).
+*-The first time that a cube intersects with the floor, the collision is detected, but the contact fails to form.
+*-Crashes when you try to put in two power sources
+*-if control is held down BEFORE the first node is selected to generate the wire, then it crashes.
+*-also, constant nodes load their output nodes in the wrong location - this appears to be caused by shared nodes.
+*-Deleted groups are not properly deleting - they reappear when running, or perhaps loading.
+*-Can't save functional parts
+*-model bounds for cones are too large, and they are not getting correct triangle accurate collision
+*-problems with loading models multiple times
+*-group nodes are not always initiated during serialization - was problem with serialization, and hashSets - hashcodes were not calculated properly at deserialization
+*-loading slide nodes appears to cause them to group improperly, including for selection - might be responsible for odd behaviour when running in physics
+*-on returning to design mode, old physics nodes are NOT being removed properly
+*-save fails on JointMaterialNode focus
+*-Copy/Pasted Buttons don't have outlets
+*-Holding 'CTRL' and clicking on an axle, rocket, etc. causes a crash
+*-Wiring multiple inputs to one functional component seems to cause glitches
+*-ctrl in wire mode crashes when trying to save actions through addactions, control center is null (fixed);
+*-if in wire mode, and control is pressed, and then z is also pressed, it crashes: likely this is because there is no proper way to undo wire movements
+*-Can't group select and use wires
+*-replaced wires stay behind when a source is moved
+*-undo movement for groups gets it wrong - if two things are joined into a group, then both of them are used as the center point for group movement, then it is undone until just before they wre joined, they will be in the wrong positions
+*-can't undo cones
+*-cones copied become pyramids
+*-undo has wrong order for creating/deletion of cylinder?
+*-loading an object with a contact will cause a crash
+*-after loading a model, the tools sometimes have references to deleted objects, causing problems.
+
+ODE errors:
+ODE Internal Error 1: assertion "0" failed in \ode\src\collision_cylinder_box.cpp: 985
+
+If a rocket node is turned on while completely inside a sphere, physics crashes with this message:
+"ODE Message 2: vector has NaN component (..\..\ode\src\odemath.cpp:138)
+3-Jan-2008 5:38:48 PM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-3.092122, Y=5.3372245, Z=-1.3893818]
+com.jme.math.Quaternion: [x=0.0 y=0.0 z=0.0 w=1.0]
+3-Jan-2008 5:38:48 PM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-2.9995313, Y=5.737296, Z=-0.5143503]
+com.jme.math.Quaternion: [x=0.0 y=0.0 z=0.0 w=1.0]"
+  
+  
+Possible, the ODE Message 2: vector has zero size is caused by putting force against joints in ways they dont like.
+-----------  
+  
+This one also:  
+ODE Message 2: vector has zero size (..\..\ode\src\odemath.cpp:80)
+Exception in thread "AWT-EventQueue-0" java.lang.StackOverflowError: The ODE step function could not allocate enough stack memory to compute the time step!
+This is usually caused by low stack size or by too many applied contacts respectively (number of contacts in this step was 676).
+Note, the stack size of threads other than the "main" thread can be raised with the VM paremeter -Xss.
+	at com.jmex.physics.impl.ode.OdePhysicsSpace.computeTimeStep(OdePhysicsSpace.java:778)
+	at com.jmex.physics.impl.ode.OdePhysicsSpace.update(OdePhysicsSpace.java:589)
+	at com.jmex.physics.util.states.PhysicsGameState.update(PhysicsGameState.java:53)
+	at functional.FunctionalGameState.update(FunctionalGameState.java:51)
+	at constructor.FunctionalTestingState.update(FunctionalTestingState.java:48)
+	at com.jmex.game.state.GameStateNode.update(GameStateNode.java:71)
+	at constructor.FullCanvasImpl.simpleUpdate(FullCanvasImpl.java:78)
+	at com.jmex.awt.SimpleCanvasImpl.doUpdate(SimpleCanvasImpl.java:135)
+	at com.jmex.awt.lwjgl.LWJGLCanvas.paintGL(LWJGLCanvas.java:98)
+	at org.lwjgl.opengl.AWTGLCanvas.paint(AWTGLCanvas.java:308)
+	at sun.awt.RepaintArea.paintComponent(RepaintArea.java:248)
+	at sun.awt.RepaintArea.paint(RepaintArea.java:224)
+	at sun.awt.windows.WComponentPeer.handleEvent(WComponentPeer.java:301)
+	at java.awt.Component.dispatchEventImpl(Component.java:4486)
+	at java.awt.Component.dispatchEvent(Component.java:4240)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:599)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:273)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:183)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:173)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:168)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:160)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:121)
+  
+  -------------------
+  ODE: Assertion 0 failed
+  
+  -----------------
+  
+ ODE Message 2: vector has NaN component (..\..\ode\src\odemath.cpp:138)
+
+ODE Message 2: vector has NaN component (..\..\ode\src\odemath.cpp:138)
+Jan 20, 2008 10:45:06 AM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-10.159779, Y=1.1951588, Z=5.1924677]
+com.jme.math.Quaternion: [x=0.0067673116 y=0.31666285 z=-0.0034470095 w=0.9485077]
+Jan 20, 2008 10:45:06 AM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-5.645369, Y=1.159555, Z=4.751976]
+com.jme.math.Quaternion: [x=-0.61464566 y=-0.24354725 z=0.21147388 w=-0.7198432]
+Jan 20, 2008 10:45:06 AM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-8.647545, Y=1.164736, Z=4.0040293]
+com.jme.math.Quaternion: [x=-0.0059651895 y=0.3187988 z=3.6305666E-4 w=0.9478036]
+Jan 20, 2008 10:45:06 AM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-13.165955, Y=1.1615252, Z=4.1398907]
+com.jme.math.Quaternion: [x=0.6108722 y=-0.24315543 z=-0.20336056 w=-0.7255034]
+Jan 20, 2008 10:45:06 AM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-8.802397, Y=1.1568382, Z=0.81763244]
+com.jme.math.Quaternion: [x=0.36793247 y=0.29784578 z=-0.13057993 w=0.8711271]
+Jan 20, 2008 10:45:06 AM com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl sceneFromOde
+WARNING: ODE transform result was NaN for node null (com.jmex.physics.impl.ode.DynamicPhysicsNodeImpl) trying to recover...
+com.jme.math.Vector3f [X=-10.132193, Y=1.1581329, Z=8.23516]
+com.jme.math.Quaternion: [x=-0.53864634 y=0.26104242 z=0.17986275 w=0.7806192]
+
+ODE Message 2: cforce has NaN component! (..\..\ode\src\quickstep.cpp:770) 
