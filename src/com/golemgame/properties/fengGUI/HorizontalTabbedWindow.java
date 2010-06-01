@@ -8,6 +8,7 @@ import java.util.Map;
 import org.fenggui.Button;
 import org.fenggui.Container;
 import org.fenggui.FengGUI;
+import org.fenggui.composite.Window;
 import org.fenggui.decorator.background.Background;
 import org.fenggui.decorator.background.PlainBackground;
 import org.fenggui.event.ButtonPressedEvent;
@@ -141,7 +142,9 @@ public class HorizontalTabbedWindow extends TabbedWindow {
 	        // create the main container
 	       // Window window = FengGUI.createWindow(display, false, false, false, true);
 	       // window = new Window();
-	      	window = FengGUI.createWindow(true, false, false, true);
+			
+	      	window = createWindow();
+	      	
 	        window.setTitle(getTitle());
 	        window.setSize(width/2, height/4);
 	       // window.removeWidget(window.getTitleBar());
@@ -219,6 +222,10 @@ public class HorizontalTabbedWindow extends TabbedWindow {
 				}
 	        	
 	        });
+	}
+
+	protected Window createWindow() {
+		return FengGUI.createWindow(true, false, false, true);
 	}
 
 }

@@ -20,6 +20,7 @@ import org.fenggui.ToggableGroup;
 import org.fenggui.binding.render.ITexture;
 import org.fenggui.binding.render.Pixmap;
 import org.fenggui.binding.render.lwjgl.LWJGLTexture;
+import org.fenggui.composite.Window;
 import org.fenggui.decorator.PixmapDecorator;
 import org.fenggui.decorator.background.Background;
 import org.fenggui.decorator.background.PixmapBackground;
@@ -72,6 +73,14 @@ public class MainMenu extends HorizontalTabbedWindow{
 	public final static int MAIN_MENU_WIDTH = 380;
 	public final static int MAIN_MENU_HEIGHT = 400;
 	
+	@Override
+	protected Window createWindow() {
+		MainWindow main = new MainWindow();
+		FengGUI.getTheme().setUp(main);
+		return main;
+	}
+
+
 	@Override
 	protected void setCurrentButton(ITab tab) {
 		if(this.imageButtonMap.containsKey(tab))
