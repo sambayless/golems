@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="test/TestSave.java|test/TestSVG.java" kind="src" path="test"/>
+	<classpathentry excluding="support/BatchSaveFileConversion.java|support/ConvertSVGtoPercentage.java" kind="src" path="support"/>
+	<classpathentry kind="src" path="dataFolder"/>
+	<classpathentry kind="src" path="buoyancy"/>
+	<classpathentry excluding="com/jmex/physics/jme/collision/" kind="src" path="openSource"/>
+	<classpathentry kind="src" path="loading"/>
+	<classpathentry kind="src" path="platformSpecific"/>
+	<classpathentry kind="src" path="MVC"/>
+	<classpathentry excluding="com/golemgame/states/FunctionalPhysicsController.java|com/golemgame/states/MachinePhysicsController.java|com/golemgame/states/MechanicalPhysicsState.java|com/golemgame/menu/FileDialogWindow.java|com/golemgame/toolbar/instrumentation/InstrumentationControls.java" kind="src" path="src"/>
+	<classpathentry kind="src" path="MVC_Golems"/>
+	<classpathentry kind="src" path="MVC_Golems_Validate"/>
+	<classpathentry kind="src" path="MVC_Util"/>
+	<classpathentry kind="src" path="settings"/>
+	<classpathentry kind="src" path="audio"/>
+	<classpathentry kind="src" path="javalauncher"/>
+	<classpathentry kind="src" path="localization"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-math-1.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/jme/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="golems/lib/native"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/FengGUI"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jme"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jmephysics"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/simplemonkey"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GolemsDirectSave"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JMovieEncoder"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jPhya"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

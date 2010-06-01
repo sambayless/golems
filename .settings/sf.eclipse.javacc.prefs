@@ -1,0 +1,12 @@
+#Tue Sep 08 21:31:28 PDT 2009
+CLEAR_CONSOLE=false
+JAVACC_OPTIONS=
+JJDOC_OPTIONS=
+JJTREE_OPTIONS=
+JJ_NATURE=true
+JTB_OPTIONS=-p\=support.translate.parser
+RUNTIME_JAR=-intern-
+RUNTIME_JTBJAR=-intern-
+SHOW_CONSOLE=true
+SUPPRESS_WARNINGS=true
+eclipse.preferences.version=1
