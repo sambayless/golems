@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="Golems" default="dist" basedir=".">
+
+	
+
+	  <!-- set global properties for this build -->
+	 <property name="src" location="../MVC_Golems_Validate"/>
+
+	  <property name="build" location="buildMVC_Golems_Validate"/>
+	  <property name="dist"  location="dist"/>
+
+	<property name="dependencies"  location="./distribution-dependencies/"/>
+	<property name="libdir"  location="${dependencies}/lib/"/>
+	<property name="nativedir"  location="${dependencies}/native/"/>
+	<property name="opensource"  location="../openSource"/>
+	
+	<!-- ensure that classes are built against the same libs as we are distributing-->
+	<property name="classpath-base"  location="${libdir}"/>
+
+	  <path id="project.class.path">
+	    <pathelement location="${classpath-base}/"/>
+	  	<pathelement location="..\lib\jme-math.jar"/>
+	  	<pathelement location="${classpath-base}/mvc.jar"/>
+	  	<pathelement location="${classpath-base}/mvc_golems.jar"/>
+
+	  </path>
+
+	  <pathconvert pathsep=" " property="classpath" refid="project.class.path"/>
+
+	  <target name="init">
+	    <!-- Create the time stamp -->
+	    <tstamp/>
+	    <!-- Create the build directory structure used by compile -->
+	   <mkdir dir="${build}"/> 
+	  </target>
+	
+	  <target name="compile" depends="init"
+	        description="compile the source " >
+	  
+	    <!-- Compile the java code from ${src} into ${build} -->
+	    <javac destdir="${build}">
+	    	  	    	     
+	    	  <src location="${src}"/>
+	    	
+	    	  
+	    	  <classpath refid="project.class.path"/>
+	    </javac>
+	    	
+	  	
+	  </target>
+
+	  <target name="dist" depends="compile"
+	        description="generate the distribution" >
+	    <!-- Put everything in ${build} into the jar file -->
+	 
+	  
+	  	
+	    <jar destfile="../lib/mvc_validate.jar" basedir="${build}" filesetmanifest="mergewithoutmain" compress="true">
+	        <manifest>
+	        	<attribute name="Created-By" value="Sam Bayless"/>
+	            <attribute name="Built-By" value="Sam Bayless"/>
+	        	   <attribute name="Class-Path" value="lib/ opensource.jar lib/jme.jar"/>
+
+	       	        </manifest>
+	    </jar>
+	  	
+	  	<copyfile dest="./distribution-dependencies/lib/mvc_validate.jar" src="../lib/mvc_validate.jar"/>
+	  	             
+	 
+	  	
+	  </target>
+
+	  <target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${build} and ${dist} directory trees -->
+	    <delete dir="${build}"/>
+	    <delete dir="${dist}"/>
+	  </target>
+
+   
+	
+</project>
+
+
+

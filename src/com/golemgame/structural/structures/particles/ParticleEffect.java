@@ -1,0 +1,209 @@
+package com.golemgame.structural.structures.particles;
+
+import com.golemgame.model.spatial.LockedUpdateNode;
+import com.golemgame.mvc.PropertyStore;
+import com.golemgame.mvc.golems.ParticleEffectInterpreter;
+import com.jme.bounding.BoundingSphere;
+import com.jme.image.Texture;
+import com.jme.math.FastMath;
+import com.jme.math.Vector3f;
+import com.jme.scene.Geometry;
+import com.jme.scene.Spatial;
+import com.jme.scene.state.AlphaState;
+import com.jme.scene.state.TextureState;
+import com.jme.scene.state.ZBufferState;
+import com.jme.system.DisplaySystem;
+import com.jme.util.TextureManager;
+import com.jmex.effects.particles.ParticleFactory;
+import com.jmex.effects.particles.ParticleMesh;
+
+public class ParticleEffect {
+
+	  private Vector3f offset = new Vector3f(1f,0,0);
+	  private ParticleMesh mesh;
+	
+	  private LockedUpdateNode node = new LockedUpdateNode();
+	  
+	  private ParticleEffectInterpreter interpreter;
+	  
+	public ParticleEffect(PropertyStore properties) {
+		super();
+		
+			interpreter = new ParticleEffectInterpreter(properties);
+		      
+
+		     AlphaState as1 = DisplaySystem.getDisplaySystem().getRenderer().createAlphaState();
+		     
+		     if (interpreter.isLuminous())
+		     {
+		      as1.setBlendEnabled( true );
+		      as1.setSrcFunction( AlphaState.SB_SRC_ALPHA );
+		      as1.setDstFunction( AlphaState.DB_ONE );
+		      as1.setTestEnabled( true );
+		      as1.setTestFunction( AlphaState.TF_GREATER );
+		      as1.setEnabled( true );
+		     }else
+		     {		    
+		    	 as1.setBlendEnabled(true);
+		    	 as1.setSrcFunction(AlphaState.SB_SRC_ALPHA);
+		    	 as1.setDstFunction(AlphaState.SB_ONE_MINUS_SRC_ALPHA);					
+		    	 as1.setTestEnabled(true);						
+		    	 as1.setTestFunction(AlphaState.TF_ALWAYS);	
+		    	 as1.setEnabled(true);
+		     }
+		     
+		      TextureState ts =  DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
+		      if (interpreter.isLuminous())
+			     {
+		    	  ts.setTexture(
+		              TextureManager.loadTexture(
+		                      getClass().getClassLoader().getResource(
+		                              "com/golemgame/data/textures/flaresmall.png" ),
+		                      Texture.MM_LINEAR_LINEAR,
+		                      Texture.FM_LINEAR ) );
+		      		ts.setEnabled( true );
+			     }else
+			     {	
+			         ts.setTexture(
+				              TextureManager.loadTexture(
+				                      getClass().getClassLoader().getResource(
+				                              "com/golemgame/data/textures/flarealpha.png" ),
+				                      Texture.MM_LINEAR_LINEAR,
+				                      Texture.FM_LINEAR ) );
+				      ts.setEnabled( true );
+			     }
+		     
+		      mesh = ParticleFactory.buildParticles("particles",interpreter.getNumberOfParticles());
+		      mesh.setEmissionDirection( new Vector3f( 0f, 0f, 1f ) );
+		    
+		      mesh.setMaximumAngle(interpreter.getMaxAngle());
+		      mesh.setMinimumAngle(interpreter.getMinAngle());
+		      mesh.setSpeed(1f);
+		      mesh.setMinimumLifeTime(interpreter.getMinLifeSpan());
+		      mesh.setMaximumLifeTime(interpreter.getMaxLifeSpan());
+		   
+		      mesh.setStartColor(interpreter.getStartColor() );
+		      mesh.setEndColor( interpreter.getEndColor() );
+		      mesh.setInitialVelocity( interpreter.getInitialVelocity() );
+		      mesh.setRotateWithScene(true);
+		      
+		      mesh.setStartSize(interpreter.getInitialSize());
+		      mesh.setEndSize(interpreter.getFinalSize());
+		      mesh.setControlFlow(true);
+		      
+		   //   mesh.setReleaseRate(0);
+		   //   mesh.setControlFlow(true);
+		    // 
+		    
+		   
+		      
+		   //   mesh.setModelBound(new BoundingBox());
+		  //    mesh.updateModelBound();
+		      
+	
+
+		      ZBufferState zbuf = DisplaySystem.getDisplaySystem().getRenderer().createZBufferState();
+		      zbuf.setWritable( false );
+		      zbuf.setEnabled( true );
+		      zbuf.setFunction( ZBufferState.CF_LEQUAL );
+
+		      mesh.setRenderState( ts );
+		      mesh.setRenderState( as1 );
+		      mesh.setRenderState( zbuf );
+		  
+		    /*  PathInfluence pathInfluence = new PathInfluence(mesh,5);
+		      
+		       generator = new RandomPathGenerator(pathInfluence, mesh, 5);
+		      mesh.addInfluence(pathInfluence);*/
+		      
+		      
+		      node.attachChild(mesh);
+		      mesh.setModelBound(new BoundingSphere());
+		      mesh.updateModelBound();
+	}
+	private RandomPathGenerator generator ;
+	
+	public void init()
+	{
+	//	mesh.setReleaseVariance(0)
+		mesh.setControlFlow(true);
+		mesh.setCreateVisibleParticles(false);
+		mesh.setReleaseRate(Integer.MAX_VALUE);
+		 
+		   mesh.randomizeLifeTimes();
+		// mesh.warmUp(6 );
+		   this.node.manualUpdate(0.1f,true);
+		   this.node.manualUpdate(0.1f,true);
+	
+		 //  
+		   mesh.setReleaseRate(0);
+		   
+		   mesh.setCreateVisibleParticles(true);
+	}
+
+	public Spatial getSpatial() {
+		return node;
+	}
+
+	public void setGeom(Geometry geom) {
+		mesh.setGeomBatch(geom.getBatch(0));
+	}
+	
+	
+//	private  static PropertyStore defaultEffect =null;
+	
+
+
+
+
+	public void update(float time) {
+	//	 mesh.forceRespawn();
+		//generator.update(time);
+		this.node.manualUpdate(time,false);
+		
+	}
+
+
+
+
+	public void setDirection(Vector3f dir) {
+		mesh.setEmissionDirection(dir);
+		
+	}
+
+
+
+
+/*	public void setSpeed(float percent) {
+		mesh.setReleaseRate(Math.round(percent* mesh.getNumParticles()));
+		
+	}*/
+
+
+	public void setEngagement(float percent) {
+		
+	//	mesh.setReleaseRate( Math.round(mesh.getNumParticles() * percent));
+		if(FastMath.abs(percent) >0.1f)
+		{			
+			mesh.setReleaseRate(Integer.MAX_VALUE);
+			mesh.setInitialVelocity(interpreter.getInitialVelocity() * percent);
+			mesh.setStartSize(interpreter.getInitialSize()*percent);
+			mesh.setEndSize(interpreter.getFinalSize()*percent);
+			
+		}else
+		{
+			//mesh.setControlFlow(true);
+			mesh.setReleaseRate(0);
+		}
+	
+		//mesh.setReleaseRate(Integer.MAX_VALUE);
+	}
+
+
+	public void disengage() {
+		setEngagement(0);
+	
+	}
+
+
+}

@@ -1,0 +1,765 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~zh
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+                   
+            
+GOLEMS{
+
+       GOLEMS~傀人
+
+    VERSION~版本
+
+    MAIN_MENU~
+    #主菜单
+
+    MAIN_MENU{  
+       
+        OK~确定
+
+        CANCEL~取消
+        
+         YES~
+         
+         NO~
+        MAIN~主菜单
+        FILE_MENU{
+
+            NEW~新建机器
+
+            SAVE~保存机器
+
+            LOAD~加载机器
+
+            IMPORT~导入机器
+
+            RECORD~记录影像
+
+            EXIT~退出
+
+            
+
+        }
+        SETTINGS~设置
+        DISPLAY~显示
+
+        DISPLAY{
+
+            QUALITY~显示质量
+
+            QUALITY_LOW~低
+
+            QUALITY_NORMAL~正常
+
+            QUALITY_HIGH~高
+
+            RESOLUTION~分辨率
+
+            FULL_SCREEN~全屏
+
+            FREQ~频率
+
+            COLOR_DEPTH~色深
+
+            FPS~帧频
+
+            VSYNC~使用垂直同步
+
+            TOOLTIPS~工具提示
+
+            SHOW_TOOLTIPS~显示工具提示
+
+        }
+
+        KEYBOARD~键盘快捷键
+
+        KEYBOARD{
+
+            SHORTCUTS~键盘快捷键
+
+            CTRL_POINTS~控制点
+
+            ROTATE~旋转
+
+            XY_PLANE~XY平面
+
+            YZ_PLANE~YZ平面
+
+            GRID_SNAP~快爬
+
+            AXIS_LOCK~轴锁
+
+            STATICS~
+
+            SHOW_LAYERS~显示层次
+
+            ISLAND_SELECT~选择组对象
+
+            MULTI_SELECT~选择多个对象
+
+            PROPERTIES~显示对象属性
+
+            COPY~复制
+
+            DEL~删除
+
+            FOCUS~对焦
+
+            ZOOM~变焦
+
+            NEXT_CAM~下一个摄像机
+
+            PREV_CAM~上一个摄像机
+
+            DEF_CAM~默认摄像机
+
+            MENU~菜单
+
+            SCREEN_SHOT~屏幕快拍
+            
+
+        }
+
+        RECORDING~录像选项
+
+        RECORDING{
+
+            FORMAT~录像格式
+
+            QUALITY~压缩量(1%至100%)
+
+            FPS~每秒帧数
+
+            BEGIN~开始录像
+
+            STOP~
+
+        }
+
+        MACHINE~机器
+
+        MACHINE{
+
+            NAME~名称
+
+            DESCRIPTION~
+
+        }
+
+        ENVIRONMENT~环境
+
+        ENVIRONMENT{
+
+            SPEED~速度
+
+            SPEED_PAUSED~(暂停)
+
+            SPEED_HALF~减半
+
+            SPEED_DOUBLE~增倍
+
+            SPEED_UNLIMITED~(无限)
+
+            GRAVITY~
+
+            GRID_SPACING~
+
+            LOCK~
+
+            UNITS~
+
+            ROTATION~
+
+            ANGLES~
+
+            BACKGROUND~
+
+            COLOR~
+
+            CLOUDS~
+
+            SERENE~
+
+            SUNSET~
+
+            STARS~
+
+            SHOW_GRID~
+
+        }
+
+        EXIT~退出
+
+        EXIT{
+
+            CHECK~
+
+        }
+
+    }
+
+    STATUSBAR{
+
+        ENGAGE~
+
+        LAYERS~
+
+        SENSORS~
+
+        AXIS~
+
+        SNAP~
+
+        STATIC~
+
+        LAYERS{
+
+            NEW~
+
+            COPY~
+
+            SELECT~
+
+            MOVE~
+
+            DELETE~
+
+            GROUND~
+
+            LOCK~
+
+            HIDE~
+
+        }
+
+    }
+
+    TOOLBAR{
+
+        SHOW_TOOLBAR~
+
+        SELECT~
+
+        ISLAND~
+
+        ROTATE~
+
+        STRETCH~
+
+        WIRE_MODE~
+
+        BOX~
+
+        SPHERE~
+
+        CYLINDER~
+
+        TUBE~
+
+        PYRAMID~
+
+        CONE~
+
+        ELLIPSOID~
+
+        CAPSULE~
+
+        AXLE~
+
+        HINGE~
+
+        HYDRAULIC~
+
+        BALL_SOCKET~
+
+        BATTERY~
+
+        FUNCTION~
+
+        INPUT~
+
+        OSCILLOSCOPE~
+
+        TOUCH~
+
+        DISTANCE~
+
+        MULTI~
+
+        CONTACT~
+
+        ROCKET~
+
+        GEAR~
+
+        FORCE_BEAM~
+
+        CAMERA~
+
+
+        
+
+    }
+
+    PROPERTIES~
+
+    PROPERTIES{
+
+        MATTER~
+
+        MATTER{
+
+            DENSITY~
+
+            MATERIAL~
+
+            DEFAULT~
+
+            IRON~
+
+            WOOD~
+
+            CONCRETE~
+
+            GRANITE~
+
+            GLASS~
+
+            PLASTIC~
+
+            RUBBER~
+
+            ICE~
+
+            HELIUM~
+
+            STATIC_DESCRIPTION~
+
+            STICKY_DESCRIPTION~
+
+            POSITION~
+
+            ROTATION~
+
+            SIZE~
+
+            RADIUS~
+
+            HEIGHT~
+
+            WIDTH~
+
+            LENGTH~
+
+            RADIUS_INNER~
+
+            ARC~
+
+        }
+
+        APPEARANCE~
+
+        APPEARANCE{
+
+            PRIMARY~
+
+            HIGHLIGHT~
+
+            SHOW_TEXT~
+
+            NONE~
+
+            CAMO~
+
+            CHECKERS~
+
+            METAL_GALV~
+
+            RIVETS~
+
+            SPOTS~
+
+            STAR~
+
+            STARS~
+
+            STEEL_BOX~
+
+            STRIPES~
+
+            TREADPLATE~
+
+            CHOOSER~
+
+            HUE~
+
+            SATURATION~
+
+            LUMINOSITY~
+
+            RED~
+
+            GREEN~
+
+            BLUE~
+
+            ALPHA~
+
+        }
+
+        MOTOR~
+
+        MOTOR{
+
+            BEARING~
+
+            RADIUS_LEFT~
+
+            RADIS_RIGHT~
+
+            LENGTH_LEFT~
+
+            LENGTH_RIGHT~
+
+            ANGLE_LEFT~
+
+            ANGLE_RIGHT~
+
+            DISTANCE~
+
+            MIN_DISTANCE~
+
+            MAX_DISTANCE~
+
+            JOINT_UNIVERSAL~
+
+            UNIVERSAL_JOINT_DESCRIPTION~
+
+            JOINT_LENGTH~
+
+            JOINT_RADIUS~
+
+            BALL_RADIUS~
+
+            MOTOR_DESCRIPTION_INPUT~
+
+            MOTOR_DESCRIPTION_OUTPUT~
+
+            FORCE~
+
+            VELOCITY~
+
+            ACCELERATION~
+
+            MAX_VEL~
+
+            MAX_FORCE~
+
+            SPRING~
+
+            SPRING_DESCRIPTION~
+
+            SPRING_CONSTANT~
+
+            SPRING_FRICTION~
+
+        }
+
+        SENSOR~
+
+        SENSOR{
+
+            IGNORE_ATTACHED~
+
+            IGNORE_JOINTS~
+
+            IGNORE_NON_STATIC~
+
+            IGNORE_STATIC~
+
+        }
+
+        ROCKET~
+
+        ROCKET{
+
+            MAX_FORCE~
+
+            EFFECTS~
+
+            EFFECT_ORIGINAL~
+
+            EFFECT_MAGIC~
+
+            EFFECT_NOVA~
+
+            EFFECT_PLASMA~
+
+            EFFECT_RINGS~
+
+            EFFECT_ROCKET~
+
+            EFFECT_SAT_V~
+
+            EFFECT_SMOKS~
+
+            EFFECT_SPARK~
+
+            EFFECT_SPUTTER~
+
+            EFFECT_NAME~
+
+            LUMINESCENT~
+
+            ANGLE~
+
+            LIFESPAN~
+
+            SIZE~
+
+            PARTICLE_NUM~
+
+            VELOCITY~
+
+            SAVE~
+
+            ENABLE~
+
+        }
+
+        FORCE_BEAM{
+
+            MAX_FORCE~
+
+            BEAM_LENGTH~
+
+            SHOW_BEAM~
+
+            LUMINOUS_BEAM~
+
+            COLOR_PUSH~
+
+            COLOR_PULL~
+
+        }
+
+        GEAR{
+
+            TOOTH_WIDTH~
+
+            TOOTH_HEGIHT~
+
+            TOOTH_ANGLE~
+
+        }
+
+        MULTIMETER{
+
+            ALTITUDE~
+
+            MAX_HEIGHT~
+
+            MIN_HEIGHT~
+
+            ORIENTATION~
+
+            POSITION~
+
+            RELATIVE~
+
+            MAX_X_RANGE~
+
+            MIN_X_RANGE~
+
+            VELOCITY~
+
+            ACCELERATION~
+
+        }
+
+        CAMERA{
+
+            LOCK~
+
+        }
+
+        INPUT{
+
+            DEVICE_NAME~
+
+            TYPE~
+
+            SLIDER~
+
+            TEXT~
+
+            KEY_EVENT_TYPE~
+
+            HOLD_DOWN~
+
+            TOGGLE~
+
+            KEY~
+
+            UNKNOWN~
+
+            OUTPUT_NEGATIVE_DESCRIPTION~
+
+        }
+
+        FUNCTION{
+
+            FUN_UNNAMED~
+
+            FUN_LINE~
+
+            FUN_ZERO~
+
+            FUN_PARABOLA~
+
+            FUN_CUBIC~
+
+            FUN_SINE~
+
+            FUN_COS~
+
+            FUN_DERIVATIVE~
+
+            FUNCTION_NAME~
+
+            OPTIONS_BATTERY~
+
+            OPTIONS_MODIFIER~
+
+            SWITCH~
+
+            THRESHOLD_DESCRIPTION~
+
+            SWITCH_THRESHOLD~
+
+            THRESHOLD_DESCRIPTION_2~
+
+            SWITCH_ACTION~
+
+            TURN_ON~
+
+            INVERT~
+
+            HOLD~
+
+            MULT~
+
+            EXAMPLE~
+
+        }
+
+    }
+
+}
+            

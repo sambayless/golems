@@ -1,0 +1,147 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~zh
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~TW
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~
+
+
+#Golems Translations
+
+GOLEMS{
+
+    GOLEMS~傀人
+
+    VERSION~版本
+
+    MAIN_MENU~主�?�單
+
+    MAIN_MENU{
+     MAIN~主�?�單
+
+        FILE_MENU{
+
+            NEW~新機器
+
+            SAVE~�?存機器
+
+            LOAD~加載機器
+
+            IMPORT~導入機器
+
+            RECORD~記錄影�?
+
+            EXIT~退出
+
+            OK~確定
+
+            CANCEL~�?�消
+
+            SETTINGS~
+
+        }
+        
+        
+    }
+}

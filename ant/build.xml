@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="Golems" default="dist" basedir=".">
+
+
+
+	<!-- set global properties for this build -->
+	<property name="src" location="../src" />
+	<property name="platform" location="../platformSpecific" />
+	<property name="data" location="../dataFolder" />
+	<property name="build" location="build" />
+	<property name="buildsettings" location="build-launch-settings/" />
+	<property name="buildlauncher" location="buildlauncher" />
+	<property name="dist" location="dist" />
+	<property name="themedir" location="../theme/" />
+	<property name="dependencies" location="./distribution-dependencies/" />
+	<property name="libdir" location="${dependencies}/lib/" />
+	<property name="nativedir" location="${dependencies}/native/" />
+	<property name="opensource" location="../openSource" />
+
+
+	<!-- ensure that classes are built against the same libs as we are distributing-->
+	<property name="classpath-base" location="${libdir}" />
+
+
+
+	<path id="project.class.path">
+
+
+		<fileset dir="${classpath-base}">
+			<include name="**/*.jar" />
+
+		</fileset>
+
+
+	</path>
+
+
+
+
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+		  <mkdir dir="${buildsettings}" />
+		<mkdir dir="${buildlauncher}" />
+	</target>
+
+	   <target name="clean">
+	      
+	    <delete dir="${build}"/>
+	    <delete dir="${buildsettings}"/>
+	   <delete dir="${buildlauncher}"/>
+	   	<delete dir="${dist}" />
+	    </target>
+	
+	<target name="compile" depends=" clean,init" description="compile the source ">
+
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="../" destdir="${build}">
+
+
+			<include name="src/**/*.java" />
+			<!--      <exclude name="src/**/com/golemgame/physical/sound/**"/>
+	    	              <exclude name="src/**/com/golemgame/physical/ode/sound/**"/>
+	    	             <exclude name="src/**/com/golemgame/state/audio/**"/>-->
+			<include name="platformSpecific/**/*.java" />
+			<include name="audio/**/*.java" />
+			<include name="localization/**/*.java" />
+			<classpath>
+				<pathelement path="${classpath-base}" />
+				<fileset dir="">
+					<include name="**/*.jar" />
+
+				</fileset>
+			</classpath>
+		</javac>
+
+	
+		<javac srcdir="../settings" destdir="${buildsettings}">
+
+			<classpath>
+				<pathelement path="${classpath-base}" />
+				<fileset dir="">
+					<include name="**/*.jar" />
+
+				</fileset>
+
+				<pathelement path="${build}" />
+
+				<fileset dir="">
+					<include name="**/*.class" />
+				</fileset>
+
+
+			</classpath>
+		</javac>
+
+		
+		<javac srcdir="../javalauncher" destdir="${buildlauncher}">
+
+
+			<include name="**/*.java" />
+
+
+			<classpath>
+				<pathelement path="${build}" />
+
+				<fileset dir="">
+					<include name="**/*.class" />
+				</fileset>
+				<pathelement path="build-launch-settings" />
+				<fileset dir="">
+					<include name="**/*.class" />
+				</fileset>
+
+			</classpath>
+		</javac>
+
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<!-- Put everything in ${build} into the jar file -->
+
+		<mkdir dir="${dist}/null" />
+
+		<mkdir dir="${dist}/All" />
+		<mkdir dir="${dist}/Windows" />
+		<mkdir dir="${dist}/Mac" />
+		<mkdir dir="${dist}/Linux" />
+
+		<mkdir dir="${dist}/Windows/lib" />
+		<mkdir dir="${dist}/Mac/lib" />
+		<mkdir dir="${dist}/Linux/lib" />
+
+		<mkdir dir="${dist}/Windows/lib/native" />
+		<mkdir dir="${dist}/Mac/lib/native" />
+		<mkdir dir="${dist}/Linux/lib/native" />
+
+		<!-- keep this to overwrite previous installations -->
+		<jar destfile="${dist}/All/robotGame.jar" basedir="${dist}/null" filesetmanifest="mergewithoutmain" compress="true">
+			<manifest>
+				<attribute name="Created-By" value="Sam Bayless" />
+				<attribute name="Built-By" value="Sam Bayless" />
+
+			</manifest>
+		</jar>
+
+		<jar destfile="${dist}/All/golems.jar" basedir="${build}" filesetmanifest="mergewithoutmain" compress="true">
+			<manifest>
+				<attribute name="Created-By" value="Sam Bayless" />
+				<attribute name="Built-By" value="Sam Bayless" />
+				<attribute name="Main-Class" value="com.golemgame.constructor.GolemsDriver" />
+				<attribute name="Class-Path" value=" opensource.jar datafiles.jar lib/ lib/mvc.jar lib/mvc_golems.jar lib/mvc_validate.jar lib/jme-effects.jar lib/jme-font.jar lib/direct.jar lib/jme-awt.jar lib/jme-physics-buoyancy.jar  lib/jme.jar  lib/simplemonkey.jar  lib/jme-settings-panel.jar  lib/jme-gamestates.jar lib/native/ lib/jme-physics.jar lib/FengGUI.jar lib/lwjgl.jar lib/lwjgl_util.jar  lib/jinput.jar lib/odejava-jni.jar lib/commons-math-1.2-SNAPSHOT.jar lib/jmovieencoder.jar lib/jphya.jar lib/jphya-lwjgl.jar" />
+			</manifest>
+		</jar>
+
+		      <jar destfile="${dist}/All/settings.jar" basedir="${buildsettings}" filesetmanifest="mergewithoutmain" compress="true">
+		            <manifest>
+		                <attribute name="Created-By" value="Sam Bayless" />
+		                <attribute name="Built-By" value="Sam Bayless" />
+		                <attribute name="Main-Class" value="com.golemgame.launch.settings.ShowSettings" />
+		                <attribute name="Class-Path" value="golems.jar lib/mvc.jar lib/mvc-golems.jar lib/mvc_validate.jar" />
+		            </manifest>
+		        </jar>
+		
+		<jar destfile="${dist}/All/launcher.jar" basedir="${buildlauncher}" filesetmanifest="mergewithoutmain" compress="true">
+			<manifest>
+				<attribute name="Created-By" value="Sam Bayless" />
+				<attribute name="Built-By" value="Sam Bayless" />
+				<attribute name="Main-Class" value="com.golemgame.launch.Launcher" />
+				<attribute name="Class-Path" value="golems.jar settings.jar lib/mvc.jar lib/mvc-golems.jar lib/mvc_validate.jar" />
+			</manifest>
+		</jar>
+
+		<mkdir dir="${dist}/All/lib/" />
+		<copydir src="${libdir}" dest="${dist}/All/lib/" />
+
+		<copydir src="${nativedir}" dest="${dist}/All/lib/native/" />
+
+		<jar destfile="${dist}/All/opensource.jar" basedir="${opensource}" compress="true">
+
+		</jar>
+
+
+
+		<jar destfile="${dist}/All/datafiles.jar" basedir="${data}" compress="true">
+
+		</jar>
+		
+		<copyfile dest="${dist}/Windows/settings.jar" src="${dist}/All/settings.jar" />
+		<copyfile dest="${dist}/Windows/launcher.jar" src="${dist}/All/launcher.jar" />
+		<copyfile dest="${dist}/Windows/robotGame.jar" src="${dist}/All/robotGame.jar" />
+		<copyfile dest="${dist}/Windows/golems.jar" src="${dist}/All/golems.jar" />
+		<copyfile dest="${dist}/Windows/datafiles.jar" src="${dist}/All/datafiles.jar" />
+		<copyfile dest="${dist}/Windows/opensource.jar" src="${dist}/All//opensource.jar" />
+
+		  <copyfile dest="${dist}/Mac/settings.jar" src="${dist}/All/settings.jar" />
+		<copyfile dest="${dist}/Mac/launcher.jar" src="${dist}/All/launcher.jar" />
+		<copyfile dest="${dist}/Mac/robotGame.jar" src="${dist}/All/robotGame.jar" />
+		<copyfile dest="${dist}/Mac/golems.jar" src="${dist}/All/golems.jar" />
+		<copyfile dest="${dist}/Mac/datafiles.jar" src="${dist}/All/datafiles.jar" />
+		<copyfile dest="${dist}/Mac/opensource.jar" src="${dist}/All//opensource.jar" />
+
+		  <copyfile dest="${dist}/Linux/settings.jar" src="${dist}/All/settings.jar" />
+		<copyfile dest="${dist}/Linux/launcher.jar" src="${dist}/All/launcher.jar" />
+		<copyfile dest="${dist}/Linux/robotGame.jar" src="${dist}/All/robotGame.jar" />
+		<copyfile dest="${dist}/Linux/golems.jar" src="${dist}/All/golems.jar" />
+		<copyfile dest="${dist}/Linux/datafiles.jar" src="${dist}/All/datafiles.jar" />
+		<copyfile dest="${dist}/Linux/opensource.jar" src="${dist}/All//opensource.jar" />
+
+		<copyfile dest="${dist}/All/lib/LICENSE" src="LICENSE" />
+
+		<copyfile dest="${dist}/Linux/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
+		<copyfile dest="${dist}/Mac/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
+		<copyfile dest="${dist}/Windows/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
+		<copyfile dest="${dist}/All/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
+
+
+
+		<!-- Copy the appropriate dlls to where they need to go -->
+		<copy todir="${dist}/Windows/lib">
+
+			<fileset dir="${libdir}" casesensitive="no">
+				<include name="**/*.jar" />
+			</fileset>
+
+			<fileset file="LICENSE" />
+			<fileset file="NOTICE" />
+		</copy>
+
+		<copy todir="${dist}/Mac/lib">
+
+			<fileset dir="${libdir}" casesensitive="no">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset file="LICENSE" />
+			<fileset file="NOTICE" />
+
+		</copy>
+
+		<copy todir="${dist}/Mac/lib">
+
+			<fileset dir="platform-specific-components/mac" casesensitive="no">
+				<include name="**/*.jar" />
+			</fileset>
+
+		</copy>
+
+		<copy todir="${dist}/Mac/lib/native">
+
+			<fileset dir="platform-specific-components/mac" casesensitive="no">
+				<include name="**/*.jnilib" />
+			</fileset>
+
+		</copy>
+
+		<copy todir="${dist}/Linux/lib">
+
+			<fileset dir="platform-specific-components/linux" casesensitive="no">
+				<include name="**/*.jar" />
+			</fileset>
+
+		</copy>
+
+		<copy todir="${dist}/Linux/lib">
+
+			<fileset dir="${libdir}" casesensitive="no">
+				<include name="**/*.jar" />
+			</fileset>
+			<fileset file="LICENSE" />
+			<fileset file="NOTICE" />
+
+		</copy>
+
+
+
+		<copy todir="${dist}/Windows/lib/native">
+
+			<fileset dir="${nativedir}" casesensitive="no">
+				<include name="**/*.dll" />
+			</fileset>
+
+		</copy>
+
+		<copy todir="${dist}/Mac/lib/native">
+
+			<fileset dir="${nativedir}" casesensitive="no">
+				<include name="**/*.jnilib" />
+				<include name="**/*.dylib" />
+			</fileset>
+
+		</copy>
+
+
+		<copy todir="${dist}/Mac/lib/native">
+
+			<fileset dir="platform-specific-components/mac" casesensitive="no">
+				<include name="**/*.jnilib" />
+				<include name="**/*.dylib" />
+			</fileset>
+
+		</copy>
+
+		<copy todir="${dist}/Linux/lib/native">
+
+			<fileset dir="${nativedir}" casesensitive="no">
+				<include name="**/*.so" />
+			</fileset>
+
+		</copy>
+
+	</target>
+
+
+
+
+
+</project>
+
+
+

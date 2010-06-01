@@ -1,0 +1,893 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~sv
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+
+
+GOLEMS{
+
+    GOLEMS~
+
+    VERSION~
+
+    MAIN_MENU~Huvudmeny
+
+    MAIN_MENU{
+
+        OK~OK
+
+        CANCEL~Avbryt
+
+        NO~Nej
+
+        YES~Ja
+
+        MAIN~Meny
+
+        FILE_MENU{
+
+            NEW~Ny Maskin
+
+            SAVE~ Spara Maskin
+
+            LOAD~Ladda Maskin
+
+            IMPORT~ Importera Maskin
+
+            RECORD~Spela in video
+
+            EXIT~Avsluta Golems
+
+        }
+
+        SETTINGS~Inställningar
+
+        DISPLAY~Visning
+
+        DISPLAY{
+
+            QUALITY~Visningskvalité
+
+            QUALITY_LOW~Låg
+
+            QUALITY_NORMAL~ Normal (mellan)
+
+            SETTINGS~Visning
+
+            QUALITY_HIGH~Hög
+
+            RESOLUTION~Upplösning
+
+            FULL_SCREEN~Fullskärm
+
+            FREQ~Frekvens
+
+            COLOR_DEPTH~Färgdjup
+
+            FPS~Bilder per sekund
+
+            VSYNC~Använd VSync
+
+            TOOLTIPS~Verktygstips
+
+            SHOW_TOOLTIPS~Visa Verktygstips
+
+        }
+
+        KEYBOARD~Tangentbord
+
+        KEYBOARD{
+
+            SHORTCUTS~Snabbtangenter
+
+            CTRL_POINTS~Visa förstoringsklot
+
+            ROTATE~Rotera
+
+            XY_PLANE~XY-Plan
+
+            YZ_PLANE~YZ-Plan
+
+            GRID_SNAP~Följ rutnätet
+
+            AXIS_LOCK~Axel-Lås
+
+            STATICS~Låsta objekt valbara
+
+            SHOW_LAYERS~Visa Lager-inställningar
+
+            ISLAND_SELECT~Markera Ihopsatta Objekt
+
+            MULTI_SELECT~ Markera Flera Objekt
+
+            PROPERTIES~Visa Egenskaper för Objekt
+
+            COPY~Kopiera
+
+            DEL~ Ta bort
+
+            FOCUS~Fokusera på markerat objekt
+
+            ZOOM~Zooma
+
+            NEXT_CAM~Nästa Kamera
+
+            PREV_CAM~Föregående Kamera
+
+            DEF_CAM~Standardkamera
+
+            MENU~Meny
+
+            SCREEN_SHOT~Skärmdump
+
+        }
+
+        RECORDING~Inspelningsinställningar
+
+        RECORDING{
+
+            FORMAT~Video Format
+
+            COMPRESSION~            
+
+            QUALITY~Kvalité på inspelningen (1% till 100%):
+
+            FPS~Bilder per sekund
+
+            BEGIN~Starta Inspelning
+
+            STOP~
+
+            SIZE~
+
+            LENGTH~
+
+            TIME~
+
+            PAUSE~
+
+            MEMORY~
+
+            BEGIN~
+
+            RESUME~
+
+        }
+
+        MACHINE~Maskin
+
+        MACHINE{
+
+            NAME~Namn
+
+            DESCRIPTION~
+
+        }
+
+        ENVIRONMENT~ Miljö
+
+        ENVIRONMENT{
+
+            SPEED~Hastighet
+
+            SPEED_NORMAL~
+
+            SPEED_PAUSED~(Pausad)
+
+            SPEED_HALF~Halva
+
+            SPEED_DOUBLE~Dubbla
+
+            SPEED_UNLIMITED~(Max)
+
+            GRAVITY~Gravitation från alla axlar (x,y,z)
+            
+
+            GRID_SPACING~Inställningar för rutnätet
+
+            LOCK~Lås
+
+            UNITS~ En rutas storlek (x,y,z)
+
+            ROTATION~Rotation
+
+            ANGLES~Grader att låsa till (grader)
+
+            BACKGROUND~Bakgrund
+
+            COLOR~En färg
+
+            CLOUDS~Moln
+
+            SERENE~Vattenmiljö
+
+            SUNSET~Solnedgång
+
+            STARS~Stjärnor
+
+            SHOW_GRID~Visa bakgrunds-rutnät i byggläge
+            
+
+        }
+
+        EXIT~Avsluta
+
+        EXIT{
+
+            CHECK~Vill du verkligen avsluta?
+            
+
+        }
+
+    }
+
+    STATUSBAR{
+
+        ENGAGE~Starta maskinen!
+
+        LAYERS~Lager
+
+        SENSORS~Sensorer
+
+        AXIS~Axlar
+
+        SNAP~ Lås till rutnätet
+
+        STATIC~Markera låsta objekt
+
+        LAYERS{
+
+            NEW~
+
+            COPY~
+
+            SELECT~Välj
+
+            MOVE~
+
+            DELETE~
+
+            GROUND~
+
+            LOCK~
+
+            HIDE~
+
+        }
+
+    }
+
+    TOOLBAR{
+
+        SHOW_TOOLBAR~
+
+        MENU~
+
+        AUTOCLOSE~
+
+        HIDE~
+
+        MENU.TOOLTIP~
+
+        SELECT~Välj
+
+        SELECT.TOOLTIP~Klicka för att markera ett objekt. När objektet är markerat, tryck enter för att öpnna objektets egenskaper. Du kan även dra och flytta på objekt i sidleds, vill du flytta det i annan riktning, håll nere $Z_AXIS_KEY eller $X_AXIS_KEY.
+        
+
+        ISLAND~Massval
+
+        ISLAND.TOOLTIP~Markera alla objekt som sitter ihop med det objektet du klickar på. Du kan också välja flera objekt genom att hålla nere $MULTI_SELECT_KEY.
+        
+
+        ROTATE~Rotera
+
+        ROTATE.TOOLTIP~Markera något, och dra runt objektet för att rotera det. För att rotera runt en annan axel, håll nere $Z_AXIS_KEY eller $X_AXIS_KEY. Du kan också rotera genom att hålla nere $ROTATE_KEY.
+        
+
+        STRETCH~Förstora
+
+        STRETCH.TOOLTIP~Markera något, dra sedan i ett av de vita kloten för att förstora objektet. Du kan också förstora genom att hålla nere $STRETCH_KEY.
+        
+
+        WIRE_MODE~Visa kopplingsläge
+
+        WIRE_MODE.TOOLTIP~Kopplingsläge visar och låter dig koppla ihop saker med "kablar", t.ex batteri med motorer. Objekt som kan kopplas ihop med något har gula eller gröna utgångar visade i kopplingsläget.
+        
+
+        BOX~Kub
+
+        BOX.TOOLTIP~Skapa en kub.
+
+        SPHERE~Klot
+
+        SPHERE.TOOLTIP~Skapa ett klot.
+
+        CYLINDER~Cylinder
+
+        CYLINDER.TOOLTIP~Skapa en cylinder.
+
+        TUBE~Rör
+
+        TUBE.TOOLTIP~Skapa ett rör.
+
+        PYRAMID~Pyramid
+
+        PYRAMID.TOOLTIP~Skapa en kvadratbaserad pyramid.
+
+        CONE~Kon
+
+        CONE.TOOLTIP~Skapa en kon.
+
+        ELLIPSOID~Ellipsoid
+
+        ELLIPSOID.TOOLTIP~Skapa en ellipsoid (Ett klot som du kan töja åt alla håll).
+        
+
+        CAPSULE~Kapsel
+
+        CAPSULE.TOOLTIP~ Skapa en kapsel.
+
+        AXLE~Axel
+
+        AXLE.TOOLTIP~De två ändarna av en axel kan rotera fritt runt varandra. En axel kan bli motor när den ansluts till ett batteri eller en annan signal.
+        
+
+        HINGE~Gångjärn
+
+        HINGE.TOOLTIP~De två ändarna av ett gångjärn kan rotera runt axeln som går vinkelrätt mot dess huvudaxel. Ett gångjärn kan driva om det kopplas till ett batteri eller en annan signal.
+        
+
+        HYDRAULIC~Hydraulcylinder
+
+        HYDRAULIC.TOOLTIP~De två ändarna av en hydrualcylinder kan röra sig närmare eller längre ifrån varandra, längden ställer du in i hydrualcylinderns egenskaper. En hydrualcylinder kan driva om den kopplas till ett batteri eller en annan signal.
+        
+
+        BALL_SOCKET~Kulled
+
+        BALL_SOCKET.TOOLTIP~De två ändarna i en kulled kan rotera fritt runt varandra
+        
+
+        BATTERY~Batteri
+
+        BATTERY.TOOLTIP~Batterier är funktionella komponenter. I kopplingsläget, kan du dra, från den översta utgången, en kabel till t.ex en motor. I batteriets egenskaper, kan du ställa in att batteriet ska ändra ut-signal efter en tid.
+        
+
+        FUNCTION~Funktion
+
+        FUNCTION.TOOLTIP~Tar emot en signal och använder den enligt dina inställningar i egenskaperna för funktionen. Genom att koppla något till den översta porten kan du få funkionen att starta/stänga av, eller få den att komma ihåg sin nuvarande signal.
+        
+
+        INPUT~Indata
+
+        INPUT.TOOLTIP~ När din maskin är igång, låter dessa inställningar användaren att kontrollera din maskin med tangentbordet, musen, eller med synliga reglage.
+        
+
+        OSCILLOSCOPE~Oscilloskop
+
+        OSCILLOSCOPE.TOOLTIP~När din maskin är igång, visar oscilloskopen signalerna de får in.
+        
+
+        TOUCH~Trycksensor
+
+        TOUCH.TOOLTIP~En trycksensor skickar ut signaler när den rör ett annat objekt.
+        
+
+        DISTANCE~Distanssensor
+
+        DISTANCE.TOOLTIP~En distanssensor skickar ut en signal när något kommer i dess 'sikte'. Öppna sensorns egenskaper för att kunna ändra dess form. Du kan flytta, förstora eller rotera sensorns sikte, eller så kan du välja en annan for för siktet i sensorns egenskaper.
+        
+
+        MULTIMETER~Multimeter
+
+        MULTIMETER.TOOLTIP~En kub som kan upptäcka dess position, hastighet, rotation, eller acceleration.
+        
+
+        CONTACT~Kontakt
+
+        CONTACT.TOOLTIP~Kontakter är som elektriska ledare. Om de möts, så kommer signaler att gå genom dem.
+        
+
+        ROCKET~Raket
+
+        ROCKET.TOOLTIP~En raket kommer att driva enligt den signal som den tar emot. (Koppla ett batteri till raketen för att skapa en signal till den). Du kan ändra raketens styrka i raketens egenskaper.
+        
+
+        GEAR~Kugghjul
+
+        GEAR.TOOLTIP~Skapa ett kugghjul
+
+        FORCE_BEAM~Kraftstråle
+
+        FORCE_BEAM.TOOLTIP~En kraftståle antingen drar till sig eller knuffar iväg andra objekt. Ut-signalen är hur nära objektet som strålen rör är.
+        
+
+        CAMERA~Kamera
+
+        CAMERA.TOOLTIP~Kameror låter användaren se världen genom dem. Tryck på $NEXT_CAMERA för att växla kamera. Kameror syns endast i kopplingsläget.
+        
+
+    }
+
+    PROPERTIES~Egenskaper
+
+    PROPERTIES{
+
+        MATTER~Materia
+
+        MATTER{
+
+            DENSITY~Densitet
+
+            MATERIAL~Material
+
+            DEFAULT~Standard
+
+            IRON~Järn
+
+            WOOD~Träd
+
+            CONCRETE~Betong
+
+            GRANITE~Granit
+
+            GLASS~Glas
+
+            PLASTIC~Plast
+
+            RUBBER~Gummi
+
+            ICE~Is
+
+            HELIUM~Helium
+
+            STATIC_DESCRIPTION~Lås detta objektet (Det kommer inte att kunna flyttas, men andra objekt kommer kunna att krocka med det)
+            
+
+            STICKY_DESCRIPTION~Gör detta objektet kletigt
+
+            POSITION~Position
+
+            ROTATION~Rotation
+
+            SIZE~Storlek
+
+            RADIUS~Radie
+
+            HEIGHT~Höjd
+
+            WIDTH~Bredd
+
+            LENGTH~Längd
+
+            RADIUS_INNER~Innercylinderns radie
+
+            ARC~Båge
+
+            INPUT~
+
+        }
+
+        APPEARANCE~Utseénde
+
+        APPEARANCE{
+
+            PRIMARY~Primär
+
+            HIGHLIGHT~Huvudsaklig
+
+            SHOW_TEXT~ Visa text
+
+            NONE~Ingen
+
+            CAMO~Camuflage
+
+            CHECKERS~Rutor
+
+            METAL_GALV~Galvaniserad metall
+
+            RIVETS~Nitar
+
+            SPOTS~Prickar
+
+            STAR~Stjärnor
+
+            STARS~Stjärnor
+
+            STEEL_BOX~Metallåda
+
+            STRIPES~Linjer
+
+            TREADPLATE~Durkplåt
+
+            CHOOSER~Färgväljare
+
+            HUE~Nyans
+
+            SATURATION~Mättnad
+
+            LUMINOSITY~Ljusstyrka
+
+            RED~Röd
+
+            GREEN~Grön
+
+            BLUE~Blå
+
+            ALPHA~Alfa
+
+        }
+
+        MOTOR~Motor
+
+        MOTOR{
+
+            BEARING~Kullagrad
+
+            RADIUS_LEFT~Vänstra radien
+
+            RADIS_RIGHT~ Högra radien
+
+            LENGTH_LEFT~Vänstra längden
+
+            LENGTH_RIGHT~ Högra längden
+
+            ANGLE_LEFT~Vänstra vinkeln
+
+            ANGLE_RIGHT~ Högra vinkeln
+
+            DISTANCE~Längd
+
+            MIN_DISTANCE~ Minsta längd
+
+            MAX_DISTANCE~ Högsta längd
+
+            MIN_SEP~
+
+            MAX_SEP~
+
+            JOINT_UNIVERSAL~Kardanknut
+
+            UNIVERSAL_JOINT_DESCRIPTION~Kardanknut (En kardanknut hindrar rotationen på tredje axeln)
+            
+
+            JOINT_LENGTH~Skarvens längd
+
+            JOINT_RADIUS~Skarvens radie
+
+            BALL_RADIUS~Kulans radie
+
+            MOTOR_DESCRIPTION_INPUT~Denna motorn ska tolka indata som
+
+            MOTOR_DESCRIPTION_OUTPUT~Denna motorn ska tolka utdata som
+
+            FORCE~Kraft
+
+            VELOCITY~Hastighet
+
+            ACCELERATION~Acceleration
+
+            MAX_VEL~ Maximal hastighet
+
+            MAX_FORCE~Maximal styrka
+
+            SPRING~Fjäder
+
+            SPRING_DESCRIPTION~ Arbeta som fjäder
+
+            SPRING_CONSTANT~Fjäderns constant
+
+            SPRING_FRICTION~Fjäderns friktion
+
+        }
+
+        SENSOR~Sensor
+
+        SENSOR{
+
+            IGNORE_ATTACHED~ Ignorera objekt som sitter ihop med sensorn (Inte skarvar)
+
+            IGNORE_JOINTS~ Ignorera objekt som sitter ihop med sensorn
+
+            IGNORE_NON_STATIC~ Ignorera icke-låsta objekt
+
+            IGNORE_STATIC~Ignorera låsta objekt
+
+        }
+
+        BATTERY~
+
+        BATTERY{
+
+        }
+
+        ROCKET~Raket
+
+        ROCKET{
+
+            MAX_FORCE~ Maximal kraft (Newton)
+
+            EFFECTS~Effekter
+
+            EFFECT_ORIGINAL~(Standardeffekt)
+
+            EFFECT_MAGIC~Magisk
+
+            EFFECT_NOVA~Ny stjärna
+
+            EFFECT_PLASMA~Plasma
+
+            EFFECT_RINGS~Ringar
+
+            EFFECT_ROCKET~Raket
+
+            EFFECT_SAT_V~Saturn V
+
+            EFFECT_SMOKE~Rök
+
+            EFFECT_SPARK~Blixt
+
+            EFFECT_SPUTTER~Fräsande
+
+            EFFECT_NAME~Namn
+
+            LUMINESCENT~ Ljust spår
+
+            ANGLE~Minsta, Maximala Vinkeln
+
+            LIFESPAN~ Minsta, Maximala Livstiden (millisekunder)
+
+            SIZE~ Första, Sista storlek
+
+            PARTICLE_NUM~ Partikelantal
+
+            VELOCITY~Starthastighet
+
+            SAVE~Spara Effekt
+
+            ENABLE~Aktivera effekter
+
+        }
+
+        FORCE_BEAM{
+
+            MAX_FORCE~ Maximala Drag/Tryck kraften
+
+            BEAM_LENGTH~Strålens längd
+
+            SHOW_BEAM~Visa stråle
+
+            LUMINOUS_BEAM~Ljusstråle
+
+            COLOR_PUSH~Tryck-färg
+
+            COLOR_PULL~ Drag-färg
+
+        }
+
+        GEAR{
+
+            TOOTH_WIDTH~Kugg-bredd
+
+            TOOTH_HEGIHT~ Kugg-höjd
+
+            TOOTH_ANGLE~Kugg-radie
+
+        }
+
+        MULTIMETER{
+
+            ALTITUDE~Högd
+
+            MAX_HEIGHT~Maximal Höjd
+
+            MIN_HEIGHT~Minimal Höjd
+
+            ORIENTATION~Orientering
+
+            POSITION~Position
+
+            RELATIVE~Rapportera värden som är relativa till orientationen av komponenten
+            
+
+            MAX_X_RANGE~ Maximal X längd
+
+            MIN_X_RANGE~Minimal X längd
+
+            VELOCITY~Hastighet
+
+            ACCELERATION~Acceleration
+
+        }
+
+        CAMERA{
+
+            LOCK~Lås kameran (Kameran kommer inte att flytta sig)
+
+        }
+
+        INPUT{
+
+            DEVICE_NAME~ Indatankomponentens namn
+
+            TYPE~Indatans sort
+
+            SLIDER~Reglage
+
+            TEXT~Text
+
+            KEY_EVENT_TYPE~ Knapptrycks-alternativ
+
+            HOLD_DOWN~ Håll nedtryckt
+
+            TOGGLE~Starta/Stäng av med ett knapptryck
+
+            KEY~Tangent
+
+            UNKNOWN~(Okänd tangent)
+
+            OUTPUT_NEGATIVE_DESCRIPTION~Utdata -1 när knappen ej är nedtryckt (annars 0)
+            
+
+        }
+
+        FUNCTION{
+
+            FUN_UNNAMED~Namnlös
+
+            FUN_LINE~Linje
+
+            FUN_ZERO~Noll
+
+            FUN_PARABOLA~Parabolisk
+
+            FUN_CUBIC~Kvadratisk
+
+            FUN_SINE~Sinus
+
+            FUN_SQRT~
+
+            FUN_COS~Cosinus
+
+            FUN_DERIVATIVE~(Lutning)
+
+            FUNCTION_NAME~Funktionens namn
+
+            OPTIONS_BATTERY~ Batteri-inställningar
+
+            OPTIONS_MODIFIER~Modifieringar
+
+            SWITCH~Batterispärr
+
+            THRESHOLD_DESCRIPTION~Ställ in den minsta signalen som behövs för att aktivera spärren
+
+            SWITCH_THRESHOLD~Ändra värdet för indata
+
+            THRESHOLD_DESCRIPTION_2~Indatan måste vara
+
+            THRESHOLD_DESCRIPTION_3~är värdet för att spärren ska aktiveras
+
+            SWITCH_ACTION~ Vad ska hända när spärren aktiveras?
+
+            TURN_ON~Starta/stäng av
+
+            INVERT~Invertera signalen
+
+            HOLD~ Behåll ett värde
+
+            MULT~Multiplicera ett värde
+
+            EXAMPLE~Exempel: Om värdet för spärren är 0.5, och indatan är >=, och spärren är inställd på 'Starta/stäng av', så kommer funktionens utdata vara 0 ända tills värdet för spärren får en indata på 0.5 eller högre.
+            
+
+        }
+
+    }
+
+}
+

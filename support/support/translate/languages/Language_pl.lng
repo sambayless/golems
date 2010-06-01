@@ -1,0 +1,897 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~pl
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+
+
+GOLEMS{
+
+    GOLEMS~
+
+    VERSION~Wersja
+    
+
+    MAIN_MENU~ Menu główne
+
+    MAIN_MENU{
+
+        OK~OK
+
+        CANCEL~Anuluj
+
+        NO~Nie
+
+        YES~Tak
+
+        MAIN~
+
+        FILE_MENU{
+
+            NEW~Nowa maszyna
+
+            SAVE~Zapisz maszynę
+
+            LOAD~Wczytaj maszynę
+
+            IMPORT~Importuj maszynę
+
+            RECORD~Nagraj film
+
+            EXIT~Wyjdź
+
+        }
+
+        SETTINGS~Ustawienia
+
+        DISPLAY~Grafika
+
+        DISPLAY{
+
+            QUALITY~Jakość grafiki
+
+            QUALITY_LOW~Niska
+
+            QUALITY_NORMAL~Normalna (średnia)
+
+            SETTINGS~Grafika
+
+            QUALITY_HIGH~Wysoka
+
+            RESOLUTION~Rozdzielczość
+
+            FULL_SCREEN~Pełny ekran
+
+            FREQ~Odświeżanie
+
+            COLOR_DEPTH~Paleta
+
+            FPS~Ograniczenie fps
+
+            VSYNC~Synhronizacja pionowa
+
+            TOOLTIPS~Podpowiedzi
+
+            SHOW_TOOLTIPS~Pokazuj podpowiedzi
+
+        }
+
+        KEYBOARD~Klawiatura
+
+        KEYBOARD{
+
+            SHORTCUTS~Skróty
+
+            CTRL_POINTS~Punkty kontrolne
+
+            ROTATE~Obrót
+
+            XY_PLANE~ Płaszczyzna XY
+
+            YZ_PLANE~ Płaszczyzna YZ
+
+            GRID_SNAP~Dociąganie
+
+            AXIS_LOCK~ Blokada osi
+
+            STATICS~Blokada obiektów statycznych   
+
+            SHOW_LAYERS~Pokaż warstwy
+
+            ISLAND_SELECT~Zaznacz zgrupowane obiekty
+
+            MULTI_SELECT~ Zaznacz wiele obiektów
+
+            PROPERTIES~Pokaż właściwości obiektu
+
+            COPY~Kopiuj
+
+            DEL~Usuń
+
+            FOCUS~Centrownanie widoku
+
+            ZOOM~Przybliż
+
+            NEXT_CAM~Następna kamera
+
+            PREV_CAM~Poprzednia kamera
+
+            DEF_CAM~Domyslna kamera
+
+            MENU~Menu
+
+            SCREEN_SHOT~Zdjęcie ekranu
+
+        }
+
+        RECORDING~Opcje nagrywania
+
+        RECORDING{
+
+            FORMAT~ Format video
+
+            COMPRESSION~Jakość kompresji
+
+            QUALITY~Jakość kompresji (1% - 100%)
+
+            FPS~Klatki na sekundę
+
+            BEGIN~ Rozpocznij nagrywanie
+
+            STOP~
+
+            SIZE~
+
+            LENGTH~
+
+            TIME~
+
+            PAUSE~
+
+            MEMORY~
+
+            BEGIN~
+
+            RESUME~
+
+        }
+
+        MACHINE~Maszyna
+
+        MACHINE{
+
+            NAME~Nazwa
+
+            DESCRIPTION~
+
+        }
+
+        ENVIRONMENT~Środowisko
+
+        ENVIRONMENT{
+
+            SPEED~Prędkość
+
+            SPEED_NORMAL~
+
+            SPEED_PAUSED~(Zatrzymana)
+
+            SPEED_HALF~Połowa
+
+            SPEED_DOUBLE~Podwójna
+
+            SPEED_UNLIMITED~(Nieograniczona)
+
+            GRAVITY~ Grawitacja (w kierunkach: x,y,z)
+
+            GRID_SPACING~Siatka pomocnicza
+
+            LOCK~ Równe wymiary siatki
+
+            UNITS~Jednostki (x,y,z)
+
+            ROTATION~Obracanie
+
+            ANGLES~Kąt obrotu (stopnie)
+
+            BACKGROUND~Tło
+
+            COLOR~Kolor
+
+            CLOUDS~Chmury
+
+            SERENE~Południe
+
+            SUNSET~ Zachód słońca
+
+            STARS~Gwiazdy
+
+            SHOW_GRID~Pokaż siatkę podczas projektowania
+
+        }
+
+        EXIT~Wyjdź
+
+        EXIT{
+
+            CHECK~Na pewno chcesz zamknąć program?
+
+        }
+
+    }
+
+    STATUSBAR{
+
+        ENGAGE~Włącz fizykę!
+
+        LAYERS~Warstwy
+
+        SENSORS~Detektory
+
+        AXIS~Osie
+
+        SNAP~Siatka
+
+        STATIC~Statyczne
+
+        LAYERS{
+
+            NEW~Nowa warstwa
+
+            COPY~Kopiuj warstwę
+
+            SELECT~Zaznacz warstwę
+
+            MOVE~Przenieś na warstwę
+
+            DELETE~Usuń warstwę
+
+            GROUND~Podłoże
+
+            LOCK~Blokuj
+
+            HIDE~Ukryj
+
+        }
+
+    }
+
+    TOOLBAR{
+
+        SHOW_TOOLBAR~
+
+        MENU~
+
+        AUTOCLOSE~
+
+        HIDE~
+
+        MENU.TOOLTIP~
+
+        SELECT~Zaznaczanie
+
+        SELECT.TOOLTIP~Kliknij obiekt aby go zaznaczyć (trzymaj $MULTI_SELECT_KEY żeby zaznaczyć więcej obiektów). Po zaznaczeniu, wciśnij $OBJECT_MENU_KEY aby zmienić właściwości obiektu. Wciśnij i przytrzymaj $Z_AXIS_KEY lub $X_AXIS_KEY żeby zmienić płaszczyznę przesuwania obiektu. Przeciągnij obiekt myszką aby go przesunąć.
+        
+
+        ISLAND~Zaznaczanie połączonych obiektów
+
+        ISLAND.TOOLTIP~Zaznacz jednocześnie wszystkie połączone obiekty. Trzymając $MULTI_SELECT_KEY możesz zaznaczać dodatkowe obiekty.
+        
+
+        ROTATE~Obracanie
+
+        ROTATE.TOOLTIP~Zaznacz obiekt, potem przeciągnij go myszką żeby go obrócić. Przytrzymaj $Z_AXIS_KEY lub $X_AXIS_KEY aby obracać obiekt wokół innych osi. W każdej chwili możesz obracać obiekty trzymając klawisz $ROTATE_KEY.
+        
+
+        STRETCH~Rozciąganie
+
+        STRETCH.TOOLTIP~Zaznacz obiekt, potem przeciągnij myszką punkty kontrolne aby zmienić jego kształt. W każdej chwili możesz rozciągać obiekty trzymając $STRETCH_KEY.
+        
+
+        WIRE_MODE~Pokaż przewody
+
+        WIRE_MODE.TOOLTIP~Widok przewodów pozwala połączyć różne części maszyny, oraz dodawać dodatkowe elementy elektroniczne, takie jak baterie i sensory. Elementy które możesz ze sobą połączyć kablami posiadają żółte i zielone złącza.
+        
+
+        BOX~Sześcian
+
+        BOX.TOOLTIP~Stwórz sześcian.
+
+        SPHERE~Kula
+
+        SPHERE.TOOLTIP~Stwórz kulę.
+
+        CYLINDER~Walec
+
+        CYLINDER.TOOLTIP~Stwórz walec.
+
+        TUBE~Rura
+
+        TUBE.TOOLTIP~Stwórz rurę, lub jej wycinek (np. rynnę).
+
+        PYRAMID~Piramida
+
+        PYRAMID.TOOLTIP~Stwórz ostrosłup o prostokątnej podstawie.
+
+        CONE~Stożek
+
+        CONE.TOOLTIP~Stwórz stożek.
+
+        ELLIPSOID~Elipsoida
+
+        ELLIPSOID.TOOLTIP~Stwórz elipsoidę (kulę, którą możesz spłaszczać i rozciągać).
+
+        CAPSULE~Kapsułka
+
+        CAPSULE.TOOLTIP~Stwórz walec zaokrąglony z obu stron.
+
+        AXLE~Oś
+
+        AXLE.TOOLTIP~Oba końce osi mogą się swobodnie obracać wokół osi wzdłóżnej. Po podłączeniu baterii, oś może działałać jak silnik lub serwo. Osi mozna także użyć jako łożyska.
+        
+
+        HINGE~Zawias
+
+        HINGE.TOOLTIP~Obie części zawiasu mogą się obracać wokół łączącej je osi. Po podłączeniu baterii lub innego sygnału, zawias może się ustawić w żądanej pozycji.
+        
+
+        HYDRAULIC~Siłownik
+
+        HYDRAULIC.TOOLTIP~Oba końce siłownika mogą się zbliżać lub oddalać od siebie. Ograniczenie zakresu ruchu można ustawić we właściwościach siłownika. Siłownik może być zasilany przy pomocy baterii lub innego sygnału.
+        
+
+        BALL_SOCKET~Staw
+
+        BALL_SOCKET.TOOLTIP~Panewka może się swobodnie obracać wokół kuli. Możesz także przekazywać moment obrotowy wzdłuż podłużnej osi, włączając opcję [universal joint] w oknie właściwości.
+        
+
+        BATTERY~Bateria
+
+        BATTERY.TOOLTIP~Baterie dostarczają energii poszczególnym częściom maszyny. Aby połączyć baterię, kliknij na żółtym polu na górze baterii i przeciągnij kabel do zielonego złącza części którą chcesz zasilać. W oknie właściwości baterii możesz ustawić siłe sygnału, oraz jego zmiany w czasie.
+        
+
+        FUNCTION~Funkcja
+
+        FUNCTION.TOOLTIP~Przekształca sygnał zgodnie z wykresem narysowanym w oknie właściwości funkcji. Podłączając przewód do górnego złącza możesz włączać lub wyłączać funkcję, albo zatrzymać aktualny poziom sygnału na wyjściu.
+        
+
+        INPUT~Wejście
+
+        INPUT.TOOLTIP~Umożliwia sterowanie maszyną przy pomocy klawiatury lub suwaków wyświetlanych na ekranie.
+        
+
+        OSCILLOSCOPE~Oscyloskop
+
+        OSCILLOSCOPE.TOOLTIP~Wyświetla na wykresie poziom sygnału otrzymywanego z innych urządzeń.
+        
+
+        TOUCH~Detektor kolizji
+
+        TOUCH.TOOLTIP~Wysyła sygnał kiedy dotyka innego obiektu.
+
+        DISTANCE~Detektor obiektów
+
+        DISTANCE.TOOLTIP~Wysyła sygnał, kiedy inne obiekty znajdą się w jego polu widzenia. Możesz przesunąć, powiększyć, obrócić lub zmienić kształt pola widzenia sensora w oknie właściwości.
+        
+
+        MULTIMETER~Multimetr
+
+        MULTIMETER.TOOLTIP~Urządzenie wysyłające swoją pozycję, prędkość, orientację, przyspieszenie lub wysokość.
+        
+
+        CONTACT~Złącze
+
+        CONTACT.TOOLTIP~Złącze umożliwia przekazywanie sygnałów bez potrzeby łączenia elementów przewodami. Jeżeli złącze zetknie się z innym złączem, przekazują sobie wzajemnie sygnały.
+        
+
+        ROCKET~Silnik rakietowy
+
+        ROCKET.TOOLTIP~Silnik rakietowy działa z mocą proporcjonalną do siły podłączonego sygnału. Możesz ustawić maksymalną moc oraz efekty wizualne w oknie właściwości.
+        
+
+        GEAR~Zębatka
+
+        GEAR.TOOLTIP~Stwórz koło zębate. W oknie właściwości możesz ustawić wielkość oraz kształt zębów.
+        
+
+        FORCE_BEAM~Promień siłowy
+
+        FORCE_BEAM.TOOLTIP~Promień siłowy może przyciągać lub odpychać obiekty. Może także okreslić odległość od obiektu.
+        
+
+        CAMERA~Kamera
+
+        CAMERA.TOOLTIP~Kamera pozwala obserwować działanie maszyny. Wcisnij $NEXT_CAMERA lub $PREV_CAMERA żeby przełączyć się między kamerami. Kamery są widoczne tylko w trybie widoku przewodów.
+        
+
+    }
+
+    PROPERTIES~Właściwości
+
+    PROPERTIES{
+
+        MATTER~Materiał
+
+        MATTER{
+
+            DENSITY~Gęstość
+
+            MATERIAL~Materiał
+
+            DEFAULT~Domyślny
+
+            IRON~Żelazo
+
+            WOOD~Drewno
+
+            CONCRETE~Beton
+
+            GRANITE~Granit
+
+            GLASS~Szkło
+
+            PLASTIC~Tworzywo
+
+            RUBBER~Guma
+
+            ICE~Lód
+
+            HELIUM~Hel
+
+            STATIC_DESCRIPTION~  Statyczny (obiekt sam nie podlega siłom fizycznym, ale oddziałowuje na inne obiekty)
+
+            STICKY_DESCRIPTION~Obiekt klejący
+
+            POSITION~Pozycja
+
+            ROTATION~Obrót
+
+            SIZE~Rizmiar
+
+            RADIUS~Promień
+
+            HEIGHT~Wysokość
+
+            WIDTH~Szerokość
+
+            LENGTH~Długość
+
+            RADIUS_INNER~Promień wewnętrzny
+
+            ARC~Łuk
+
+            INPUT~
+
+        }
+
+        APPEARANCE~Wygląd
+
+        APPEARANCE{
+
+            PRIMARY~Podstawowy
+
+            HIGHLIGHT~Pomocniczy
+
+            SHOW_TEXT~Pokaż tekst
+
+            NONE~Brak
+
+            CAMO~Kamuflaż
+
+            CHECKERS~Szachownica
+
+            METAL_GALV~ Stal ocynkowana
+
+            RIVETS~Nity
+
+            SPOTS~Plamy
+
+            STAR~Gwiazdy
+
+            STARS~Gwiazdy
+
+            STEEL_BOX~ Stalowa skrzynia
+
+            STRIPES~Paski
+
+            TREADPLATE~Blacha karbowana
+
+            CHOOSER~Wybór koloru
+
+            HUE~Barwa
+
+            SATURATION~Nasycenie
+
+            LUMINOSITY~Jasność
+
+            RED~Czerwony
+
+            GREEN~Zielony
+
+            BLUE~Niebieski
+
+            #Przezroczystość   // can be Alpha if to long
+            ALPHA~Alpha
+
+        }
+
+        MOTOR~Silnik
+
+        MOTOR{
+
+            BEARING~Łożysko
+
+            RADIUS_LEFT~Lewy promień
+
+            RADIS_RIGHT~Prawy promień
+
+            LENGTH_LEFT~ Lewa długość
+
+            LENGTH_RIGHT~Prawa długość
+
+            ANGLE_LEFT~Lewy kąt
+
+            ANGLE_RIGHT~Prawy kąt
+
+            DISTANCE~Odległość
+
+            MIN_DISTANCE~Min. odległość
+
+            MAX_DISTANCE~ Max. odległość
+
+            MIN_SEP~
+
+            MAX_SEP~
+
+            JOINT_UNIVERSAL~Przegub Cardana
+
+            UNIVERSAL_JOINT_DESCRIPTION~Przegub Cardana (przegub krzyżakowy - przekazuje moment obrotowy według osi podłużnej)   // przegub krzyżakowy, sprzęgło wychylne...
+            
+
+            JOINT_LENGTH~ Długość panewki
+
+            JOINT_RADIUS~Średnica panewki
+
+            BALL_RADIUS~Średnica kuli
+
+            MOTOR_DESCRIPTION_INPUT~Sygnał wejściowy jest interpretowany jako: 
+            
+
+            MOTOR_DESCRIPTION_OUTPUT~  Sygnał wyjściowy jest interpretowany jako: 
+
+            FORCE~Moc
+
+            VELOCITY~Prędkość
+            
+            POSITION~Pozycja
+
+            ACCELERATION~Przyspieszenie
+
+            MAX_VEL~Maksymalna prędkość
+
+            MAX_FORCE~ Maksymalna moc
+
+            SPRING~Sprężyna
+
+            SPRING_DESCRIPTION~Włącz sprężynowanie
+
+            SPRING_CONSTANT~Stała sprężyny
+
+            SPRING_FRICTION~Tłumienie drgań spręźyny
+
+        }
+
+        SENSOR~Detektor
+
+        SENSOR{
+
+            IGNORE_ATTACHED~Ignoruj przyłączone obiekty (nie włączając łączników)   
+            
+
+            IGNORE_JOINTS~ Ignoruj przyłączone obiekty
+
+            #Wykrywaj tylko statyczne obiekty      // = "detect only static objects"
+            IGNORE_NON_STATIC~Wykrywaj tylko statyczne obiekty 
+
+            IGNORE_STATIC~Ignoruj obiekty statyczne
+
+        }
+
+        BATTERY~
+
+        BATTERY{
+
+        }
+
+        ROCKET~Silnik rakietowy
+
+        ROCKET{
+
+            MAX_FORCE~Maksymalna moc (N)
+
+            EFFECTS~Efekty
+
+            EFFECT_ORIGINAL~(oryginalne efekty)
+
+            EFFECT_MAGIC~Magiczny
+            #Nova = Nowa, but this is common word in polish (= new)
+            EFFECT_NOVA~Supernowa
+
+            EFFECT_PLASMA~Plazma
+
+            EFFECT_RINGS~Pierścienie
+
+            EFFECT_ROCKET~Rakieta
+
+            EFFECT_SAT_V~
+
+            EFFECT_SMOKE~Dym
+
+            EFFECT_SPARK~Iskry
+
+            EFFECT_SPUTTER~Kopeć
+
+            EFFECT_NAME~Nazwa
+
+            LUMINESCENT~Świecący ślad
+
+            ANGLE~ Kąt:  min, max
+
+            LIFESPAN~ Czas życia:  min, max
+
+            SIZE~ Rozmiar:  początkowy, końcowy  
+
+            PARTICLE_NUM~Ilość cząsteczek
+
+            VELOCITY~ Prędkość początkowa
+
+            SAVE~ Zapisz efekt
+
+            ENABLE~ Włącz efekty
+
+        }
+
+        FORCE_BEAM~ Promień siłowy
+        FORCE_BEAM{
+
+            MAX_FORCE~Maksymalna siła
+
+            BEAM_LENGTH~Długość promienia
+
+            SHOW_BEAM~Pokazuj promień
+
+            LUMINOUS_BEAM~Włącz poświatę
+
+            COLOR_PUSH~Kolor promienia odpychającego
+
+            COLOR_PULL~Kolor promienia przyciągającego
+
+        }
+
+        GEAR~Zębatka
+        GEAR{
+
+            TOOTH_WIDTH~ Szerokośc zębów
+
+            TOOTH_HEGIHT~  Wysokość zębów
+
+            TOOTH_ANGLE~ Kąt ścięcia zębów
+
+        }
+
+        MULTIMETER{
+
+            ALTITUDE~Wysokość
+
+            MAX_HEIGHT~ Maksymalna wysokość
+
+            MIN_HEIGHT~ Minimalna wysokość
+
+            ORIENTATION~Orientacja
+
+            POSITION~Pozycja
+
+            RELATIVE~Wysyłaj wartości uwzględniając orientację multimetru
+            
+
+            MAX_X_RANGE~Maksymalny zakres X
+
+            MIN_X_RANGE~Minimalny zakres X
+
+            VELOCITY~Prędkość
+
+            ACCELERATION~Przyspieszenie
+
+        }
+
+        CAMERA{
+
+            LOCK~Zapobiegaj obracaniu kamery
+
+        }
+
+        INPUT{
+
+            DEVICE_NAME~Nazwa urządzenia wejściowego
+
+            TYPE~Rodzaj sterowania
+
+            SLIDER~Suwak
+
+            TEXT~Pole tekstowe
+
+            KEY_EVENT_TYPE~  Działanie klawisza
+
+            HOLD_DOWN~ Tylko kiedy wciśnięty
+
+            TOGGLE~   Przełącza sygnał
+
+            KEY~ Klawisz
+
+            UNKNOWN~(Kliknij tu i wciśnij klawisz)
+
+            OUTPUT_NEGATIVE_DESCRIPTION~Wysyłaj sygnał -1 zamiast 0, kiedy klawisz nie jest wciśnięty.
+            
+
+        }
+
+        FUNCTION{
+
+            FUN_UNNAMED~Nienazwana
+
+            FUN_LINE~Liniowa
+
+            FUN_ZERO~Zero
+
+            FUN_PARABOLA~Paraboliczna
+
+            FUN_CUBIC~Kwadratowa
+
+            FUN_SINE~Sinusoidalna
+
+            FUN_SQRT~
+
+            FUN_COS~Cosinusoidalna
+
+            FUN_DERIVATIVE~(Zmiany sydnału wejściowego)
+
+            FUNCTION_NAME~Nazwa funkcji
+
+            OPTIONS_BATTERY~ Opcje baterii
+
+            OPTIONS_MODIFIER~ Opcje przełącznika
+
+            SWITCH~Przełącznik
+
+            THRESHOLD_DESCRIPTION~Określ poziom sygnału aktywującego przełącznik
+
+            SWITCH_THRESHOLD~ Próg przełącznika
+
+            THRESHOLD_DESCRIPTION_2~  Sygnał 
+
+            THRESHOLD_DESCRIPTION_3~ niż próg aktywuje przełącznik 
+
+            SWITCH_ACTION~ Funkcja przełącznika
+
+            TURN_ON~ Włącz / wyłącz
+
+            INVERT~ Odwróć sygnał
+
+            HOLD~ Utrzymuj wartość wyjściową
+
+            MULT~ Mnożenie sygnału
+
+            EXAMPLE~Przykład:  Jeżeli próg przełącznika jest ustawiony na 0.5, operator na >= a aunkcja przełącznika na "włącz / wyłącz", na wyjściu funkcji nie będzie sygnału, dopuki przełącznik otrzymuje sygnał mniejszy niż 0.5. 
+            
+
+        }
+
+    }
+
+}
+

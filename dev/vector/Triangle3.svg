@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 13.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="187.75px"
+   height="400.85px"
+   viewBox="0 0 187.75 400.85"
+   enable-background="new 0 0 187.75 400.85"
+   xml:space="preserve"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="Triangle3.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"><metadata
+   id="metadata18"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs16"><inkscape:perspective
+     sodipodi:type="inkscape:persp3d"
+     inkscape:vp_x="0 : 200.425 : 1"
+     inkscape:vp_y="0 : 1000 : 0"
+     inkscape:vp_z="187.75 : 200.425 : 1"
+     inkscape:persp3d-origin="93.875 : 133.61667 : 1"
+     id="perspective20" /></defs><sodipodi:namedview
+   inkscape:window-height="669"
+   inkscape:window-width="640"
+   inkscape:pageshadow="2"
+   inkscape:pageopacity="1"
+   guidetolerance="10.0"
+   gridtolerance="10.0"
+   objecttolerance="10.0"
+   borderopacity="1.0"
+   bordercolor="#666666"
+   pagecolor="#ffffff"
+   id="base"
+   showgrid="false"
+   inkscape:zoom="1.1525508"
+   inkscape:cx="93.875"
+   inkscape:cy="200.425"
+   inkscape:window-x="207"
+   inkscape:window-y="207"
+   inkscape:current-layer="Layer_1" />
+<path
+   d="M0.275,280.575h187.2l-93.6-160.3L0.275,280.575z"
+   id="path3" />
+<polyline
+   fill="none"
+   stroke="#000000"
+   stroke-width="0.55"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   points="0.275,280.575   93.875,120.275 187.475,280.575 0.275,280.575 "
+   id="polyline5" />
+<path
+   d="M0.275,160.575h187.2l-93.6-160.3L0.275,160.575z"
+   id="path7" />
+<polyline
+   fill="none"
+   stroke="#000000"
+   stroke-width="0.55"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   points="0.275,160.575   93.875,0.275 187.475,160.575 0.275,160.575 "
+   id="polyline9" />
+<path
+   d="M0.275,400.575h187.2l-93.6-160.3L0.275,400.575z"
+   id="path11" />
+<polyline
+   fill="none"
+   stroke="#000000"
+   stroke-width="0.55"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   points="0.275,400.575   93.875,240.275 187.475,400.575 0.275,400.575 "
+   id="polyline13" />
+</svg>

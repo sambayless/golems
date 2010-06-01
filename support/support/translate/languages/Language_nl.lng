@@ -1,0 +1,882 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~nl
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+
+
+GOLEMS{
+
+    GOLEMS~
+
+    VERSION~Versie
+
+    MAIN_MENU~ Hoofd Menu
+
+    MAIN_MENU{
+
+        OK~OK
+
+        CANCEL~Annuleren
+
+        NO~Nee
+
+        YES~Ja
+
+        MAIN~Menu
+
+        FILE_MENU{
+
+            NEW~Nieuwe Machine
+
+            SAVE~ Machine Opslaan
+
+            LOAD~ Machine Laden
+
+            IMPORT~Machine Importeren
+
+            RECORD~Video Opnemen
+
+            EXIT~Programma Verlaten
+
+        }
+
+        SETTINGS~Opties
+
+        DISPLAY~Beeldscherm
+
+        DISPLAY{
+
+            QUALITY~Kwaliteit
+
+            QUALITY_LOW~Laag
+
+            QUALITY_NORMAL~Normaal
+
+            SETTINGS~Beeldscherm
+
+            QUALITY_HIGH~Hoog
+
+            RESOLUTION~Resolutie
+
+            FULL_SCREEN~Volledig Scherm
+
+            FREQ~Frequentie
+
+            COLOR_DEPTH~ Kleuren Diepte
+
+            FPS~Snelheid
+
+            VSYNC~Vsync gebruiken
+
+            TOOLTIPS~Tips
+
+            SHOW_TOOLTIPS~Tips weergeven
+
+        }
+
+        KEYBOARD~Toetsenbord
+
+        KEYBOARD{
+
+            SHORTCUTS~Toetsen
+
+            CTRL_POINTS~Controle punten
+
+            ROTATE~Verdraaien
+
+            XY_PLANE~XY-vlak
+
+            YZ_PLANE~ YZ-vlak
+
+            GRID_SNAP~
+
+            AXIS_LOCK~ As-slot
+
+            STATICS~Statis selecteerbaar
+
+            SHOW_LAYERS~ Lagen weergeven
+
+            ISLAND_SELECT~Selecteer gegroepeerde objecten
+
+            MULTI_SELECT~ Selecteer Meerdere Objecten
+
+            PROPERTIES~Eigenschappen weergeven
+
+            COPY~Kopieeren
+
+            DEL~Verweideren
+
+            FOCUS~Focusen
+
+            ZOOM~Zoom
+
+            NEXT_CAM~Volgende Camera
+
+            PREV_CAM~Vorige Camera
+
+            DEF_CAM~Standaard Camera
+
+            MENU~Menu
+
+            SCREEN_SHOT~Afbeelding maken
+
+        }
+
+        RECORDING~Opname Opties
+
+        RECORDING{
+
+            FORMAT~Video Formaat
+
+            COMPRESSION~Compressie kwaliteit
+
+            QUALITY~Compressie kwaliteit
+
+            FPS~ Frames per seconde
+
+            BEGIN~Opname Starten
+
+            STOP~
+
+            SIZE~
+
+            LENGTH~
+
+            TIME~
+
+            PAUSE~
+
+            MEMORY~
+
+            BEGIN~
+
+            RESUME~
+
+        }
+
+        MACHINE~Machine
+
+        MACHINE{
+
+            NAME~Naam
+
+            DESCRIPTION~
+
+        }
+
+        ENVIRONMENT~Omgeving
+
+        ENVIRONMENT{
+
+            SPEED~Snelheid
+
+            SPEED_NORMAL~
+
+            SPEED_PAUSED~ (Pauze)
+
+            SPEED_HALF~Half
+
+            SPEED_DOUBLE~Dubbel
+
+            SPEED_UNLIMITED~(Oneindig)
+
+            GRAVITY~Zwaartekracht in elke richting
+
+            GRID_SPACING~rooster ruimte
+
+            LOCK~Slot
+
+            UNITS~Eenheden
+
+            ROTATION~Verdraaing
+
+            ANGLES~Hoeken om vast te zetten (Graden)
+
+            BACKGROUND~Achtergrond
+
+            COLOR~Kleur
+
+            CLOUDS~Wolken
+
+            SERENE~
+
+            SUNSET~Zonsondergang
+
+            STARS~Sterren
+
+            SHOW_GRID~Rooster weergeven in ontwerp modus
+
+        }
+
+        EXIT~Afsluiten
+
+        EXIT{
+
+            CHECK~ Ben je zeker dat je wilt afsluiten?
+
+        }
+
+    }
+
+    STATUSBAR{
+
+        ENGAGE~Simulatie starten!
+
+        LAYERS~Lagen
+
+        SENSORS~Sensoren
+
+        AXIS~Assen
+
+        SNAP~
+
+        STATIC~Statis
+
+        LAYERS{
+
+            NEW~
+
+            COPY~
+
+            SELECT~
+
+            MOVE~
+
+            DELETE~
+
+            GROUND~
+
+            LOCK~
+
+            HIDE~
+
+        }
+
+    }
+
+    TOOLBAR{
+
+        SHOW_TOOLBAR~
+
+        MENU~
+
+        AUTOCLOSE~
+
+        HIDE~
+
+        MENU.TOOLTIP~
+
+        SELECT~Selecteren
+
+        SELECT.TOOLTIP~Klik en hou om een object te selecteren. Druk op enter tijdens Selectie om de eigenschappen aan te passen. om het veld van de beweging te veranderen hou $Z_AXIS_KEY of $X_AXIS_KEY ingedrukt
+        
+
+        ISLAND~Selecteer aangrensende
+
+        ISLAND.TOOLTIP~Selecteert alle aangrensende voorwerpen. je kan meerdere voorwerpen selecteren door $MULTI_SELECT_KEY in te houden.
+        
+
+        ROTATE~Verdraaien
+
+        ROTATE.TOOLTIP~Selecteer iets, dan klik en sleep om het te draaien. om rond een andere as te draaien, hou $Z_AXIS_KEY of $X_AXIS_KEY ingedrukt. door $ROTATE_KEY in te houden kan je objecten ook verdraaien
+        
+
+        STRETCH~rekken
+
+        STRETCH.TOOLTIP~Selecteer iets, sleep dan een witte controle bol om de vorm te veranderen. je kan voorwerpen rekken door $STRETCH_KEY in te houden
+
+        WIRE_MODE~ Kabels Weergeven
+
+        WIRE_MODE.TOOLTIP~Kabel modus laat je de kabels zien die verschillende onderdelen van je machine, zowel als functionele componenten zoals batterijen. componenten die met een kabel te verbinden zijn, hebben groene of gele poorten
+        
+
+        BOX~Doos
+
+        BOX.TOOLTIP~Maakt een doos
+
+        SPHERE~Bol
+
+        SPHERE.TOOLTIP~Maakt een bol
+
+        CYLINDER~Cilinder
+
+        CYLINDER.TOOLTIP~Maakt een Cylinder
+
+        TUBE~Buis
+
+        TUBE.TOOLTIP~ Maakt een buis
+
+        PYRAMID~Piramide
+
+        PYRAMID.TOOLTIP~Maakt een piramide met een vierkante grondvlak
+
+        CONE~Kegel
+
+        CONE.TOOLTIP~ Maakt een kegel
+
+        ELLIPSOID~Ellipsoïde
+
+        ELLIPSOID.TOOLTIP~Maakt een Ellipsoïde (een bol die je in elke richting kan rekken)
+
+        CAPSULE~Capsule
+
+        CAPSULE.TOOLTIP~ Maakt een capsule (een Cilinder met halve bollen aan de uiteinde)
+
+        AXLE~Spil
+
+        AXLE.TOOLTIP~De uiteindes van aan spil kunnen vrij ronddraaien tenopzichte van hun hoofd as. een spil kan als motor worden gebruikt als het is verbonden met een batterij of een ander signaal
+        
+
+        HINGE~Scharnier
+
+        HINGE.TOOLTIP~De uiteindes kunnen draaien rond de loodrechte as. een scharnier kan worden verbonden met een batterij of een ander signaal om het te laten draaien
+        
+
+        HYDRAULIC~Hydraulisch
+
+        HYDRAULIC.TOOLTIP~De eindes van een hydraulisch kunnen verder of dichter komen, tot de limiet die je kan instellen onder de eigenschappen. een hydraulisch kan verlengen of verkorten door middel van een batterij of een ander signaal.
+        
+
+        BALL_SOCKET~Kogelgewricht
+
+        BALL_SOCKET.TOOLTIP~De eindes van een kogelgewricht kunnen vrij draaien rond elke as
+        
+
+        BATTERY~Batterij
+
+        BATTERY.TOOLTIP~Batterijen zijn functionele componenten. in kabel zicht kan je de bovenste poort klikken en slepen om een kabel te maken die motoren kan bekrachtigen. onder eigenschappen kan je het signaal wijzigen.
+        
+
+        FUNCTION~Functie
+
+        FUNCTION.TOOLTIP~neemt een signaal en verandert het naar een functie die je kan ontwerpen onder de eigenschappen. Door een kabel met de bovenste poort te verbinden, kan je de functie in en uitschakelen.
+
+        INPUT~Input
+
+        INPUT.TOOLTIP~Als je machine loopt, kan je dit gebruiken met toetsen of visueele controles
+        
+
+        OSCILLOSCOPE~Oscilloscoop
+
+        OSCILLOSCOPE.TOOLTIP~Als je machine loopt, laat de oscilloscoop de signaal zien dat het ontvangt
+        
+
+        TOUCH~Druk sensor
+
+        TOUCH.TOOLTIP~Een druk sensor is een doos dat een signaal uitzendt als het contact maakt met voorwerp
+        
+
+        DISTANCE~ Afstands sensor
+
+        DISTANCE.TOOLTIP~Een afstands sensor detecteert alle objecten in zijn 'zicht'. selecteer de sensor om de zicht vorm te zien. je kan de zicht vorm aanpassen.
+        
+
+        MULTIMETER~Multimeter
+
+        MULTIMETER.TOOLTIP~Een doos dat positie, rotatie, snelheid en versnelling kan meten
+        
+
+        CONTACT~Contact
+
+        CONTACT.TOOLTIP~Contacten zijn soort van electrische geleiders, raken ze elkaar aan, dan laten ze signalen door.
+        
+
+        ROCKET~Raket
+
+        ROCKET.TOOLTIP~Een raket geeft een kracht afhankelijk van het signaal. (verbindt een batterij met een raket om een signaal te maken). je kan de maximale kracht onder de eigenschappen
+        
+
+        GEAR~Tandwiel
+
+        GEAR.TOOLTIP~Maakt een tandwiel
+
+        FORCE_BEAM~Kracht straal
+
+        FORCE_BEAM.TOOLTIP~Een kracht straal trekt voorwerpen aan of stoot ze af. de output is de afstand tot het object
+        
+
+        CAMERA~Camera
+
+        CAMERA.TOOLTIP~Camera's laten je de wereld zien van hun zicht. druk $NEXT_CAMERA om te wisselen naar je huidige camera. camera's zijn alleen zichtbaar in kabel modus.
+        
+
+    }
+
+    PROPERTIES~
+
+    PROPERTIES{
+
+        MATTER~
+
+        MATTER{
+
+            DENSITY~
+
+            MATERIAL~
+
+            DEFAULT~
+
+            IRON~
+
+            WOOD~
+
+            CONCRETE~
+
+            GRANITE~
+
+            GLASS~
+
+            PLASTIC~
+
+            RUBBER~
+
+            ICE~
+
+            HELIUM~
+
+            STATIC_DESCRIPTION~
+
+            STICKY_DESCRIPTION~
+
+            POSITION~
+
+            ROTATION~
+
+            SIZE~
+
+            RADIUS~
+
+            HEIGHT~
+
+            WIDTH~
+
+            LENGTH~
+
+            RADIUS_INNER~
+
+            ARC~
+
+            INPUT~
+
+        }
+
+        APPEARANCE~
+
+        APPEARANCE{
+
+            PRIMARY~
+
+            HIGHLIGHT~
+
+            SHOW_TEXT~
+
+            NONE~
+
+            CAMO~
+
+            CHECKERS~
+
+            METAL_GALV~
+
+            RIVETS~
+
+            SPOTS~
+
+            STAR~
+
+            STARS~
+
+            STEEL_BOX~
+
+            STRIPES~
+
+            TREADPLATE~
+
+            CHOOSER~
+
+            HUE~
+
+            SATURATION~
+
+            LUMINOSITY~
+
+            RED~
+
+            GREEN~
+
+            BLUE~
+
+            ALPHA~
+
+        }
+
+        MOTOR~
+
+        MOTOR{
+
+            BEARING~
+
+            RADIUS_LEFT~
+
+            RADIS_RIGHT~
+
+            LENGTH_LEFT~
+
+            LENGTH_RIGHT~
+
+            ANGLE_LEFT~
+
+            ANGLE_RIGHT~
+
+            DISTANCE~
+
+            MIN_DISTANCE~
+
+            MAX_DISTANCE~
+
+            MIN_SEP~
+
+            MAX_SEP~
+
+            JOINT_UNIVERSAL~
+
+            UNIVERSAL_JOINT_DESCRIPTION~
+
+            JOINT_LENGTH~
+
+            JOINT_RADIUS~
+
+            BALL_RADIUS~
+
+            MOTOR_DESCRIPTION_INPUT~
+
+            MOTOR_DESCRIPTION_OUTPUT~
+
+            FORCE~
+
+            VELOCITY~
+
+            ACCELERATION~
+
+            MAX_VEL~
+
+            MAX_FORCE~
+
+            SPRING~
+
+            SPRING_DESCRIPTION~
+
+            SPRING_CONSTANT~
+
+            SPRING_FRICTION~
+
+        }
+
+        SENSOR~
+
+        SENSOR{
+
+            IGNORE_ATTACHED~
+
+            IGNORE_JOINTS~
+
+            IGNORE_NON_STATIC~
+
+            IGNORE_STATIC~
+
+        }
+
+        BATTERY~
+
+        BATTERY{
+
+        }
+
+        ROCKET~
+
+        ROCKET{
+
+            MAX_FORCE~
+
+            EFFECTS~
+
+            EFFECT_ORIGINAL~
+
+            EFFECT_MAGIC~
+
+            EFFECT_NOVA~
+
+            EFFECT_PLASMA~
+
+            EFFECT_RINGS~
+
+            EFFECT_ROCKET~
+
+            EFFECT_SAT_V~
+
+            EFFECT_SMOKE~
+
+            EFFECT_SPARK~
+
+            EFFECT_SPUTTER~
+
+            EFFECT_NAME~
+
+            LUMINESCENT~
+
+            ANGLE~
+
+            LIFESPAN~
+
+            SIZE~
+
+            PARTICLE_NUM~
+
+            VELOCITY~
+
+            SAVE~
+
+            ENABLE~
+
+        }
+
+        FORCE_BEAM{
+
+            MAX_FORCE~
+
+            BEAM_LENGTH~
+
+            SHOW_BEAM~
+
+            LUMINOUS_BEAM~
+
+            COLOR_PUSH~
+
+            COLOR_PULL~
+
+        }
+
+        GEAR{
+
+            TOOTH_WIDTH~
+
+            TOOTH_HEGIHT~
+
+            TOOTH_ANGLE~
+
+        }
+
+        MULTIMETER{
+
+            ALTITUDE~
+
+            MAX_HEIGHT~
+
+            MIN_HEIGHT~
+
+            ORIENTATION~
+
+            POSITION~
+
+            RELATIVE~
+
+            MAX_X_RANGE~
+
+            MIN_X_RANGE~
+
+            VELOCITY~
+
+            ACCELERATION~
+
+        }
+
+        CAMERA{
+
+            LOCK~
+
+        }
+
+        INPUT{
+
+            DEVICE_NAME~
+
+            TYPE~
+
+            SLIDER~
+
+            TEXT~
+
+            KEY_EVENT_TYPE~
+
+            HOLD_DOWN~
+
+            TOGGLE~
+
+            KEY~
+
+            UNKNOWN~
+
+            OUTPUT_NEGATIVE_DESCRIPTION~
+
+        }
+
+        FUNCTION{
+
+            FUN_UNNAMED~
+
+            FUN_LINE~
+
+            FUN_ZERO~
+
+            FUN_PARABOLA~
+
+            FUN_CUBIC~
+
+            FUN_SINE~
+
+            FUN_SQRT~
+
+            FUN_COS~
+
+            FUN_DERIVATIVE~
+
+            FUNCTION_NAME~
+
+            OPTIONS_BATTERY~
+
+            OPTIONS_MODIFIER~
+
+            SWITCH~
+
+            THRESHOLD_DESCRIPTION~
+
+            SWITCH_THRESHOLD~
+
+            THRESHOLD_DESCRIPTION_2~
+
+            THRESHOLD_DESCRIPTION_3~
+
+            SWITCH_ACTION~
+
+            TURN_ON~
+
+            INVERT~
+
+            HOLD~
+
+            MULT~
+
+            EXAMPLE~
+
+        }
+
+    }
+
+}
+

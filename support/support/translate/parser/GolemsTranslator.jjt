@@ -1,0 +1,113 @@
+/**
+* JJTree file
+*/
+
+options {
+  MULTI =true;   
+  STATIC = true;
+  JAVA_UNICODE_ESCAPE=true;
+  UNICODE_INPUT=true;
+  JDK_VERSION = "1.5";
+    BUILD_NODE_FILES=false;//so it doesnt overwrite existing nodes accidently
+}
+ 
+PARSER_BEGIN(Translator) 
+package support.translate.parser;
+
+public class Translator {
+
+}
+PARSER_END(Translator)
+
+SKIP :
+{
+  " " 
+| "\t"
+| "\n"
+| "\r"
+| "\r\n"
+|<"#" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+}/*
+SPECIAL_TOKEN : {
+
+    < SINGLE_LINE_COMMENT: "#"(~["\n","\r"])* ("\n"|"\r"|"\r\n")? > 
+    } 
+*/
+
+TOKEN :
+{
+    <CLOSE_CLASS: "}">
+}
+
+
+TOKEN : 
+{
+  < KEY: (["A"-"Z"]) (["A"-"Z","0"-"9","_","-","."])* "~"> //(~[":","{","}","#","\n","\r"," "])+  >
+}
+
+
+
+TOKEN : 
+{
+  < CLASS: (["A"-"Z"]) (["A"-"Z","0"-"9","_","-"])* "{"> //(~[":","{","}","#","\n","\r"," "])+  >
+}
+
+TOKEN :   
+{//must have atleast 1 non space character
+  < ENTRY: (~["~","{","}","#","\n","\r", " "]) (~["~","{","}","#"])* (["\r" , "\n"] | "\r\n")  > //require the statement to end on a new line.
+ //< ENTRY: ([":"]) (~[":"]) ([":"](?!":"))* (["\r" , "\n"] | "\r\n")  > //require the statement to end on a new line.
+
+}
+/*TOKEN : 
+{
+  < CLASS: (~["\n","\r", ":"])+ "{" >
+}
+TOKEN : 
+{
+  < RESULT: (~[":" "{"])+ >//note: a result can contain new lines
+}
+*/
+SimpleNode Start():{}
+{
+    
+
+
+   (entry())+
+  
+  { return jjtThis; }
+}
+
+
+void entry()#void:
+{Token e;}
+{
+    (e= <KEY> simpleEntry(e))
+     
+     | (e= <CLASS> readClass(e))
+  
+}
+
+void simpleEntry(Token e) #Definition:
+{
+Token t = null;}
+{
+  
+  
+   (t=<ENTRY>)?
+
+   {jjtThis.setKey(e); jjtThis.setEntry(t);}
+}
+
+void readClass(Token t)#DefinitionClass:
+{}
+{
+   
+    {jjtThis.setName(t);jjtThis.setLine(t.endLine);}
+    (entry())*
+    
+    <CLOSE_CLASS>
+}
+
+
+
+

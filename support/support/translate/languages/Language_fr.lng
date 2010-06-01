@@ -1,0 +1,783 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~fr
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+GOLEMS{
+
+    GOLEMS~
+
+    VERSION~ 
+
+    MAIN_MENU~
+
+    MAIN_MENU{
+
+        OK~Ok
+
+        CANCEL~Annuler
+
+        YES~Oui
+
+        NO~Non
+            
+        FILE_MENU{
+
+            NEW~Nouvelle création
+
+            SAVE~Sauvegarder la création
+
+            LOAD~Charger une création
+
+            IMPORT~Importer une création
+
+            RECORD~Enregistrer une video
+
+            EXIT~Fermez le programme
+
+        }
+        
+        SETTINGS~Option
+        DISPLAY~Image
+
+        DISPLAY{
+
+            QUALITY~Qualitée de l'image
+
+            QUALITY_LOW~Mauvaise
+
+            QUALITY_NORMAL~Moyen
+
+            QUALITY_HIGH~Bonne
+
+            RESOLUTION~Résolution
+
+            FULL_SCREEN~Plein ecran
+
+            FREQ~Fréquence
+
+            COLOR_DEPTH~
+
+            FPS~
+
+            VSYNC~ Utiliser Vsync
+
+            TOOLTIPS~
+
+            SHOW_TOOLTIPS~
+
+        }
+
+        KEYBOARD~Clavier
+
+        KEYBOARD{
+
+            SHORTCUTS~Raccourci clavier
+
+            CTRL_POINTS~Point de control
+
+            ROTATE~Tourner
+
+            XY_PLANE~Plan XY
+
+            YZ_PLANE~Plan YZ
+
+            GRID_SNAP~Aligner
+
+            AXIS_LOCK~Bloquer sur l'axe
+
+            STATICS~Sélection des objets statique
+
+            SHOW_LAYERS~ Voir les groupe
+
+            ISLAND_SELECT~ Selection d'objet groupée
+
+            MULTI_SELECT~Selection de plusieurs objets
+
+            PROPERTIES~Voir les propriété des objets
+
+            COPY~Copier
+
+            DEL~Supprimmer
+
+            FOCUS~ Recentrer la caméra
+
+            ZOOM~Zoom
+
+            NEXT_CAM~ Caméra suivante
+
+            PREV_CAM~Caméra précedente
+
+            DEF_CAM~Caméra par défaut
+
+            MENU~Menu
+
+            SCREEN_SHOT~Prise d'écran
+
+        }
+
+        RECORDING~Option d'enregistrement
+
+        RECORDING{
+
+            FORMAT~Format de la video
+
+            QUALITY~Compression et qualitée (1% a 100%)
+
+            FPS~Images par seconde
+
+            BEGIN~Commencer l'enregistrement
+
+            STOP~
+
+        }
+
+        MACHINE~Création
+
+        MACHINE{
+
+            NAME~Nom
+
+            DESCRIPTION~
+
+        }
+
+        ENVIRONMENT~Environnement
+
+        ENVIRONMENT{
+
+            SPEED~Vitesse
+
+            SPEED_PAUSED~(Pause)
+
+            SPEED_HALF~Moitier
+
+            SPEED_DOUBLE~Double
+
+            SPEED_UNLIMITED~(Illimiter)
+
+            GRAVITY~Gravitée (x,y,z)
+
+            GRID_SPACING~Taille de la grille
+
+            LOCK~Bloquer
+
+            UNITS~
+
+            ROTATION~Rotation
+
+            ANGLES~ Angle a aligner (degré)
+
+            BACKGROUND~Arrière plan
+
+            COLOR~Couleur
+
+            CLOUDS~Automne
+
+            SERENE~Montagnes
+
+            SUNSET~Plage
+
+            STARS~Étoiles
+
+            SHOW_GRID~Voir la grille dans le mode création
+
+        }
+
+        EXIT~Quitter
+
+        EXIT{
+
+            CHECK~Étes vous sur de vouloir quitter ?
+
+           
+
+        }
+
+    }
+
+    STATUSBAR{
+
+        ENGAGE~Engagez la physique
+
+        LAYERS~Groupes
+
+        SENSORS~Senseur
+
+        AXIS~Axe
+
+        SNAP~Bloquer sur la grille
+
+        STATIC~Statique
+
+        LAYERS{
+
+            NEW~
+
+            COPY~
+
+            SELECT~
+
+            MOVE~
+
+            DELETE~
+
+            GROUND~
+
+            LOCK~
+
+            HIDE~
+
+        }
+
+    }
+
+    TOOLBAR{
+
+        SHOW_TOOLBAR~
+
+        SELECT~Selection
+        SELECT.TOOLTIP~Cliquez sur un objet pour le selectionner , Quand un objet est selectionner appuyer sur Entrée pour voir ses propriétée. Pour changer le plan de mouvement appuyer sur $Z_AXIS_KEY ou $X_AXIS_KEY.
+            
+        ISLAND~Sélection multiple
+        ISLAND.TOOLTIP~Sélectionner les objet attacher entre eux . Vous pouvez aussi selectionner plusieurs objet en appuyant sur $MULTI_SELECT_KEY.
+        
+        
+        ROTATE~Tourner
+ROTATE.TOOLTIP~Sélectionner quelque chose puis appuyer sur la lettre ($Z_AXIS_KEY ou $X_AXIS_KEY) pour choisir le plan de rotation puis tourner la souris autour de l'objet. vous pouvez aussi appuyer sur $ROTATE_KEY.
+            
+        STRETCH~Modifier
+STRETCH.TOOLTIP~Séléctionner quelque chose et bouger les boule blanche pour modifier l'objet vous pouvez aussi activer se mode en appuyant sur $STRETCH_KEY.
+            
+        WIRE_MODE~Voir les fils
+WIRE_MODE.TOOLTIP~Le mode "fils" vous permet de voir les different partis de votre création connecter entre elles et permet de les modifier.
+            
+        BOX~Cube
+BOX.TOOLTIP~Créer un cube.
+        SPHERE~Sphere
+SPHERE.TOOLTIP~Créer une sphere.
+        CYLINDER~Cylindre
+CYLINDER.TOOLTIP~Créer une cylindre.
+        TUBE~Tube
+TUBE.TOOLTIP~Créer un tube.
+        PYRAMID~Pyrammide
+PYRAMID.TOOLTIP~Créer une pyrammide.
+        CONE~Cone
+CONE.TOOLTIP~Créer un cone.
+        ELLIPSOID~Ellipsoïde
+ELLIPSOID.TOOLTIP~Créer un ellipsoïde ( une sphere que vout pouvez modifier sur chaque plan).
+
+        CAPSULE~Capsule
+CAPSULE.TOOLTIP~Créer une capsule.
+        AXLE~Axe
+AXLE.TOOLTIP~Les deux partie d'un axe peuvent tourner comme un roulement a billes. L'axe s'il est connectet dans le mode "fils" peut agir comme un moteur.
+            
+        HINGE~Axe2
+HINGE.TOOLTIP~Les deux partis d'un "axe2" peuvent tourner comme axe.
+            
+        HYDRAULIC~Hydraulic
+HYDRAULIC.TOOLTIP~Les hydraulic bougent en function du signal qu'ils recoivent.
+            
+        BALL_SOCKET~Balle et Socket
+BALL_SOCKET.TOOLTIP~Les balle socket peuvent tourner sur tout les axe.
+            
+        BATTERY~Pile
+BATTERY.TOOLTIP~Les piles vous permette de envoyant un signal ou un autre en fonction de son temps de fonctionnement.
+            
+        FUNCTION~Function
+FUNCTION.TOOLTIP~Une function permet de renvoyer un signal en function de celui quelle recois sur le dessin dans les propriété l'axe verticale indique le signal quelle renveras en fonction du signal quelle recois indiquer sur l'axe horyzontale.Elle possede aussi un "button" qui permet de l'éteindre ou de l'allummer (ou d'autre chose) en function du signal quelle recois sur se port (cela peut etre modifier dans les propriété). Les ports vert indique les entrée et les jaune les sorti.
+            
+        INPUT~Controller
+INPUT.TOOLTIP~Vous permet d'envoyer un signal en fonction des touches que vous appuyer.
+            
+        OSCILLOSCOPE~Oscilloscope
+OSCILLOSCOPE.TOOLTIP~Les oscilloscope font un graphique du signal qu'ils recoivent.
+            
+        TOUCH~ Senseur "Toucher"
+TOUCH.TOOLTIP~Un senseur toucher detect si un objets le touche et envoie un signal si c'est le cas.
+            
+        DISTANCE~Senseur "Distance"
+DISTANCE.TOOLTIP~Un senseur "distance envoie un signal quand un objets rentre dans son champs de vision le champs de vision peut etre modifier comme n'importe quelle autre forme geometrique.
+            
+        MULTIMETER~Multimetre
+MULTIMETER.TOOLTIP~Une boite qui peut detecter sa position ,acceleration vitesse ou rotation.
+            
+        CONTACT~Contact
+CONTACT.TOOLTIP~Les contact agisses comme des conducteurs si deux se touche le signal qui entre d'un l'un sort dans l'autre.
+            
+        ROCKET~Fusée
+ROCKET.TOOLTIP~Les fusée vous permet de faire une fusée .
+            
+        GEAR~Engrenage
+GEAR.TOOLTIP~Créer un engrenage
+        FORCE_BEAM~ Laser force
+FORCE_BEAM.TOOLTIP~Les laser vous permet d'appliquer une force sur les objets que le laser croise, La sortir (dans le mode fils) vous permet de "voir" a quelle distance est située l'objet.
+            
+        CAMERA~Camera
+CAMERA.TOOLTIP~Les cameras vous permette de voir votre création de la ou vous l'avez placée.Appuyer sur $NEXT_CAMERA pour passer d'un camera a l'autre.
+
+        }
+
+    }
+
+    PROPERTIES~
+
+    PROPERTIES{
+
+        MATTER~
+
+        MATTER{
+
+            DENSITY~
+
+            MATERIAL~
+
+            DEFAULT~
+
+            IRON~
+
+            WOOD~
+
+            CONCRETE~
+
+            GRANITE~
+
+            GLASS~
+
+            PLASTIC~
+
+            RUBBER~
+
+            ICE~
+
+            HELIUM~
+
+            STATIC_DESCRIPTION~
+
+            STICKY_DESCRIPTION~
+
+            POSITION~
+
+            ROTATION~
+
+            SIZE~
+
+            RADIUS~
+
+            HEIGHT~
+
+            WIDTH~
+
+            LENGTH~
+
+            RADIUS_INNER~
+
+            ARC~
+
+        }
+
+        APPEARANCE~
+
+        APPEARANCE{
+
+            PRIMARY~
+
+            HIGHLIGHT~
+
+            SHOW_TEXT~
+
+            NONE~
+
+            CAMO~
+
+            CHECKERS~
+
+            METAL_GALV~
+
+            RIVETS~
+
+            SPOTS~
+
+            STAR~
+
+            STARS~
+
+            STEEL_BOX~
+
+            STRIPES~
+
+            TREADPLATE~
+
+            CHOOSER~
+
+            HUE~
+
+            SATURATION~
+
+            LUMINOSITY~
+
+            RED~
+
+            GREEN~
+
+            BLUE~
+
+            ALPHA~
+
+        }
+
+        MOTOR~
+
+        MOTOR{
+
+            BEARING~
+
+            RADIUS_LEFT~
+
+            RADIS_RIGHT~
+
+            LENGTH_LEFT~
+
+            LENGTH_RIGHT~
+
+            ANGLE_LEFT~
+
+            ANGLE_RIGHT~
+
+            DISTANCE~
+
+            MIN_DISTANCE~
+
+            MAX_DISTANCE~
+
+            JOINT_UNIVERSAL~
+
+            UNIVERSAL_JOINT_DESCRIPTION~
+
+            JOINT_LENGTH~
+
+            JOINT_RADIUS~
+
+            BALL_RADIUS~
+
+            MOTOR_DESCRIPTION_INPUT~
+
+            MOTOR_DESCRIPTION_OUTPUT~
+
+            FORCE~
+
+            VELOCITY~
+
+            ACCELERATION~
+
+            MAX_VEL~
+
+            MAX_FORCE~
+
+            SPRING~
+
+            SPRING_DESCRIPTION~
+
+            SPRING_CONSTANT~
+
+            SPRING_FRICTION~
+
+        }
+
+        SENSOR~
+
+        SENSOR{
+
+            IGNORE_ATTACHED~
+
+            IGNORE_JOINTS~
+
+            IGNORE_NON_STATIC~
+
+            IGNORE_STATIC~
+
+        }
+
+        ROCKET~
+
+        ROCKET{
+
+            MAX_FORCE~
+
+            EFFECTS~
+
+            EFFECT_ORIGINAL~
+
+            EFFECT_MAGIC~
+
+            EFFECT_NOVA~
+
+            EFFECT_PLASMA~
+
+            EFFECT_RINGS~
+
+            EFFECT_ROCKET~
+
+            EFFECT_SAT_V~
+
+            EFFECT_SMOKE~
+
+            EFFECT_SPARK~
+
+            EFFECT_SPUTTER~
+
+            EFFECT_NAME~
+
+            LUMINESCENT~
+
+            ANGLE~
+
+            LIFESPAN~
+
+            SIZE~
+
+            PARTICLE_NUM~
+
+            VELOCITY~
+
+            SAVE~
+
+            ENABLE~
+
+        }
+
+        FORCE_BEAM{
+
+            MAX_FORCE~
+
+            BEAM_LENGTH~
+
+            SHOW_BEAM~
+
+            LUMINOUS_BEAM~
+
+            COLOR_PUSH~
+
+            COLOR_PULL~
+
+        }
+
+        GEAR{
+
+            TOOTH_WIDTH~
+
+            TOOTH_HEGIHT~
+
+            TOOTH_ANGLE~
+
+        }
+
+        MULTIMETER{
+
+            ALTITUDE~
+
+            MAX_HEIGHT~
+
+            MIN_HEIGHT~
+
+            ORIENTATION~
+
+            POSITION~
+
+            RELATIVE~
+
+            MAX_X_RANGE~
+
+            MIN_X_RANGE~
+
+            VELOCITY~
+
+            ACCELERATION~
+
+        }
+
+        CAMERA{
+
+            LOCK~
+
+        }
+
+        INPUT{
+
+            DEVICE_NAME~
+
+            TYPE~
+
+            SLIDER~
+
+            TEXT~
+
+            KEY_EVENT_TYPE~
+
+            HOLD_DOWN~
+
+            TOGGLE~
+
+            KEY~
+
+            UNKNOWN~
+
+            OUTPUT_NEGATIVE_DESCRIPTION~
+
+        }
+
+        FUNCTION{
+
+            FUN_UNNAMED~
+
+            FUN_LINE~
+
+            FUN_ZERO~
+
+            FUN_PARABOLA~
+
+            FUN_CUBIC~
+
+            FUN_SINE~
+
+            FUN_COS~
+
+            FUN_DERIVATIVE~
+
+            FUNCTION_NAME~
+
+            OPTIONS_BATTERY~
+
+            OPTIONS_MODIFIER~
+
+            SWITCH~
+
+            THRESHOLD_DESCRIPTION~
+
+            SWITCH_THRESHOLD~
+
+            THRESHOLD_DESCRIPTION_2~
+
+            SWITCH_ACTION~
+
+            TURN_ON~
+
+            INVERT~
+
+            HOLD~
+
+            MULT~
+
+            EXAMPLE~
+
+        }
+
+    }
+
+}
+

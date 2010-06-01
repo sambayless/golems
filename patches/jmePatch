@@ -1,0 +1,4217 @@
+Index: src/com/jme/util/GameTaskQueue.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/util/GameTaskQueue.java,v
+retrieving revision 1.4
+diff -u -r1.4 GameTaskQueue.java
+--- src/com/jme/util/GameTaskQueue.java 14 Aug 2007 13:41:32 -0000  1.4
++++ src/com/jme/util/GameTaskQueue.java 19 Jul 2009 20:48:40 -0000
+@@ -99,6 +99,11 @@
+         return task;
+     }
+     
++    public boolean isEmpty()
++    {
++       return queue.isEmpty();
++    }
++    
+     /**
+      * This method should be invoked in the update() or render() method
+      * inside the main game to make sure the tasks are invoked in the
+Index: src/com/jme/util/TextureManager.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/util/TextureManager.java,v
+retrieving revision 1.85
+diff -u -r1.85 TextureManager.java
+--- src/com/jme/util/TextureManager.java    25 Mar 2008 15:45:03 -0000  1.85
++++ src/com/jme/util/TextureManager.java    19 Jul 2009 20:48:40 -0000
+@@ -300,13 +300,14 @@
+         return loadTexture(texture, tkey, null, DEFAULT_MIN_FILTER, DEFAULT_MAG_FILTER, DEFAULT_ANISO_LEVEL);
+     }
+     
+-    public static com.jme.image.Texture loadTexture(Texture texture, TextureKey tkey, com.jme.image.Image imageData, int minFilter,
++    public static synchronized com.jme.image.Texture loadTexture(Texture texture, TextureKey tkey, com.jme.image.Image imageData, int minFilter,
+             int magFilter, float anisoLevel) {
+         if(tkey == null) {
+             logger.warning("TextureKey is null, cannot load");
+             return TextureState.getDefaultTexture();
+         }
+         
++        
+         Texture cache = findCachedTexture(tkey);
+         if(cache != null) {
+             //look into cache.
+@@ -371,7 +372,7 @@
+         return texture;
+     }
+     
+-    public static void addToCache(Texture t) {
++    public static synchronized void addToCache(Texture t) {
+         if (TextureState.getDefaultTexture() == null
+                 || (t != TextureState.getDefaultTexture()
+                 && t.getImage() != TextureState.getDefaultTextureImage())) {
+@@ -449,7 +450,7 @@
+             logger.log(Level.WARNING, "loadImage(URL file, boolean flipped): defaultTexture used", e);
+             return TextureState.getDefaultTextureImage();
+         }
+-        return loadImage(fileExt, is, flipped);
++         return loadImage(fileExt, is, flipped);
+     }
+ 
+     public static com.jme.image.Image loadImage(String fileName, boolean flipped) {
+@@ -568,7 +569,7 @@
+      * @param flipImage
+      *            if true will flip the image's y values.
+      * @return the loaded image.
+-     */
++     */ 
+     public static com.jme.image.Image loadImage(java.awt.Image image,
+                                                 boolean flipImage) {
+         if (image == null) return null;
+@@ -694,7 +695,7 @@
+         return false;
+     }
+ 
+-    public static boolean releaseTexture(Texture texture) {
++    public static synchronized boolean releaseTexture(Texture texture) {
+         if (texture == null) 
+             return false;
+         
+@@ -712,11 +713,11 @@
+         return false;
+     }
+ 
+-    public static boolean releaseTexture(TextureKey tKey) {
++    public static synchronized boolean releaseTexture(TextureKey tKey) {
+         return m_tCache.remove(tKey) != null;
+     }
+ 
+-    public static void clearCache() {
++    public static synchronized void clearCache() {
+         m_tCache.clear();
+     }
+     
+@@ -739,7 +740,7 @@
+        loaders.remove(format.toLowerCase());
+    }
+     
+-    public static void registerForCleanup(TextureKey textureKey, int textureId) {
++    public static synchronized void registerForCleanup(TextureKey textureKey, int textureId) {
+         Texture t = m_tCache.get(textureKey); 
+         if (t != null) {
+             t.setTextureId(textureId);
+@@ -770,11 +771,11 @@
+         } catch (Exception e) {} // ignore.
+     }
+ 
+-    public static Texture findCachedTexture(TextureKey textureKey) {
++    public static synchronized Texture findCachedTexture(TextureKey textureKey) {
+         return m_tCache.get(textureKey); 
+     }
+ 
+-    public static void preloadCache(Renderer r) {
++    public static synchronized void preloadCache(Renderer r) {
+         TextureState ts = r.createTextureState(); 
+         for (Texture t : m_tCache.values()) {
+             if (t.getTextureKey().location != null) {
+Index: src/com/jme/scene/shape/Tube.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/shape/Tube.java,v
+retrieving revision 1.1
+diff -u -r1.1 Tube.java
+--- src/com/jme/scene/shape/Tube.java   6 Jan 2008 16:41:54 -0000   1.1
++++ src/com/jme/scene/shape/Tube.java   19 Jul 2009 20:48:39 -0000
+@@ -124,6 +124,8 @@
+    }
+ 
+    public void setOuterRadius(float outerRadius) {
++       if(this.innerRadius==innerRadius)
++           return;
+        this.outerRadius = outerRadius;
+        allocateVertices();
+    }
+@@ -133,6 +135,8 @@
+    }
+ 
+    public void setInnerRadius(float innerRadius) {
++       if(this.innerRadius==innerRadius)
++           return;
+        this.innerRadius = innerRadius;
+        allocateVertices();
+    }
+@@ -142,6 +146,8 @@
+    }
+ 
+    public void setHeight(float height) {
++       if(this.innerRadius==innerRadius)
++           return;
+        this.height = height;
+        allocateVertices();
+    }
+Index: src/com/jme/scene/shape/Box.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/shape/Box.java,v
+retrieving revision 1.23
+diff -u -r1.23 Box.java
+--- src/com/jme/scene/shape/Box.java    21 Sep 2007 15:45:27 -0000  1.23
++++ src/com/jme/scene/shape/Box.java    19 Jul 2009 20:48:39 -0000
+@@ -37,6 +37,7 @@
+ 
+ import com.jme.math.Vector3f;
+ import com.jme.scene.TriMesh;
++import com.jme.scene.VBOInfo;
+ import com.jme.scene.batch.TriangleBatch;
+ import com.jme.util.export.InputCapsule;
+ import com.jme.util.export.JMEExporter;
+Index: src/com/jme/renderer/AbstractCamera.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/renderer/AbstractCamera.java,v
+retrieving revision 1.48
+diff -u -r1.48 AbstractCamera.java
+--- src/com/jme/renderer/AbstractCamera.java    21 Sep 2007 15:45:31 -0000  1.48
++++ src/com/jme/renderer/AbstractCamera.java    19 Jul 2009 20:48:36 -0000
+@@ -195,7 +195,7 @@
+     /**
+      * Array holding the planes that this camera will check for culling.
+      */
+-    protected Plane[] worldPlane;
++    public Plane[] worldPlane;
+ 
+     /**
+      * Computation vector used in lookAt operations.
+Index: src/com/jme/renderer/Renderer.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/renderer/Renderer.java,v
+retrieving revision 1.72
+diff -u -r1.72 Renderer.java
+--- src/com/jme/renderer/Renderer.java  14 Sep 2007 20:53:52 -0000  1.72
++++ src/com/jme/renderer/Renderer.java  19 Jul 2009 20:48:36 -0000
+@@ -676,6 +676,14 @@
+     public abstract int createDisplayList(GeomBatch batch);
+ 
+     /**
++     * Releases a DisplayList from the card, sometime in the future.
++     * This method is safe to call from anythread, and from finalize methods.
++     * @param listId
++     *            the id of the display list to release
++     */
++    public abstract void futureReleaseDisplayList(int listID);
++    
++    /**
+      * Releases a DisplayList from the card.
+      * 
+      * @param listId
+Index: src/com/jme/renderer/RenderQueue.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/renderer/RenderQueue.java,v
+retrieving revision 1.37
+diff -u -r1.37 RenderQueue.java
+--- src/com/jme/renderer/RenderQueue.java   11 Oct 2007 20:03:35 -0000  1.37
++++ src/com/jme/renderer/RenderQueue.java   19 Jul 2009 20:48:36 -0000
+@@ -35,6 +35,7 @@
+ import java.util.Arrays;
+ import java.util.Comparator;
+ 
++import com.jme.math.FastMath;
+ import com.jme.math.Vector3f;
+ import com.jme.scene.SceneElement;
+ import com.jme.scene.Spatial;
+@@ -235,7 +236,9 @@
+      * Renders the opaque, clone, transparent, and ortho buckets in that order.
+      */
+     public void renderBuckets() {
+-        renderOpaqueBucket();
++    
++       renderOpaqueBucket();
++       renderer.setPolygonOffset( 0, 0 );
+         renderTransparentBucket();
+         renderOrthoBucket();
+     }
+@@ -247,8 +250,11 @@
+     private void renderOpaqueBucket() {
+         opaqueBucket.sort();
+         for (int i = 0; i < opaqueBucket.listSize; i++) {
+-            opaqueBucket.list[i].draw(renderer);
++           renderer.setPolygonOffset(opaqueBucket.list[i].getZOFFSET()/10f ,0 );
++           opaqueBucket.list[i].draw(renderer);
++           //
+         }
++        renderer.setPolygonOffset(0 ,0 );
+         opaqueBucket.clear();
+     }
+ 
+@@ -262,7 +268,7 @@
+         transparentBucket.sort();
+             for (int i = 0; i < transparentBucket.listSize; i++) {
+                 SceneElement obj = transparentBucket.list[i]; 
+-
++               renderer.setPolygonOffset(obj.getZOFFSET()/10f ,0 );
+                 if (twoPassTransparent && obj instanceof GeomBatch) {
+                     GeomBatch batch = (GeomBatch)obj;
+                     RenderState oldCullState = batch.states[RenderState.RS_CULL];
+@@ -286,6 +292,7 @@
+                 }
+                 obj.queueDistance = Float.NEGATIVE_INFINITY;
+             }
++            renderer.setPolygonOffset(0 ,0 );
+         transparentBucket.clear();
+     }
+ 
+Index: src/com/jme/scene/Geometry.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/Geometry.java,v
+retrieving revision 1.113
+diff -u -r1.113 Geometry.java
+--- src/com/jme/scene/Geometry.java 5 Oct 2007 22:40:35 -0000   1.113
++++ src/com/jme/scene/Geometry.java 19 Jul 2009 20:48:37 -0000
+@@ -573,7 +573,7 @@
+      */
+     @Override
+     public void updateWorldBound() {
+-        if ((lockedMode & SceneElement.LOCKED_BOUNDS) != 0) return;
++        if (((lockedMode & SceneElement.LOCKED_BOUNDS) != 0)  && ((dirtyLocks & SceneElement.LOCKED_BOUNDS) == 0)) return;
+ 
+         boolean foundFirstBound = false;
+         for (int i = 0, cSize = getBatchCount(); i < cSize; i++) {
+@@ -593,7 +593,7 @@
+                 }
+             }
+         }
+-
++        dirtyLocks &= (~SceneElement.LOCKED_BOUNDS);
+     }
+ 
+     /**
+@@ -722,67 +722,80 @@
+     public void lockBounds() {
+         super.lockBounds();
+ 
+-        for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).lockBounds();
++     /*   for (int x = 0; x < getBatchCount(); x++)
++            getBatch(x).lockBounds();*/
+     }
+ 
+     @Override
+     public void lockShadows() {
+         super.lockShadows();
+-
++/*
+         for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).lockShadows();
++            getBatch(x).lockShadows();*/
+     }
+     
+     @Override
+     public void lockTransforms() {
+         super.lockTransforms();
+ 
+-        for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).lockTransforms();
++   /*     for (int x = 0; x < getBatchCount(); x++)
++            getBatch(x).lockTransforms();*/
+     }
+ 
+     @Override
+-    public void lockMeshes(Renderer r) {
+-        super.lockMeshes(r);
++    public void lockMeshes() {
++        super.lockMeshes();
+ 
+-        for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).lockMeshes(r);
++/*        for (int x = 0; x < getBatchCount(); x++)
++            getBatch(x).lockMeshes();*/
+     }
+     
+     @Override
+     public void unlockBounds() {
+         super.unlockBounds();
+ 
+-        for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).unlockBounds();
++/*        for (int x = 0; x < getBatchCount(); x++)
++            getBatch(x).unlockBounds();*/
+     }
+     
+     @Override
+     public void unlockShadows() {
+         super.unlockShadows();
+-
++/*
+         for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).unlockShadows();
++            getBatch(x).unlockShadows();*/
+     }
+     
+     @Override
+     public void unlockTransforms() {
+         super.unlockTransforms();
+ 
+-        for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).unlockTransforms();
++  /*      for (int x = 0; x < getBatchCount(); x++)
++            getBatch(x).unlockTransforms();*/
+     }
+ 
+     @Override
+-    public void unlockMeshes(Renderer r) {
+-        super.unlockMeshes(r);
++    public void unlockMeshes() {
++        super.unlockMeshes();
+ 
+-        for (int x = 0; x < getBatchCount(); x++)
+-            getBatch(x).unlockMeshes(r);
++/*        for (int x = 0; x < getBatchCount(); x++)
++            getBatch(x).unlockMeshes();*/
+     }
+ 
+-    private void readObject(java.io.ObjectInputStream s) throws IOException,
++    
++    @Override
++   protected void refreshBranchToLeaves(int locksToDirty) {
++       super.refreshBranchToLeaves(locksToDirty);
++       //no reason to lock geometry batches, is there?
++ /*       if (batchList != null)
++            for (int i = 0, cSize = getBatchCount(); i < cSize; i++) {
++                GeomBatch batch = getBatch(i);
++                if (batch != null && batch.isEnabled())
++                    batch.refreshBranchToLeaves(locksToDirty);
++            }*/
++   }
++
++   private void readObject(java.io.ObjectInputStream s) throws IOException,
+             ClassNotFoundException {
+         s.defaultReadObject();
+         // go through children and set parent to this node
+Index: src/com/jme/scene/ConnectionPoint.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/ConnectionPoint.java,v
+retrieving revision 1.1
+diff -u -r1.1 ConnectionPoint.java
+--- src/com/jme/scene/ConnectionPoint.java  25 Aug 2006 19:11:48 -0000  1.1
++++ src/com/jme/scene/ConnectionPoint.java  19 Jul 2009 20:48:37 -0000
+@@ -34,10 +34,12 @@
+         if(target == null) {
+             return;
+         }
+-        if (((lockedMode & SceneElement.LOCKED_TRANSFORMS) == 0)) {
++        if ((((lockedMode & SceneElement.LOCKED_TRANSFORMS) == 0)) || ((dirtyLocks & SceneElement.LOCKED_TRANSFORMS) != 0)) {
++           
+             worldScale.set(parent.getWorldScale()).multLocal(target.getWorldScale());
+             parent.getWorldRotation().mult(target.getWorldRotation(), worldRotation);
+             worldTranslation = parent.localToWorld( target.getWorldTranslation(), worldTranslation );
++            dirtyLocks &= (~SceneElement.LOCKED_TRANSFORMS);
+         }
+     }
+     
+Index: src/com/jme/scene/Spatial.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/Spatial.java,v
+retrieving revision 1.127
+diff -u -r1.127 Spatial.java
+--- src/com/jme/scene/Spatial.java  10 Dec 2007 14:36:30 -0000  1.127
++++ src/com/jme/scene/Spatial.java  19 Jul 2009 20:48:38 -0000
+@@ -347,17 +347,28 @@
+      *            true if this node started the update process.
+      */
+     public void updateGeometricState(float time, boolean initiator) {
+-        if ((lockedMode & SceneElement.LOCKED_BRANCH) != 0) return;
++        if (((lockedMode & SceneElement.LOCKED_BRANCH) != 0) && ((dirtyLocks & SceneElement.LOCKED_BRANCH) == 0) ) return;
++       
++        
+         updateWorldData(time);
+-        if ((lockedMode & SceneElement.LOCKED_BOUNDS) == 0) {
+-            updateWorldBound();
++        if (((lockedMode & SceneElement.LOCKED_BOUNDS) == 0)  || ((dirtyLocks & SceneElement.LOCKED_BOUNDS) != 0)) {
++            updateWorldBound();            
+             if (initiator) {
+                 propagateBoundToRoot();
+             }
++            dirtyLocks &= (~SceneElement.LOCKED_BOUNDS);
+         }
++        dirtyLocks &= (~SceneElement.LOCKED_BRANCH);
+     }
+ 
+-    /**
++    @Override
++   protected void refreshBranchToRoot( int locksToDirty) {
++       super.refreshBranchToRoot(locksToDirty);
++       if (this.getParent()!=null)
++           this.getParent().refreshBranchToRoot(locksToDirty);
++   }
++
++   /**
+      *
+      * <code>updateWorldData</code> updates the world transforms from the
+      * parent down to the leaf.
+@@ -368,6 +379,7 @@
+     public void updateWorldData(float time) {
+         // update spatial state via controllers
+         if(geometricalControllers != null) {
++           // updateWorldVectors();//update the world vectors early, in case its needed by the controllers
+             for (int i = 0, gSize = geometricalControllers.size(); i < gSize; i++) {
+                 try {
+                     Controller controller = geometricalControllers.get( i );
+@@ -391,10 +403,13 @@
+      *
+      */
+     public void updateWorldVectors() {
+-        if (((lockedMode & SceneElement.LOCKED_TRANSFORMS) == 0)) {
++        if ((((lockedMode & SceneElement.LOCKED_TRANSFORMS) == 0)) || ((dirtyLocks & SceneElement.LOCKED_TRANSFORMS) != 0)) {
++    
++           
+             updateWorldScale();
+             updateWorldRotation();
+             updateWorldTranslation();
++            dirtyLocks &= (~SceneElement.LOCKED_TRANSFORMS);
+         }
+     }
+ 
+@@ -706,10 +721,15 @@
+      *
+      */
+     public void propagateBoundToRoot() {
+-        if (parent != null) {
+-            parent.updateWorldBound();
+-            parent.propagateBoundToRoot();
+-        }
++       try{
++           if (parent != null) {
++               parent.updateWorldBound();
++               parent.propagateBoundToRoot();
++           }
++       }catch(NullPointerException e)
++       {
++           //System.err.println(e);//can be caused by threading issues... this is fine, more or less.
++       }
+     }
+ 
+     /**
+Index: src/com/jme/scene/DistanceSwitchModel.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/DistanceSwitchModel.java,v
+retrieving revision 1.11
+diff -u -r1.11 DistanceSwitchModel.java
+--- src/com/jme/scene/DistanceSwitchModel.java  21 Sep 2007 15:45:28 -0000  1.11
++++ src/com/jme/scene/DistanceSwitchModel.java  19 Jul 2009 20:48:37 -0000
+@@ -35,6 +35,8 @@
+ import java.io.IOException;
+ 
+ import com.jme.math.Vector3f;
++import com.jme.renderer.Camera;
++import com.jme.renderer.Renderer;
+ import com.jme.system.JmeException;
+ import com.jme.util.export.InputCapsule;
+ import com.jme.util.export.JMEExporter;
+@@ -70,8 +72,17 @@
+ 
+    private float worldScaleSquared;
+ 
+-   private Vector3f diff;
++   private float sqrDistance = 0;
++   
++   private int switchChild = 0;
+ 
++
++   private Vector3f modelCenter = new Vector3f();;
++
++   private Vector3f worldCenter = new Vector3f();
++
++   private final static Vector3f tmpVs = new Vector3f();
++   
+     public DistanceSwitchModel() {}
+     
+    /**
+@@ -82,6 +93,7 @@
+     *            the number of children this model selects from.
+     */
+    public DistanceSwitchModel(int numChildren) {
++       
+        this.numChildren = numChildren;
+        modelMin = new float[numChildren];
+        modelMax = new float[numChildren];
+@@ -136,35 +148,59 @@
+        modelMax[index] = maxDist;
+    }
+ 
+-   /**
+-    * <code>set</code> accepts Float and Vector3f objects to set the
+-    * properties of the distance switch model. If the value passed is a Float
+-    * object, this value is used to determine the world scale (squared) value,
+-    * which allows the adjustment of the min and max distances for switching.
+-    * If the value passed is a Vector3f, that is used to set the difference of
+-    * the switch node and a comparison point which is typically the camera
+-    * location.
+-    * 
+-    * @param value
+-    *            either Float - the world scale squared value, or Vector3f -
+-    *            the difference between the switch node and a location.
+-    */
+-   public void set(Object value) {
+-       if (value instanceof Float) {
++   public void setScale(float value)
++   {
++       worldScaleSquared = value;
++
++       for (int i = 0; i < numChildren; i++) {
++           worldMin[i] = worldScaleSquared * modelMin[i] * modelMin[i];
++           worldMax[i] = worldScaleSquared * modelMax[i] * modelMax[i];
++       }
++   }
++
+ 
+-           worldScaleSquared = ((Float) value).floatValue();
++   public void selectLevelOfDetail(Camera camera, SwitchNode switchNode) {
++   
++       //problem: this computation should be happening in the switch model, not here.
++       // compute world LOD center
++       worldCenter = switchNode.getWorldRotation().multLocal(worldCenter.set(modelCenter))
++               .multLocal(switchNode.getWorldScale()).addLocal(switchNode.getWorldTranslation());
++
++       // compute world squared distance intervals
++
++       float worldSqrScale = tmpVs.set(switchNode.getWorldScale()).multLocal(switchNode.getWorldScale())
++               .length();
++       
++       this.sqrDistance = worldCenter.subtractLocal(camera.getLocation()).lengthSquared();
++   
++       setScale(worldSqrScale);
++       //System.out.println( model.getSwitchChild());
++       
++       updateSwitchChild();
++       
++       switchNode.setActiveChild(getSwitchChild());
++
++       
++       
++   }
++   
++   public void updateSwitchChild()
++   {
++       if (numChildren > 0) {
++           
+ 
+            for (int i = 0; i < numChildren; i++) {
+-               worldMin[i] = worldScaleSquared * modelMin[i] * modelMin[i];
+-               worldMax[i] = worldScaleSquared * modelMax[i] * modelMax[i];
++               if (worldMin[i] <= sqrDistance && sqrDistance < worldMax[i]) {
++                   this.switchChild = i;
++                   return;
++               }
+            }
+-       } else if (value instanceof Vector3f) {
+-           diff = (Vector3f) value;
+-       } else {
+-           throw new JmeException("Invalid value for set method.");
+        }
++
++       this.switchChild = SwitchNode.SN_INVALID_CHILD;
+    }
+ 
++
+    /**
+     * <code>getSwitchChild</code> returns the index of the child that should
+     * be switched on. The current distance between the parent switch node and a
+@@ -174,17 +210,7 @@
+     */
+    public int getSwitchChild() {
+        // select the switch child
+-       if (numChildren > 0) {
+-           float sqrDistance = diff.lengthSquared();
+-
+-           for (int i = 0; i < numChildren; i++) {
+-               if (worldMin[i] <= sqrDistance && sqrDistance < worldMax[i]) {
+-                   return i;
+-               }
+-           }
+-       }
+-
+-       return SwitchNode.SN_INVALID_CHILD;
++       return switchChild;
+    }
+     
+     public void write(JMEExporter e) throws IOException {
+@@ -196,7 +222,7 @@
+         capsule.write(worldMax, "worldMax", new float[0]);
+         capsule.write(numChildren, "numChildren", 0);
+         capsule.write(worldScaleSquared, "worldScaleSquared", 0);
+-        capsule.write(diff, "diff", Vector3f.ZERO);
++       
+     }
+     
+     public void read(JMEImporter e) throws IOException {
+@@ -208,10 +234,15 @@
+         worldMax = capsule.readFloatArray("worldMax", new float[0]);
+         numChildren = capsule.readInt("numChildren", 0);
+         worldScaleSquared = capsule.readFloat("worldScaleSquared", 0);
+-        diff = (Vector3f)capsule.readSavable("diff", Vector3f.ZERO.clone());
++   
+     }
+     
+     public Class getClassTag() {
+         return this.getClass();
+     }
++
++
++   public void render(Renderer r, SwitchNode toSwitch) {
++       selectLevelOfDetail(r.getCamera(),toSwitch);
++   }
+ }
+\ No newline at end of file
+Index: src/com/jme/scene/TriMesh.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/TriMesh.java,v
+retrieving revision 1.69
+diff -u -r1.69 TriMesh.java
+--- src/com/jme/scene/TriMesh.java  2 Aug 2007 21:54:36 -0000   1.69
++++ src/com/jme/scene/TriMesh.java  19 Jul 2009 20:48:38 -0000
+@@ -47,6 +47,7 @@
+ import com.jme.renderer.Renderer;
+ import com.jme.scene.batch.GeomBatch;
+ import com.jme.scene.batch.TriangleBatch;
++import com.jme.system.DisplaySystem;
+ import com.jme.system.JmeException;
+ 
+ /**
+@@ -258,6 +259,8 @@
+      *            the renderer to display
+      */
+     public void draw(Renderer r) {
++       
++
+         TriangleBatch batch;
+         if (getBatchCount() == 1) {
+             batch = getBatch(0);
+@@ -379,6 +382,8 @@
+         thisCT.getBounds().transform(
+                 worldRotation, worldTranslation, worldScale,
+                 thisCT.getWorldBounds());
++        
++        //this last step is very slow
+         return thisCT.intersect(checkCT);        
+     }
+ 
+Index: src/com/jme/scene/SharedMesh.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/SharedMesh.java,v
+retrieving revision 1.38
+diff -u -r1.38 SharedMesh.java
+--- src/com/jme/scene/SharedMesh.java   2 Aug 2007 21:54:36 -0000   1.38
++++ src/com/jme/scene/SharedMesh.java   19 Jul 2009 20:48:38 -0000
+@@ -109,7 +109,6 @@
+        } else {
+            setTarget(target);
+        }
+-               
+        this.localRotation.set(target.getLocalRotation());
+        this.localScale.set(target.getLocalScale());
+        this.localTranslation.set(target.getLocalTranslation());
+@@ -522,8 +521,8 @@
+     }
+ 
+     @Override
+-    public void lockMeshes(Renderer r) {
+-        target.lockMeshes(r);
++    public void lockMeshes() {
++        target.lockMeshes();
+     }
+     
+     /**
+Index: src/com/jme/scene/Skybox.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/Skybox.java,v
+retrieving revision 1.16
+diff -u -r1.16 Skybox.java
+--- src/com/jme/scene/Skybox.java   12 May 2006 21:19:22 -0000  1.16
++++ src/com/jme/scene/Skybox.java   19 Jul 2009 20:48:38 -0000
+@@ -168,7 +168,7 @@
+         // Initialize the texture state
+         ts.setTexture(texture, textureUnit);
+         ts.setEnabled(true);
+-
++       
+         // Set the texture to the quad
+         skyboxQuads[direction].setRenderState(ts);
+ 
+@@ -300,4 +300,28 @@
+         }
+         
+     }
++
++   public void removeTexture(int direction, int unit) {
++         // Validate
++        if (direction < 0 || direction > 5) {
++            throw new JmeException("Direction " + direction
++                    + " is not a valid side for the skybox");
++        }
++
++        TextureState ts = (TextureState) skyboxQuads[direction]
++                .getRenderState(RenderState.RS_TEXTURE);
++        if (ts == null) {
++            ts = DisplaySystem.getDisplaySystem().getRenderer()
++                    .createTextureState();
++        }
++
++        // Initialize the texture state
++        ts.removeTexture( unit);
++        ts.setEnabled(true);
++       
++        // Set the texture to the quad
++        skyboxQuads[direction].setRenderState(ts);
++
++       
++   }
+ }
+\ No newline at end of file
+Index: src/com/jme/scene/SwitchNode.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/SwitchNode.java,v
+retrieving revision 1.11
+diff -u -r1.11 SwitchNode.java
+--- src/com/jme/scene/SwitchNode.java   29 Sep 2006 22:36:52 -0000  1.11
++++ src/com/jme/scene/SwitchNode.java   19 Jul 2009 20:48:38 -0000
+@@ -34,6 +34,7 @@
+ 
+ import java.io.IOException;
+ 
++import com.jme.bounding.BoundingVolume;
+ import com.jme.intersection.CollisionResults;
+ import com.jme.intersection.PickResults;
+ import com.jme.math.Ray;
+@@ -88,6 +89,8 @@
+        return activeChild;
+    }
+ 
++
++   
+    /**
+     * Sets the index of the child of this Node that will be rendered. If the
+     * index is <0 or >getQuantity then nothing is rendered.
+@@ -195,8 +198,58 @@
+             }
+         }
+     }
++
++    public void updateWorldData(float time) {
++        super.updateWorldData(time);
++
++
++           if (activeChild != SN_INVALID_CHILD) {
++           if (activeChildData != null) {
++               activeChildData.updateGeometricState(time, false);
++           }
++       }
++    }
+     
+-    
++    public void updateWorldBound() {
++        if (((lockedMode & SceneElement.LOCKED_BOUNDS) != 0) && ((dirtyLocks & SceneElement.LOCKED_BOUNDS) == 0)) return;
++        
++        
++        if (children == null) {
++           dirtyLocks &= (~SceneElement.LOCKED_BOUNDS);      
++            return;
++        }
++        BoundingVolume worldBound = null;
++   
++        
++       if (activeChild != SN_INVALID_CHILD) {
++           if (activeChildData != null) {
++                 if (worldBound != null) {
++                       // merge current world bound with child world bound
++                       worldBound.mergeLocal(activeChildData.getWorldBound());
++
++                   } else {
++                       // set world bound to first non-null child world bound
++                       if (activeChildData.getWorldBound() != null) {
++                           worldBound = activeChildData.getWorldBound().clone(this.worldBound);
++                       }
++                   }
++           }
++       }
++        
++        this.worldBound = worldBound;
++        dirtyLocks &= (~SceneElement.LOCKED_BOUNDS);
++        
++    }/*//including this caused unexpected bounding failures.
++    @Override
++    public void updateModelBound() {
++
++               if (activeChild != SN_INVALID_CHILD) {
++                   if (activeChildData != null) {
++                       activeChildData.updateModelBound();
++                   }
++               }
++    }
++    */
+     public void write(JMEExporter e) throws IOException {
+         super.write(e);
+         OutputCapsule capsule = e.getCapsule(this);
+Index: src/com/jme/scene/Node.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/Node.java,v
+retrieving revision 1.76
+diff -u -r1.76 Node.java
+--- src/com/jme/scene/Node.java 29 Apr 2008 15:09:59 -0000  1.76
++++ src/com/jme/scene/Node.java 19 Jul 2009 20:48:37 -0000
+@@ -397,7 +397,7 @@
+         }
+     }
+ 
+-    // inheritted docs
++   // inheritted docs
+     public void lockBounds() {
+         super.lockBounds();
+         for (int i = 0, max = getQuantity(); i < max; i++) {
+@@ -431,12 +431,34 @@
+     }
+ 
+     //  inheritted docs
+-    public void lockMeshes(Renderer r) {
+-        super.lockMeshes(r);
++    public void lockMeshes() {
++        super.lockMeshes();
+         for (int i = 0, max = getQuantity(); i < max; i++) {
+             Spatial child =  children.get(i);
+             if (child != null) {
+-                child.lockMeshes(r);
++                child.lockMeshes();
++            }
++        }
++    }
++    
++    //  inheritted docs
++    public void lockBranch() {
++        super.lockBranch();
++        for (int i = 0, max = getQuantity(); i < max; i++) {
++            Spatial child =  children.get(i);
++            if (child != null) {
++                child.lockBranch();
++            }
++        }
++    }
++    
++    //  inheritted docs
++    public void unlockBranch() {
++        super.unlockBranch();
++        for (int i = 0, max = getQuantity(); i < max; i++) {
++            Spatial child =  children.get(i);
++            if (child != null) {
++                child.unlockBranch();
+             }
+         }
+     }
+@@ -475,12 +497,12 @@
+     }
+ 
+     //  inheritted docs
+-    public void unlockMeshes(Renderer r) {
+-        super.unlockMeshes(r);
++    public void unlockMeshes() {
++        super.unlockMeshes();
+         for (int i = 0, max = getQuantity(); i < max; i++) {
+             Spatial child =  children.get(i);
+             if (child != null) {
+-                child.unlockMeshes(r);
++                child.unlockMeshes();
+             }
+         }
+     }
+@@ -523,15 +545,37 @@
+         }
+     }
+ 
+-    /**
++    
++    
++
++
++   @Override
++   protected void refreshBranchToLeaves(int locksToDirty) {
++       super.refreshBranchToLeaves(locksToDirty);
++          if(children == null) {
++               return;
++           }
++           for (int i = 0, cSize = children.size(); i < cSize; i++) {
++               Spatial pkChild = getChild(i);
++               if (pkChild != null)
++                   pkChild.refreshBranchToLeaves(locksToDirty);
++           }
++   }
++
++
++
++   /**
+      * <code>updateWorldBound</code> merges the bounds of all the children
+      * maintained by this node. This will allow for faster culling operations.
+      * 
+      * @see com.jme.scene.Spatial#updateWorldBound()
+      */
+     public void updateWorldBound() {
+-        if ((lockedMode & SceneElement.LOCKED_BOUNDS) != 0) return;
++        if (((lockedMode & SceneElement.LOCKED_BOUNDS) != 0) && ((dirtyLocks & SceneElement.LOCKED_BOUNDS) == 0)) return;
++        
++        
+         if (children == null) {
++           dirtyLocks &= (~SceneElement.LOCKED_BOUNDS);      
+             return;
+         }
+         BoundingVolume worldBound = null;
+@@ -551,6 +595,8 @@
+             }
+         }
+         this.worldBound = worldBound;
++        dirtyLocks &= (~SceneElement.LOCKED_BOUNDS);
++        
+     }
+ 
+     /*
+Index: src/com/jme/scene/SceneElement.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/SceneElement.java,v
+retrieving revision 1.9
+diff -u -r1.9 SceneElement.java
+--- src/com/jme/scene/SceneElement.java 24 May 2007 20:55:25 -0000  1.9
++++ src/com/jme/scene/SceneElement.java 19 Jul 2009 20:48:37 -0000
+@@ -33,10 +33,14 @@
+ package com.jme.scene;
+ 
+ import java.io.IOException;
++import java.io.NotSerializableException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ import java.util.Stack;
+ 
+ import com.jme.bounding.BoundingVolume;
++import com.jme.math.FastMath;
+ import com.jme.renderer.Camera;
+ import com.jme.renderer.Renderer;
+ import com.jme.scene.state.LightState;
+@@ -59,6 +63,8 @@
+  */
+ public abstract class SceneElement implements Serializable, Savable {
+ 
++   
++   
+     public static final int NODE = 1;
+     public static final int GEOMETRY = 2;
+     public static final int TRIMESH = 4;
+@@ -83,6 +89,7 @@
+     public static final int LOCKED_TRANSFORMS = 4;
+     public static final int LOCKED_SHADOWS = 8;
+     public static final int LOCKED_BRANCH = 16;
++    public static final int LOCKED_ALL = LOCKED_BRANCH | LOCKED_SHADOWS | LOCKED_TRANSFORMS | LOCKED_MESH_DATA | LOCKED_BOUNDS;
+ 
+     public static final int NM_INHERIT = 0;
+     public static final int NM_USE_PROVIDED = 1;
+@@ -90,7 +97,12 @@
+     public static final int NM_GL_NORMALIZE_IF_SCALED = 3;
+     public static final int NM_OFF = 4;
+ 
+-    /**
++    private final float zOFFSET = FastMath.rand.nextFloat();
++    
++    public float getZOFFSET() {
++       return zOFFSET;
++   }
++   /**
+      * A flag indicating how normals should be treated by the renderer.
+      */
+     protected int normalsMode = NM_INHERIT;
+@@ -117,8 +129,30 @@
+      * locked against certain changes.
+      */
+     protected int lockedMode = LOCKED_NONE;
++    
++    /**
++     * The locks belonging to this scene element that should be temporarily ignored,
++     * because they need to be updated (just once).
++     */
++    protected int dirtyLocks = LOCKED_NONE;
+ 
+     /**
++     * Get the big flags of the scene locks that are going to be ignored the next time they are encountered.
++     * @return
++     */
++    public int getDirtyLocks() {
++       return dirtyLocks;
++   }
++
++    /**
++     * Set which scene locks should be ignored (just once) the next time they are encountered.
++     * As each lock is encountered and ignored, it will be subtracted from this field.
++     * @param dirtyLocks
++     */
++   public void setDirtyLocks(int dirtyLocks) {
++       this.dirtyLocks = dirtyLocks;
++   }
++   /**
+      * Flag signaling how lights are combined for this node. By default set to
+      * INHERIT.
+      */
+@@ -263,7 +297,8 @@
+      * @see #unlockBounds()
+      */
+     public void lockBounds() {
+-        updateGeometricState(0, true);
++    //    updateGeometricState(0, true);
++       //shouldn't do this - the cost is O(n^2) with the size of the tree when called on a node.
+         lockedMode |= LOCKED_BOUNDS;
+     }
+ 
+@@ -304,22 +339,7 @@
+         lockedMode |= LOCKED_TRANSFORMS;
+     }
+ 
+-    /**
+-     * Flags this spatial and those below it that any meshes in the specified
+-     * scenegraph location or lower will not have changes in vertex, texcoord,
+-     * normal or color data. This allows optimizations by the engine such as
+-     * creating display lists from the data. Calling this method does not
+-     * provide a guarentee that data changes will not be allowed or will/won't
+-     * show up in the scene. It is merely a hint to the engine.
+-     * 
+-     * @param r
+-     *            A renderer to lock against.
+-     * @see #unlockMeshes(Renderer)
+-     */
+-    public void lockMeshes(Renderer r) {
+-        updateRenderState();
+-        lockedMode |= LOCKED_MESH_DATA;
+-    }
++
+ 
+     /**
+      * Flags this spatial and those below it that any meshes in the specified
+@@ -327,29 +347,16 @@
+      * normal or color data. This allows optimizations by the engine such as
+      * creating display lists from the data. Calling this method does not
+      * provide a guarentee that data changes will not be allowed or will/won't
+-     * show up in the scene. It is merely a hint to the engine. Calls
+-     * lockMeshes(Renderer) with the current display system's renderer.
++     * show up in the scene. It is merely a hint to the engine. 
+      * 
+      * @see #lockMeshes(Renderer)
+      */
+     public void lockMeshes() {
+-        lockMeshes(DisplaySystem.getDisplaySystem().getRenderer());
++         updateRenderState();
++          lockedMode |= LOCKED_MESH_DATA;
+     }
+ 
+-    /**
+-     * Convienence function for locking all aspects of a SceneElement.
+-     * 
+-     * @see #lockBounds()
+-     * @see #lockTransforms()
+-     * @see #lockMeshes(Renderer)
+-     * @see #lockShadows()
+-     */
+-    public void lock(Renderer r) {
+-        lockBounds();
+-        lockTransforms();
+-        lockMeshes(r);
+-        lockShadows();
+-    }
++
+ 
+     /**
+      * Convienence function for locking all aspects of a SceneElement. For
+@@ -399,6 +406,39 @@
+     }
+ 
+     /**
++     * This entire branch of the scene graph has its locks dirtied so that it can be
++     * updated/rendered (it will ignore locks).
++     * @param locksToDirty A bit flag containing each lock to dirty
++     */
++    public void refreshBranch(int locksToDirty)
++    {
++       refreshBranchToRoot(locksToDirty);
++       refreshBranchToLeaves(locksToDirty);
++    }
++    
++    public void refreshBranch()
++    {
++       refreshBranch(SceneElement.LOCKED_ALL);
++    }
++    
++    /**
++     * Refresh upward in this scene graph to the root node
++     */
++    protected void refreshBranchToRoot(int locksToDirty)
++    {
++       this.dirtyLocks |= locksToDirty;
++       
++    }
++    
++    /**
++     * Refresh downward in the scene graph to each leaf of element
++     */
++    protected void refreshBranchToLeaves(int locksToDirty)
++    {
++       this.dirtyLocks |= locksToDirty;
++    }
++    
++    /**
+      * Flags this spatial and those below it to allow for transform updating
+      * (the default).
+      * 
+@@ -417,38 +457,11 @@
+      * @see #unlockMeshes(Renderer)
+      */
+     public void unlockMeshes() {
+-        unlockMeshes(DisplaySystem.getDisplaySystem().getRenderer());
++         lockedMode &= ~LOCKED_MESH_DATA;
+     }
+ 
+-    /**
+-     * Flags this spatial and those below it to allow for mesh updating (the
+-     * default). Generally this means that any display lists setup will be
+-     * erased and released.
+-     * 
+-     * @param r
+-     *            The renderer used to lock against.
+-     * @see #lockMeshes(Renderer)
+-     */
+-    public void unlockMeshes(Renderer r) {
+-        lockedMode &= ~LOCKED_MESH_DATA;
+-    }
+ 
+-    /**
+-     * Convienence function for unlocking all aspects of a SceneElement.
+-     * 
+-     * @see #unlockBounds()
+-     * @see #unlockTransforms()
+-     * @see #unlockMeshes(Renderer)
+-     * @see #unlockShadows()
+-     * @see #unlockBranch()
+-     */
+-    public void unlock(Renderer r) {
+-        unlockBounds();
+-        unlockTransforms();
+-        unlockMeshes(r);
+-        unlockShadows();
+-        unlockBranch();
+-    }
++
+ 
+     /**
+      * Convienence function for unlocking all aspects of a SceneElement. For
+@@ -486,33 +499,33 @@
+      *            SceneElement.
+      */
+     public void setLocks(int locks) {
+-        if ((lockedMode & SceneElement.LOCKED_BOUNDS) != 0)
+-            lockBounds();
+-        if ((lockedMode & SceneElement.LOCKED_MESH_DATA) != 0)
+-            lockMeshes();
+-        if ((lockedMode & SceneElement.LOCKED_SHADOWS) != 0)
+-            lockShadows();
+-        if ((lockedMode & SceneElement.LOCKED_TRANSFORMS) != 0)
+-            lockTransforms();
+-    }
+ 
+-    /**
+-     * @param locks
+-     *            a bitwise combination of the locks to establish on this
+-     *            SceneElement.
+-     * @param r
+-     *            the renderer to create display lists with if LOCKED_MESH_DATA
+-     *            is set.
+-     */
+-    public void setLocks(int locks, Renderer r) {
+-        if ((lockedMode & SceneElement.LOCKED_BOUNDS) != 0)
+-            lockBounds();
+-        if ((lockedMode & SceneElement.LOCKED_MESH_DATA) != 0)
+-            lockMeshes(r);
+-        if ((lockedMode & SceneElement.LOCKED_SHADOWS) != 0)
+-            lockShadows();
+-        if ((lockedMode & SceneElement.LOCKED_TRANSFORMS) != 0)
+-            lockTransforms();
++        
++           if ((locks & SceneElement.LOCKED_BOUNDS) != 0)
++               lockBounds();
++           else
++               unlockBounds();
++           
++            if ((locks & SceneElement.LOCKED_TRANSFORMS) != 0)
++               lockTransforms();
++           else
++               unlockTransforms();
++               
++               if ((locks & SceneElement.LOCKED_MESH_DATA) != 0)
++               lockMeshes();
++           else
++               unlockMeshes();
++               
++             if ((locks & SceneElement.LOCKED_SHADOWS) != 0)
++               lockShadows();
++           else
++               unlockShadows();
++     
++           if ((locks & SceneElement.LOCKED_BRANCH) != 0)
++               lockBranch();
++           else
++               unlockBranch();
++        
+     }
+ 
+     /**
+@@ -864,4 +877,16 @@
+     public Class getClassTag() {
+         return this.getClass();
+     }
++    
++    
++   private void writeObject(ObjectOutputStream out) throws IOException
++   {
++       assert false;
++       throw new NotSerializableException();
++   }
++   private void readObject(ObjectInputStream in) throws IOException
++   {
++       assert false;
++       throw new NotSerializableException();
++   }
+ }
+Index: src/com/jme/scene/SwitchModel.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/SwitchModel.java,v
+retrieving revision 1.7
+diff -u -r1.7 SwitchModel.java
+--- src/com/jme/scene/SwitchModel.java  11 May 2006 19:39:19 -0000  1.7
++++ src/com/jme/scene/SwitchModel.java  19 Jul 2009 20:48:38 -0000
+@@ -32,6 +32,7 @@
+ 
+ package com.jme.scene;
+ 
++import com.jme.renderer.Renderer;
+ import com.jme.util.export.Savable;
+ 
+ /**
+@@ -56,15 +57,11 @@
+     */
+    public int getSwitchChild();
+ 
++   
+    /**
+-    * 
+-    * <code>set</code> provides a generic set method for implementing
+-    * classes. The value set can be anything, and it is the responsibility of
+-    * the implementing to define what this method will do for the particular
+-    * implementation.
+-    * 
+-    * @param value
+-    *            the value to set.
++    * Called during the render stage of a switch node.
++    * @param r
++    * @param thisSpatial
+     */
+-   public void set(Object value);
++   public void render(Renderer r, SwitchNode toSwitch);
+ }
+\ No newline at end of file
+Index: src/com/jmex/effects/water/ProjectedGrid.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/effects/water/ProjectedGrid.java,v
+retrieving revision 1.9
+diff -u -r1.9 ProjectedGrid.java
+--- src/com/jmex/effects/water/ProjectedGrid.java   13 Mar 2008 14:28:09 -0000  1.9
++++ src/com/jmex/effects/water/ProjectedGrid.java   19 Jul 2009 20:48:41 -0000
+@@ -37,7 +37,7 @@
+ import java.util.logging.Logger;
+ 
+ import org.lwjgl.opengl.GL11;
+-import org.lwjgl.opengl.glu.GLU;
++import org.lwjgl.util.glu.GLU;
+ 
+ import com.jme.math.FastMath;
+ import com.jme.math.Matrix4f;
+Index: src/com/jmex/effects/ProjectedTextureUtil.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/effects/ProjectedTextureUtil.java,v
+retrieving revision 1.5
+diff -u -r1.5 ProjectedTextureUtil.java
+--- src/com/jmex/effects/ProjectedTextureUtil.java  14 Sep 2007 20:53:53 -0000  1.5
++++ src/com/jmex/effects/ProjectedTextureUtil.java  19 Jul 2009 20:48:40 -0000
+@@ -36,7 +36,7 @@
+ import java.nio.IntBuffer;
+ 
+ import org.lwjgl.opengl.GL11;
+-import org.lwjgl.opengl.glu.GLU;
++import org.lwjgl.util.glu.GLU;
+ 
+ import com.jme.image.Texture;
+ import com.jme.math.FastMath;
+Index: src/com/jme/bounding/BoundingSphere.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/bounding/BoundingSphere.java,v
+retrieving revision 1.59
+diff -u -r1.59 BoundingSphere.java
+--- src/com/jme/bounding/BoundingSphere.java    17 Aug 2007 10:34:26 -0000  1.59
++++ src/com/jme/bounding/BoundingSphere.java    19 Jul 2009 20:48:34 -0000
+@@ -667,6 +667,16 @@
+             return rVal;
+         } 
+         
++        else if (store != null && store.getType() == BoundingVolume.BOUNDING_BOX)
++        {
++           BoundingBox bStore = (BoundingBox) store;
++           bStore.setCenter(center);
++           bStore.xExtent = radius;
++           bStore.yExtent = radius;
++           bStore.zExtent = radius;
++           return bStore;
++        }
++        
+         return new BoundingSphere(radius,
+                     (center != null ? (Vector3f) center.clone() : null));
+     }
+Index: src/com/jme/bounding/CollisionTree.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/bounding/CollisionTree.java,v
+retrieving revision 1.5
+diff -u -r1.5 CollisionTree.java
+--- src/com/jme/bounding/CollisionTree.java 7 Apr 2008 16:31:31 -0000   1.5
++++ src/com/jme/bounding/CollisionTree.java 19 Jul 2009 20:48:34 -0000
+@@ -129,6 +129,11 @@
+    static private Vector3f[] verts = new Vector3f[3];
+    static private Vector3f[] target = new Vector3f[3];
+ 
++   private static final Vector3f _center = new Vector3f();
++   private static final Vector3f tempVa2 = new Vector3f();
++   private static final Vector3f tempVb2 = new Vector3f();
++   private static final Vector3f tempVc2 = new Vector3f();
++   
+    //Comparator used to sort triangle indices
+    protected static TreeComparator comparator = new TreeComparator();
+    
+@@ -334,6 +339,9 @@
+                rotj.mult(tempVd.set(target[0]).multLocal(scalej), tempVd).addLocal(transj);
+                rotj.mult(tempVe.set(target[1]).multLocal(scalej), tempVe).addLocal(transj);
+                rotj.mult(tempVf.set(target[2]).multLocal(scalej), tempVf).addLocal(transj);
++               
++
++               
+                if (Intersection.intersection(tempVa, tempVb, tempVc, tempVd,
+                        tempVe, tempVf))
+                    return true;
+@@ -342,6 +350,8 @@
+        return false;
+    }
+ 
++   
++   
+    /**
+     * Determines if this Collision Tree intersects the given CollisionTree. If
+     * a collision occurs, true is returned, otherwise false is returned. If
+@@ -396,11 +406,11 @@
+        // that are found to intersect are placed in the appropriate list.
+        Quaternion roti = parent.getWorldRotation();
+        Vector3f scalei = parent.getWorldScale();
+-       Vector3f transi = parent.getWorldTranslation();
+-
++       Vector3f transi = new Vector3f(parent.getWorldTranslation());
++       
+        Quaternion rotj = collisionTree.parent.getWorldRotation();
+        Vector3f scalej = collisionTree.parent.getWorldScale();
+-       Vector3f transj = collisionTree.parent.getWorldTranslation();
++       Vector3f transj = new Vector3f(collisionTree.parent.getWorldTranslation());
+        
+        boolean test = false;
+        
+@@ -415,6 +425,11 @@
+                rotj.mult(tempVd.set(target[0]).multLocal(scalej), tempVd).addLocal(transj);
+                rotj.mult(tempVe.set(target[1]).multLocal(scalej), tempVe).addLocal(transj);
+                rotj.mult(tempVf.set(target[2]).multLocal(scalej), tempVf).addLocal(transj);
++               
++               //translate these vertices so they are centered at origin.
++               //this reduces the chance of floating point errors.
++
++               
+                if (Intersection.intersection(tempVa, tempVb, tempVc, tempVd,
+                        tempVe, tempVf)) {
+                    test = true;
+Index: src/com/jme/bounding/BoundingBox.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/bounding/BoundingBox.java,v
+retrieving revision 1.50
+diff -u -r1.50 BoundingBox.java
+--- src/com/jme/bounding/BoundingBox.java   22 Sep 2007 16:46:35 -0000  1.50
++++ src/com/jme/bounding/BoundingBox.java   19 Jul 2009 20:48:34 -0000
+@@ -538,6 +538,12 @@
+             rVal.zExtent = zExtent;
+             rVal.checkPlane = checkPlane;
+             return rVal;
++        }else if (store != null && store.getType() == BoundingVolume.BOUNDING_SPHERE)
++        {
++           BoundingSphere bStore = (BoundingSphere) store;
++           bStore.setCenter(center);
++           bStore.setRadius(Math.max(zExtent, Math.max(xExtent, yExtent)));
++           return bStore;
+         }
+         
+         BoundingBox rVal = new BoundingBox(
+Index: src/com/jme/bounding/CollisionTreeManager.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/bounding/CollisionTreeManager.java,v
+retrieving revision 1.4
+diff -u -r1.4 CollisionTreeManager.java
+--- src/com/jme/bounding/CollisionTreeManager.java  22 Sep 2007 19:56:57 -0000  1.4
++++ src/com/jme/bounding/CollisionTreeManager.java  19 Jul 2009 20:48:34 -0000
+@@ -316,6 +316,9 @@
+     * @param batch the batch key for the tree to update.
+     */
+    public void updateCollisionTree(TriangleBatch batch) {
++       if(!batch.getParentGeom().isCollidable())
++           return;
++       
+        CollisionTree ct = cache.get(batch);
+        if (ct != null) {
+            generateCollisionTree(ct, batch, protectedList != null
+@@ -332,11 +335,17 @@
+     */
+    public void updateCollisionTree(Spatial object) {
+        if (object instanceof Node) {
++           if(!object.isCollidable())
++               return;
++           
+            Node n = (Node) object;
+            for (int i = n.getQuantity() - 1; i >= 0; i--) {
+                updateCollisionTree(n.getChild(i));
+            }
+        } else if (object instanceof TriMesh) {
++           if(!object.isCollidable())
++               return;
++           
+            TriMesh t = (TriMesh) object;
+            for (int i = 0; i < t.getBatchCount(); i++) {
+                updateCollisionTree(t.getBatch(i));
+@@ -415,4 +424,9 @@
+        this.maxTrisPerLeaf = maxTrisPerLeaf;
+    }
+ 
++   public void clear() {
++       this.cache.clear();
++       
++   }
++
+ }
+Index: src/com/jme/scene/batch/SharedBatch.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/batch/SharedBatch.java,v
+retrieving revision 1.19
+diff -u -r1.19 SharedBatch.java
+--- src/com/jme/scene/batch/SharedBatch.java    5 Oct 2007 22:44:18 -0000   1.19
++++ src/com/jme/scene/batch/SharedBatch.java    19 Jul 2009 20:48:38 -0000
+@@ -473,8 +473,8 @@
+    }
+ 
+    @Override
+-   public void lockMeshes(Renderer r) {
+-       target.lockMeshes(r);
++   public void lockMeshes() {
++       target.lockMeshes();
+    }
+ 
+    @Override
+Index: src/com/jme/scene/batch/GeomBatch.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/batch/GeomBatch.java,v
+retrieving revision 1.24
+diff -u -r1.24 GeomBatch.java
+--- src/com/jme/scene/batch/GeomBatch.java  5 Oct 2007 22:44:18 -0000   1.24
++++ src/com/jme/scene/batch/GeomBatch.java  19 Jul 2009 20:48:38 -0000
+@@ -55,6 +55,7 @@
+ import com.jme.scene.state.LightState;
+ import com.jme.scene.state.RenderState;
+ import com.jme.scene.state.TextureState;
++import com.jme.system.DisplaySystem;
+ import com.jme.util.export.InputCapsule;
+ import com.jme.util.export.JMEExporter;
+ import com.jme.util.export.JMEImporter;
+@@ -522,30 +523,6 @@
+         if (texBuf == null) return 0;
+         return texBuf.size();
+     }
+-    
+-    @Override
+-    public void lockMeshes(Renderer r) {
+-        if (getDisplayListID() != -1) {
+-           logger.warning("This GeomBatch already has locked meshes."
+-                    + "(Use unlockMeshes to clear)");
+-           return;
+-       }
+-       
+-       updateRenderState();
+-        lockedMode |= LOCKED_MESH_DATA;
+-        
+-        setDisplayListID(r.createDisplayList(this));
+-    }
+-    
+-    @Override
+-    public void unlockMeshes(Renderer r) {
+-        lockedMode &= ~LOCKED_MESH_DATA;
+-        
+-        if (getDisplayListID() != -1) {
+-            r.releaseDisplayList(getDisplayListID());
+-            setDisplayListID(-1);
+-        }
+-    }
+ 
+     /**
+      * <code>setModelBound</code> sets the bounding object for this geometry.
+@@ -584,11 +561,13 @@
+     }
+     
+     public void updateGeometricState(float time, boolean initiator) {
+-        if ((lockedMode & SceneElement.LOCKED_BOUNDS) == 0) {
++        if (((lockedMode & SceneElement.LOCKED_BOUNDS) == 0) || ((dirtyLocks & SceneElement.LOCKED_BOUNDS) != 0)) {
++           
+             updateWorldBound();
+             if (initiator) {
+                 propagateBoundToRoot();
+             }
++            dirtyLocks &= (~SceneElement.LOCKED_BOUNDS);
+         }
+     }
+ 
+@@ -617,6 +596,23 @@
+     public void postdraw(Renderer r) { }
+     
+     public void onDraw(Renderer r) {
++       if ((this.lockedMode & LOCKED_MESH_DATA) != 0)
++       {
++           if ((this.dirtyLocks & LOCKED_MESH_DATA) != 0)
++           {
++               //refresh the display list
++               this.clearDisplayList(r);
++               this.buildDisplayList(r);
++                 dirtyLocks &= (~SceneElement.LOCKED_MESH_DATA);
++           }else if (!this.hasDisplayList())
++           {
++               this.buildDisplayList(r);
++           }
++       }else
++       {
++           clearDisplayList(r);
++       }
++       
+         int cm = getCullMode();
+         if (cm == SceneElement.CULL_ALWAYS) {
+             frustrumIntersects = Camera.OUTSIDE_FRUSTUM;
+@@ -809,7 +805,95 @@
+         defaultColor = color;
+     }
+ 
+-    public void draw(Renderer r) {
++    @Override
++   public void lock() {
++
++   }
++
++   @Override
++   public void lockBounds() {
++   
++   }
++
++   @Override
++   public void lockBranch() {
++   
++   }
++
++   @Override
++   public void lockMeshes() {
++   
++   }
++
++   @Override
++   public void lockShadows() {
++
++   }
++
++   @Override
++   public void lockTransforms() {
++
++   }
++
++   public void draw(Renderer r) {
++       if ((this.lockedMode & LOCKED_MESH_DATA) != 0)
++       {
++           if ((this.dirtyLocks & LOCKED_MESH_DATA) != 0)
++           {
++               //refresh the display list
++               this.clearDisplayList(r);
++               this.buildDisplayList(r);
++                 dirtyLocks &= (~SceneElement.LOCKED_MESH_DATA);
++           }else if (!this.hasDisplayList())
++           {
++               this.buildDisplayList(r);
++           }
++       }else
++       {
++           clearDisplayList(r);
++       }
++    }
++    
++    @Override
++   protected void finalize() throws Throwable {
++       try{            
++           if(hasDisplayList())
++           {           //this is important: otherwise JME will leak display lists when objects are deleted.    
++               DisplaySystem.getDisplaySystem().getRenderer().futureReleaseDisplayList(this.getDisplayListID());
++               this.displayListID = -1;
++           }
++       }catch(Exception e)
++       {
++           e.printStackTrace();
++       }
++       super.finalize();
++   }
++
++   protected void buildDisplayList(Renderer r)
++    {
++        if (hasDisplayList()) {
++           logger.warning("This GeomBatch already has locked meshes."
++                    + "(Use unlockMeshes to clear)");
++           return;
++       }
++       
++       updateRenderState();
++       
++        setDisplayListID(r.createDisplayList(this));
++    }
++    
++    protected boolean hasDisplayList()
++    {
++       return getDisplayListID() != -1;
++    }
++    
++    protected void clearDisplayList(Renderer r)
++    {
++        if (getDisplayListID() != -1) {
++            r.releaseDisplayList(getDisplayListID());
++            setDisplayListID(-1);
++            updateRenderState();
++        }
+     }
+ 
+     public void write(JMEExporter e) throws IOException {
+Index: src/jmetest/text/Test3DFlatText.java
+===================================================================
+RCS file: /cvs/jme/src/jmetest/text/Test3DFlatText.java,v
+retrieving revision 1.2
+diff -u -r1.2 Test3DFlatText.java
+--- src/jmetest/text/Test3DFlatText.java    14 Aug 2007 13:43:41 -0000  1.2
++++ src/jmetest/text/Test3DFlatText.java    19 Jul 2009 20:48:42 -0000
+@@ -32,6 +32,7 @@
+ package jmetest.text;
+ 
+ import java.awt.Font;
++import java.awt.Frame;
+ import java.util.concurrent.Callable;
+ 
+ import com.jme.math.Vector3f;
+@@ -49,6 +50,8 @@
+  */
+ public class Test3DFlatText {
+    public static void main(String[] args) throws Exception {
++       Frame f =new Frame();
++       
+        StandardGame game = new StandardGame("Test 3D Flat Text");
+        game.start();
+        
+Index: src/com/jme/system/lwjgl/LWJGLDisplaySystem.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/system/lwjgl/LWJGLDisplaySystem.java,v
+retrieving revision 1.56
+diff -u -r1.56 LWJGLDisplaySystem.java
+--- src/com/jme/system/lwjgl/LWJGLDisplaySystem.java    8 Jan 2008 22:54:12 -0000   1.56
++++ src/com/jme/system/lwjgl/LWJGLDisplaySystem.java    19 Jul 2009 20:48:40 -0000
+@@ -108,7 +108,7 @@
+      */
+     public void setVSyncEnabled( boolean enabled ) {
+         Display.setVSyncEnabled( enabled );
+-    }
++     }
+ 
+     /**
+      * <code>setTitle</code> sets the window title of the created window.
+Index: src/com/jmex/effects/particles/ParticleMesh.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/effects/particles/ParticleMesh.java,v
+retrieving revision 1.11
+diff -u -r1.11 ParticleMesh.java
+--- src/com/jmex/effects/particles/ParticleMesh.java    5 Feb 2007 16:49:42 -0000   1.11
++++ src/com/jmex/effects/particles/ParticleMesh.java    19 Jul 2009 20:48:41 -0000
+@@ -70,10 +70,11 @@
+     private boolean useBatchTexCoords = true;
+     private boolean useTriangleNormalEmit = true;
+ 
+-    public ParticleMesh() {}
++    public ParticleMesh() { this.setIsCollidable(false);}
+ 
+     public ParticleMesh(String name, int numParticles) {
+         super(name, numParticles);
++        this.setIsCollidable(false);
+         setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
+         setLightCombineMode(LightState.OFF);
+         setTextureCombineMode(TextureState.REPLACE);
+@@ -81,6 +82,7 @@
+ 
+     public ParticleMesh(String name, int numParticles, int type) {
+         super(name, numParticles, type);
++        this.setIsCollidable(false);
+         setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
+         setLightCombineMode(LightState.OFF);
+         setTextureCombineMode(TextureState.REPLACE);
+@@ -90,6 +92,7 @@
+         super(name, 0, ParticleGeometry.PT_GEOMBATCH);
+         numParticles = batch.getTriangleCount();
+         psBatch = batch;
++        this.setIsCollidable(false);
+         setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
+         setLightCombineMode(LightState.OFF);
+         setTextureCombineMode(TextureState.REPLACE);
+@@ -190,7 +193,8 @@
+         Camera camera = r.getCamera();
+         for (int i = 0; i < particles.length; i++) {
+             Particle particle = particles[i];
+-            if (particle.getStatus() == Particle.ALIVE) {
++           
++            if (particle.getStatus() == Particle.ALIVE ) {
+                 particle.updateVerts(camera);
+             }
+         }
+@@ -365,4 +369,6 @@
+         useBatchTexCoords = capsule.readBoolean("useBatchTexCoords", true);
+         useTriangleNormalEmit = capsule.readBoolean("useTriangleNormalEmit", true);
+     }
++
++   
+ }
+Index: src/com/jmex/effects/particles/ParticleGeometry.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/effects/particles/ParticleGeometry.java,v
+retrieving revision 1.12
+diff -u -r1.12 ParticleGeometry.java
+--- src/com/jmex/effects/particles/ParticleGeometry.java    8 Jun 2008 23:35:57 -0000   1.12
++++ src/com/jmex/effects/particles/ParticleGeometry.java    19 Jul 2009 20:48:41 -0000
+@@ -34,6 +34,7 @@
+ import java.io.IOException;
+ import java.nio.FloatBuffer;
+ import java.util.ArrayList;
++import java.util.Random;
+ 
+ import com.jme.math.FastMath;
+ import com.jme.math.Line;
+@@ -76,7 +77,7 @@
+     public static final int PT_POINT = 2;
+     public static final int PT_LINE = 3;
+     public static final int PT_GEOMBATCH = 4; // NOT YET SUPPORTED
+-    
++        
+     protected static final float DEFAULT_END_SIZE = 4f;
+     protected static final float DEFAULT_START_SIZE = 20f;
+     protected static final float DEFAULT_MAX_ANGLE = 0.7853982f;
+@@ -116,9 +117,9 @@
+ 
+     // vectors to prevent repeated object creation:
+     protected Vector3f upXemit, absUpVector, abUpMinUp;
+-    protected Vector3f upVector;
+-    protected Vector3f leftVector;
+-    protected Vector3f invScale;
++    protected Vector3f upVector = new Vector3f();
++    protected Vector3f leftVector = new Vector3f();
++    protected Vector3f invScale = new Vector3f();
+ 
+     protected Particle particles[];
+ 
+@@ -290,7 +291,7 @@
+     public float getEndSize() {
+         return endSize;
+     }
+-
++    
+     public void setEndSize(float size) {
+         endSize = size >= 0.0f ? size : 0.0f;
+     }
+@@ -599,6 +600,15 @@
+             controller.setActive(true);
+         }
+     }
++    
++    /**
++     * Set whether newly created particles should be visible or invisible (default: visible)
++     * @param visible
++     */
++    public void setCreateVisibleParticles(boolean visible)
++    {
++       controller.setCreateVisibleParticles(visible);
++    }
+ 
+     /**
+      * Get which emittype method is being used by the underlying system.
+@@ -801,6 +811,7 @@
+                     break;
+             }
+             emitterTransform.multPoint(p.getPosition());
++   
+         }
+     }
+ 
+@@ -897,7 +908,7 @@
+      *
+      * @param pSpeed a vector to store the results in.
+      */
+-    protected Vector3f getRandomVelocity(Vector3f pSpeed) {
++    public Vector3f getRandomVelocity(Vector3f pSpeed) {
+         float randDir = FastMath.TWO_PI * FastMath.nextRandomFloat();
+         float randAngle = getRandomAngle();
+         if (pSpeed == null)
+@@ -988,6 +999,33 @@
+         numParticles = count;
+         initializeParticles(numParticles);
+     }
++    
++    public void randomizeLifeTimes() {
++        for (int i = particles.length; --i >= 0;) {
++            particles[i].recreateParticle(getRandomLifeSpan());
++            particles[i].setStatus(Particle.ALIVE);  
++        }
++
++        if (controller != null) {
++            controller.setActive(true);
++        }
++       int range = Math.round( Math.abs(this.getMaximumLifeTime() - this.getMinimumLifeTime()));
++       if(range == 0)
++           return;
++       Random random = new Random();
++       for (int i = 0; i<this.getNumParticles();i++)
++       {
++           Particle particle = this.getParticle(i);
++           
++           int lifeTime = random.nextInt(range)+1;
++           
++           particle.setCurrentAge(lifeTime + (int)this.getMinimumLifeTime());
++           
++       
++           
++       }
++       
++   }
+ 
+     @Override
+     public void updateWorldBound() {
+@@ -999,9 +1037,33 @@
+     }
+ 
+     public void updateGeometricState(float time, boolean initiator) {
++       //yes, the below code is duplicated intentionally (required to ensure correct behaviour in edge cases)
++        if (isRotateWithScene()) {
++            if (emitType == ET_GEOMBATCH && getGeomBatch() != null) {
++               
++                getGeomBatch().getParentGeom().getWorldRotation().mult(emissionDirection, worldEmit);
++            } else {
++                worldRotation.mult(emissionDirection, worldEmit);
++            }
++        } else worldEmit.set(emissionDirection);
++
++        if (particlesInWorldCoords) {
++           emitterTransform.set(worldRotation,
++               worldTranslation.divide(worldScale));
++           
++           originCenter.set(worldTranslation).addLocal(originOffset);
++   
++           getWorldTranslation().set(0,0,0);
++           getWorldRotation().set(0, 0, 0, 1);
++        } else {
++           originCenter.set(originOffset);
++        }
+         super.updateGeometricState(time, initiator);
++       // super.updateWorldVectors();
++       // this.getGeomBatch().updateGeometricState(time, initiator);
+         if (isRotateWithScene()) {
+             if (emitType == ET_GEOMBATCH && getGeomBatch() != null) {
++               
+                 getGeomBatch().getParentGeom().getWorldRotation().mult(emissionDirection, worldEmit);
+             } else {
+                 worldRotation.mult(emissionDirection, worldEmit);
+@@ -1019,6 +1081,8 @@
+         } else {
+            originCenter.set(originOffset);
+         }
++     
++    
+     }
+ 
+     public void write(JMEExporter e) throws IOException {
+Index: src/com/jmex/effects/particles/Particle.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/effects/particles/Particle.java,v
+retrieving revision 1.10
+diff -u -r1.10 Particle.java
+--- src/com/jmex/effects/particles/Particle.java    21 Sep 2007 15:45:32 -0000  1.10
++++ src/com/jmex/effects/particles/Particle.java    19 Jul 2009 20:48:41 -0000
+@@ -65,14 +65,44 @@
+     /** Particle is available for spawning. */
+     public static final int AVAILABLE = 2;
+ 
++    private boolean visible = true;
+ 
+-    private int startIndex;
++    public boolean isVisible() {
++       return visible;
++   }
++
++   public void setVisible(boolean visible) {
++       this.visible = visible;
++   }
++
++   private int startIndex;
+     private Vector3f position;
++    private Quaternion rotation;
+     private ColorRGBA startColor = ColorRGBA.black.clone();
+     private ColorRGBA currColor = ColorRGBA.black.clone();
+     private int status = AVAILABLE;
+     private float currentSize;
+-    private float lifeSpan;
++    private float endSize;
++    
++    //private ColorRGBA endColor = ColorRGBA.black.clone();
++    
++    public ColorRGBA getEndColor() {
++       return parent.getEndColor();
++   }
++
++   public void setCurrentAge(int currentAge) {
++       this.currentAge = currentAge;
++   }
++
++   public float getEndSize() {
++       return endSize;
++   }
++
++   public void setEndSize(float endSize) {
++       this.endSize = endSize;
++   }
++
++   private float lifeSpan;
+     private float spinAngle;
+     private float mass = 1;
+     private float invMass = 1;
+@@ -81,7 +111,18 @@
+     private Vector3f velocity;
+     private Vector3f bbX = new Vector3f(), bbY = new Vector3f();
+ 
+-    // colors
++
++   /* private boolean newlyCreated = false;
++    
++    public boolean isNewlyCreated() {
++       return newlyCreated;
++   }
++
++   public void setNewlyCreated(boolean newlyCreated) {
++       this.newlyCreated = newlyCreated;
++   }*/
++
++   // colors
+     private float rChange, gChange, bChange, aChange;
+ 
+     private int type = ParticleGeometry.PT_QUAD;
+@@ -155,19 +196,23 @@
+      */
+     public void recreateParticle(float lifeSpan) {
+         this.lifeSpan = lifeSpan;
+-
++        
+         int verts = ParticleGeometry.getVertsForParticleType(type);
+         startColor.set(parent.getStartColor());
++       // this.endColor.set(parent.getEndColor());
++        this.endSize = parent.getEndSize();
+         currColor.set(startColor);
+-        rChange = startColor.r - parent.getEndColor().r;
+-        gChange = startColor.g - parent.getEndColor().g;
+-        bChange = startColor.b - parent.getEndColor().b;
+-        aChange = startColor.a - parent.getEndColor().a;
++        rChange = startColor.r - getEndColor().r;
++        gChange = startColor.g - getEndColor().g;
++        bChange = startColor.b - getEndColor().b;
++        aChange = startColor.a - getEndColor().a;
++        setVisible(true);
+         for (int x = 0; x < verts; x++)
+             BufferUtils.setInBuffer(currColor, parent.getColorBuffer(0), startIndex+x);
+         currentSize = parent.getStartSize();
+         currentAge = 0;
+         spinAngle = 0;
++        
+         status = AVAILABLE;
+     }
+ 
+@@ -183,7 +228,10 @@
+      *            vectors are used.
+      */
+     public void updateVerts(Camera cam) {
+-        float orient = parent.getParticleOrientation() + spinAngle;
++        if(!isVisible())
++           return;
++       
++       float orient = parent.getParticleOrientation() + spinAngle;
+         
+         if (type == ParticleGeometry.PT_GEOMBATCH || type == ParticleGeometry.PT_POINT) {
+             ; // nothing to do
+@@ -307,7 +355,7 @@
+ 
+         // update the size
+         currentSize = parent.getStartSize();
+-        currentSize -= ((currentSize - parent.getEndSize()) * lifeRatio);
++        currentSize -= ((currentSize - getEndSize()) * lifeRatio);
+         
+         // interpolate colors
+         currColor.set(startColor);
+@@ -315,9 +363,16 @@
+         currColor.g -= gChange * lifeRatio;
+         currColor.b -= bChange * lifeRatio;
+         currColor.a -= aChange * lifeRatio;
++        
++        float aColor = currColor.a;
++        if (!this.isVisible())
++           currColor.a = 0;
++        
+         for (int x = 0; x < verts; x++)
+             BufferUtils.setInBuffer(currColor, parent.getColorBuffer(0), startIndex+x);
+-
++        
++        currColor.a = aColor;
++        
+         return false;
+     }
+ 
+@@ -530,4 +585,21 @@
+     public Class getClassTag() {
+         return this.getClass();
+     }
++
++    /**
++     *
++     */
++   public void kill() {
++        int verts = ParticleGeometry.getVertsForParticleType(type);
++        status = DEAD;
++         currColor.a = 0;
++         
++         BufferUtils.populateFromBuffer(tempVec, parent.getVertexBuffer(0), startIndex);
++         for (int x = 0; x < verts; x++) {
++             BufferUtils.setInBuffer(tempVec, parent.getVertexBuffer(0), startIndex+x);
++             BufferUtils.setInBuffer(currColor, parent.getColorBuffer(0), startIndex+x);
++         }
++     
++       
++   }
+ }
+Index: src/com/jmex/effects/particles/ParticleController.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/effects/particles/ParticleController.java,v
+retrieving revision 1.15
+diff -u -r1.15 ParticleController.java
+--- src/com/jmex/effects/particles/ParticleController.java  8 Jun 2008 23:35:26 -0000   1.15
++++ src/com/jmex/effects/particles/ParticleController.java  19 Jul 2009 20:48:41 -0000
+@@ -63,7 +63,7 @@
+     private float timePassed;
+     private float precision;
+     private boolean controlFlow;
+-
++    private boolean visible = true;
+     private int iterations;
+     private ArrayList<ParticleInfluence> influences;
+     protected ArrayList<ParticleControllerListener> listeners;
+@@ -102,8 +102,16 @@
+     public void update(float secondsPassed) {
+         // Add time and unless we have more than precision time passed
+         // since last real update, do nothing
++       
+         currentTime += secondsPassed * getSpeed();
+         timePassed = currentTime - prevTime;
++        
++        if (prevTime == 0)
++        {
++           prevTime = currentTime;
++           return;//skip the first update
++        }
++        
+         if (timePassed < precision * getSpeed()) {
+             return;
+         }
+@@ -114,7 +122,7 @@
+ 
+         // Update the current rotation matrix if needed.
+         particles.updateRotationMatrix();
+-
++       
+         // If we are in the time window where this controller is active
+         // (defaults to 0 to Float.MAX_VALUE for ParticleController)
+         if (currentTime >= getMinTime() && currentTime <= getMaxTime()) {
+@@ -166,16 +174,7 @@
+             while (i < particles.getNumParticles()) {
+                 // Current particle
+                 Particle p = particles.getParticle(i);
+-                
+-                // If we have influences and particle is alive
+-                if (influences != null && p.getStatus() == Particle.ALIVE) {
+-                    // Apply each enabled influence to the current particle
+-                    for (int x = 0; x < influences.size(); x++) {
+-                        ParticleInfluence inf = influences.get(x);
+-                        if (inf.isEnabled())
+-                            inf.apply(timePassed, p, i);
+-                    }
+-                }
++           
+                     
+ 
+                 // Update and check the particle.
+@@ -204,7 +203,9 @@
+                         }
+ 
+                         // Recreate the particle
++                       
+                         p.recreateParticle(particles.getRandomLifeSpan());
++                        p.setVisible(this.visible);
+                         p.setStatus(Particle.ALIVE);
+                         particles.initParticleLocation(i);
+                         particles.resetParticleVelocity(i);
+@@ -217,6 +218,17 @@
+                     dead = false;
+                 }
+ 
++                
++                // If we have influences and particle is alive
++                if (influences != null && p.getStatus() == Particle.ALIVE) {
++                    // Apply each enabled influence to the current particle
++                    for (int x = 0; x < influences.size(); x++) {
++                        ParticleInfluence inf = influences.get(x);
++                        if (inf.isEnabled())
++                            inf.apply(timePassed, p, i);
++                    }
++                }
++                
+                 // Check for living particles so we know when to update our boundings.
+                 if (p.getStatus() == Particle.ALIVE) {
+                     anyAlive = true;
+@@ -468,4 +480,18 @@
+         iterations = capsule.readInt("iterations", 0);
+         influences = capsule.readSavableArrayList("influences", null);
+     }
++
++    /**
++     * Set whether newly released particles should be visible or invisible.
++     * @param visible
++     */
++   public void setCreateVisibleParticles(boolean visible) {
++       
++       this.visible = visible;
++   }
++   
++   public boolean isCreatingVisibleParticles()
++   {
++       return this.visible;
++   }
+ }
+Index: src/com/jme/intersection/Intersection.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/intersection/Intersection.java,v
+retrieving revision 1.26
+diff -u -r1.26 Intersection.java
+--- src/com/jme/intersection/Intersection.java  21 Jun 2006 20:33:02 -0000  1.26
++++ src/com/jme/intersection/Intersection.java  19 Jul 2009 20:48:35 -0000
+@@ -120,7 +120,39 @@
+        }
+        return false;
+    }
+-
++   
++   /**
++    * This method tests for the intersection between two triangles defined by
++    * their vertexes. Converted to java from C code found at
++    * http://www.acm.org/jgt/papers/Moller97/tritri.html
++    * 
++    * @param v0
++    *            First triangle's first vertex.
++    * @param v1
++    *            First triangle's second vertex.
++    * @param v2
++    *            First triangle's third vertex.
++    * @param u0
++    *            Second triangle's first vertex.
++    * @param u1
++    *            Second triangle's second vertex.
++    * @param u2
++    *            Second triangle's third vertex.
++    * @return True if the two triangles intersect, false otherwise.
++    */
++   public static boolean intersection(Vector3f v0prime, Vector3f v1prime, Vector3f v2prime,
++           Vector3f u0prime, Vector3f u1prime, Vector3f u2prime) 
++   {
++       return Intersection.intersection(v0prime, v1prime, v2prime, u0prime, u1prime, u2prime, true);
++   }
++   
++   private static final Vector3f _v0 = new Vector3f();
++   private static final Vector3f _v1 = new Vector3f();
++   private static final Vector3f _v2 = new Vector3f();
++   private static final Vector3f _u0 = new Vector3f();
++   private static final Vector3f _u1 = new Vector3f();
++   private static final Vector3f _u2 = new Vector3f();
++   private static final Vector3f _center = new Vector3f();
+    /**
+     * This method tests for the intersection between two triangles defined by
+     * their vertexes. Converted to java from C code found at
+@@ -138,10 +170,34 @@
+     *            Second triangle's second vertex.
+     * @param u2
+     *            Second triangle's third vertex.
++    * @param centerTriangles Certain triangles may incorrectly be detected as intersection if they are
++    * located far from origin. Set to true to correct for this problem.
+     * @return True if the two triangles intersect, false otherwise.
+     */
+-   public static boolean intersection(Vector3f v0, Vector3f v1, Vector3f v2,
+-           Vector3f u0, Vector3f u1, Vector3f u2) {
++   public static boolean intersection(Vector3f v0prime, Vector3f v1prime, Vector3f v2prime,
++           Vector3f u0prime, Vector3f u1prime, Vector3f u2prime, boolean centerTriangles) {
++       
++       Vector3f v0; Vector3f v1; Vector3f v2; Vector3f u0; Vector3f u1; Vector3f u2;
++       
++       if (centerTriangles)
++       {
++       Vector3f center = _center.set(v0prime).addLocal(v1prime).addLocal(v2prime).addLocal(u0prime).addLocal(u1prime).addLocal(u2prime);
++       center.divideLocal(6f);//find the average translation
++       v0 = v0prime.subtract(center, _v0);
++       v1 = v1prime.subtract(center, _v1);
++       v2 = v2prime.subtract(center, _v2);
++       u0 = u0prime.subtract(center, _u0);
++       u1 =u1prime.subtract(center, _u1);
++       u2 = u2prime.subtract(center, _u2);
++       }else
++       {
++           v0 = v0prime;
++           v1 = v1prime;
++           v2 = v2prime;
++           u0 = u0prime;
++           u1 = u1prime;
++           u2 = u2prime;
++       }
+        Vector3f e1 = tempVa;
+        Vector3f e2 = tempVb;
+        Vector3f n1 = tempVc;
+Index: src/com/jme/system/dummy/DummyDisplaySystem.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/system/dummy/DummyDisplaySystem.java,v
+retrieving revision 1.7
+diff -u -r1.7 DummyDisplaySystem.java
+--- src/com/jme/system/dummy/DummyDisplaySystem.java    5 Oct 2007 22:41:19 -0000   1.7
++++ src/com/jme/system/dummy/DummyDisplaySystem.java    19 Jul 2009 20:48:40 -0000
+@@ -531,6 +531,12 @@
+ 
+             @Override
+             public void cleanup() { }
++
++           @Override
++           public void futureReleaseDisplayList(int listID) {
++               // TODO Auto-generated method stub
++               
++           }
+         };
+     }
+ 
+Index: src/com/jmex/game/StandardGame.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/game/StandardGame.java,v
+retrieving revision 1.25
+diff -u -r1.25 StandardGame.java
+--- src/com/jmex/game/StandardGame.java 20 Jan 2008 18:46:45 -0000  1.25
++++ src/com/jmex/game/StandardGame.java 19 Jul 2009 20:48:41 -0000
+@@ -42,6 +42,8 @@
+ import java.util.logging.Logger;
+ import java.util.prefs.Preferences;
+ 
++import org.lwjgl.opengl.Display;
++
+ import com.jme.app.AbstractGame;
+ import com.jme.image.Image;
+ import com.jme.input.InputSystem;
+@@ -59,7 +61,6 @@
+ import com.jme.util.NanoTimer;
+ import com.jme.util.TextureManager;
+ import com.jme.util.Timer;
+-import com.jmex.audio.AudioSystem;
+ import com.jmex.game.state.GameStateManager;
+ 
+ /**
+@@ -117,7 +118,7 @@
+        this.settings = settings;
+        this.exceptionHandler = exceptionHandler;
+        backgroundColor = ColorRGBA.black.clone();
+-
++       
+        // Validate settings
+        if (this.settings == null) {
+            this.settings = new PreferencesGameSettings(Preferences.userRoot().node(gameName));
+@@ -132,7 +133,7 @@
+    }
+ 
+    public void start() {
+-       gameThread = new Thread(this);
++       gameThread = new Thread(null,this,"OpenGL",4194304);//4 mb
+        if (exceptionHandler == null) {
+            exceptionHandler = new DefaultUncaughtExceptionHandler(this);
+        }
+@@ -146,15 +147,19 @@
+        // Wait for main game loop before returning
+        try {
+            while (!isStarted()) {
+-               Thread.sleep(1);
++               delayForUpdate();
+            }
+        } catch (InterruptedException exc) {
+            logger.logp(Level.SEVERE, this.getClass().toString(), "start()", "Exception", exc);
++       }catch(ExecutionException exc)
++       {
++           logger.logp(Level.SEVERE, this.getClass().toString(), "start()", "Exception", exc);
+        }
+    }
+ 
+    public void run() {
+        lock();
++       
+        initSystem();
+        if (type != GameType.HEADLESS) {
+            assertDisplayCreated();
+@@ -172,51 +177,133 @@
+ 
+        // Configure frame rate
+        int preferredFPS = settings.getFramerate();
++       int sleepPeriod = 10;//number of frames to go before a mandatory 1 ms sleep
++       int sleepCount = 0;
+        long preferredTicksPerFrame = -1;
+        long frameStartTick = -1;
+        long frames = 0;
+        long frameDurationTicks = -1;
+-       if (preferredFPS >= 0) {
++       if (preferredFPS > 0) {
+            preferredTicksPerFrame = Math.round((float)timer.getResolution() / (float)preferredFPS);
+        }
+ 
+        // Main game loop
+        float tpf;
+        started = true;
++   //  long[] times = new long[6];
++       
+        while ((!finished) && (!display.isClosing())) {
+            // Fixed framerate Start
++       //  int t = 0;
++       //  times [t++] = System.nanoTime();
+            if (preferredTicksPerFrame >= 0) {
+                frameStartTick = timer.getTime();
+            }
+-
++           //long time = System.nanoTime();
+            timer.update();
++       //  times [t++] = System.nanoTime();
+            tpf = timer.getTimePerFrame();
+-
++           
+            if (type == GameType.GRAPHICAL) {
+                InputSystem.update();
+            }
+-           update(tpf);
++       //  times [t++] = System.nanoTime();
++           update(tpf);//problem: update slows down for large models, so much so that
++           //no thread sleep occurs between frames, and so locking/execute/etc only get called
++           //once per frame.
++           //long time2 = System.nanoTime();
++           //Spatial models have to be in charge of when they require updating,
++           //and by default turn off updates on their children.
++           //also... every once and a while (say once a second) throw in a 1 ms sleep period
++           //in case the above is not sufficient. If updates are not going to slowly,
++           //then the 1 ms sleep period will be absorbed into the normal sleep cycle and
++           //have zero impact.
++           
++           //actually... the vast majority of the time is happening in the render area...
++           //need to increase the efficiency of rendering, aparently.
++       //  times [t++] = System.nanoTime();
+            render(tpf);
+-           display.getRenderer().displayBackBuffer();
+-
++       //  times [t++] = System.nanoTime();
++       //  long cTime = System.nanoTime();
++//         String time = "GL:\t";
++//         for (int i = 1; i< t;i++)
++//         {
++//             time+= times[i] - times[i-1] + "\t";
++//         }
++//         System.out.println(time);
++           
+            // Fixed framerate End
+-           if (preferredTicksPerFrame >= 0) {
++           if(sleepCount++>sleepPeriod)
++           {
++               sleepCount = 0;
++               unlock();
++               try{
++                   Thread.sleep(1);//sleep, to give waiting, sequential lock calls an opportunity to execute
++               } catch (InterruptedException e) {
++                   //do nothing, this is ok.
++               }finally{
++                   lock();
++               }
++           }
++           
++       
++           if (preferredTicksPerFrame >= 0) {//give the software sync a chance.
++               GameTaskQueue queue = GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE);
+                frames++;
+                frameDurationTicks = timer.getTime() - frameStartTick;
++               
+                while (frameDurationTicks < preferredTicksPerFrame) {
+-                   long sleepTime = ((preferredTicksPerFrame - frameDurationTicks) * 1000) / timer.getResolution();
+-                   try {
+-                       Thread.sleep(sleepTime);
+-                   } catch (InterruptedException exc) {
+-                       logger.log(Level.SEVERE,
+-                                   "Interrupted while sleeping in fixed-framerate",
+-                                   exc);
++                   if(frameDurationTicks < preferredTicksPerFrame*.85f &! queue.isEmpty())
++                   {//only queue for up to some % of the time
++                       queue.execute();
++                   }
++                   else if (!settings.isVerticalSync())
++                   {
++                       long sleepTime = ((preferredTicksPerFrame - frameDurationTicks) * 1000) / timer.getResolution();
++                       unlock();//it is important to keep the lock open when the thread is sleeping
++                       //so that heavy use of the lock doesn't slow down the multithreaded apps
++                       try{
++                           try {
++                               Thread.sleep(sleepTime);
++                           } catch (InterruptedException exc) {
++                               logger.log(Level.SEVERE,
++                                          "Interrupted while sleeping in fixed-framerate",
++                                          exc);
++                           }
++                       }finally
++                       {
++                           lock();
++                       }
++                   }else
++                   {
++                       //if using vsync, sleep for about 50% of the expected time
++                       long sleepTime = ((preferredTicksPerFrame - frameDurationTicks) * 750) / timer.getResolution();
++                       
++                       
++                       unlock();//it is important to keep the lock open when the thread is sleeping
++                       //so that heavy use of the lock doesn't slow down the multithreaded apps
++                       try{
++                           try {
++                               Thread.sleep(sleepTime);
++                           } catch (InterruptedException exc) {
++                               logger.log(Level.SEVERE,
++                                          "Interrupted while sleeping in fixed-framerate",
++                                          exc);
++                           }
++                       }finally
++                       {
++                           lock();
++                       }
++                       break;//if using vsync, dont sleep, just exit this queue
+                    }
+-                   frameDurationTicks = timer.getTime() - frameStartTick;
++                   frameDurationTicks = timer.getTime() - frameStartTick;//update after the backbuffer frame, otherwise this
+                }
+                if (frames == Long.MAX_VALUE) frames = 0;
+            }
+-
++       
++           display.getRenderer().displayBackBuffer();//this sometimes freezes... confirmed, this sometimes freezes.
++       
++           //there will be no sleeping time when vsync is used.
+            if (THREAD_FRIENDLY) Thread.yield();
+        }
+        started = false;
+@@ -277,8 +364,8 @@
+    }
+    
+     protected void initSound() {
+-        AudioSystem.getSystem().getEar().trackOrientation(camera);
+-        AudioSystem.getSystem().getEar().trackPosition(camera);
++      /*  AudioSystem.getSystem().getEar().trackOrientation(camera);
++        AudioSystem.getSystem().getEar().trackPosition(camera);*/
+     }
+ 
+    private void displayMins() {
+@@ -315,7 +402,7 @@
+        // Open the lock up for just a brief second
+        unlock();
+        lock();
+-
++       
+        // Execute updateQueue item
+        GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE).execute();
+ 
+@@ -323,11 +410,14 @@
+        GameStateManager.getInstance().update(interpolation);
+ 
+        if (type == GameType.GRAPHICAL) {
+-
+-           // Update music/sound
++           //FIXME: This access the windows registry at every update!
++           // Update music/sound/
++       //  long start = System.nanoTime();
+            if ((settings.isMusic()) || (settings.isSFX())) {
+-                AudioSystem.getSystem().update();
++             //  AudioSystem.getSystem().update();
+            }
++       //  long end = System.nanoTime() - start;
++           //System.out.println(end);
+        }
+    }
+ 
+@@ -348,9 +438,9 @@
+    }
+    
+    public void reinitAudio() {
+-       if (AudioSystem.isCreated()) {
++       /*if (AudioSystem.isCreated()) {
+             AudioSystem.getSystem().cleanup();
+-        }
++        }*/
+    }
+    
+    public void reinitVideo() {
+@@ -382,9 +472,9 @@
+        TextureManager.clearCache();
+        
+        JoystickInput.destroyIfInitalized();
+-        if (AudioSystem.isCreated()) {
++      /*  if (AudioSystem.isCreated()) {
+             AudioSystem.getSystem().cleanup();
+-        }
++        }*/
+    }
+ 
+    protected void quit() {
+Index: src/com/jme/scene/state/RenderState.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/state/RenderState.java,v
+retrieving revision 1.31
+diff -u -r1.31 RenderState.java
+--- src/com/jme/scene/state/RenderState.java    19 Nov 2006 00:41:36 -0000  1.31
++++ src/com/jme/scene/state/RenderState.java    19 Jul 2009 20:48:39 -0000
+@@ -33,6 +33,9 @@
+ package com.jme.scene.state;
+ 
+ import java.io.IOException;
++import java.io.NotSerializableException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ import java.util.Arrays;
+ import java.util.Stack;
+@@ -283,4 +286,16 @@
+     public static void setQuickCompares(boolean enabled) {
+         Arrays.fill(QUICK_COMPARE, enabled);
+     }
++    
++    
++   private void writeObject(ObjectOutputStream out) throws IOException
++   {
++       assert false;
++       throw new NotSerializableException();
++   }
++   private void readObject(ObjectInputStream in) throws IOException
++   {
++       assert false;
++       throw new NotSerializableException();
++   }
+ }
+\ No newline at end of file
+Index: src/com/jmex/awt/swingui/LWJGLImageGraphics.java
+===================================================================
+RCS file: /cvs/jme/src/com/jmex/awt/swingui/LWJGLImageGraphics.java,v
+retrieving revision 1.13
+diff -u -r1.13 LWJGLImageGraphics.java
+--- src/com/jmex/awt/swingui/LWJGLImageGraphics.java    21 Jan 2008 09:17:57 -0000  1.13
++++ src/com/jmex/awt/swingui/LWJGLImageGraphics.java    19 Jul 2009 20:48:40 -0000
+@@ -38,7 +38,7 @@
+ import org.lwjgl.opengl.GL11;
+ import org.lwjgl.opengl.OpenGLException;
+ import org.lwjgl.opengl.Util;
+-import org.lwjgl.opengl.glu.GLU;
++import org.lwjgl.util.glu.GLU;
+ 
+ import java.awt.*;
+ import java.awt.font.FontRenderContext;
+Index: src/com/jme/math/Vector3f.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/math/Vector3f.java,v
+retrieving revision 1.53
+diff -u -r1.53 Vector3f.java
+--- src/com/jme/math/Vector3f.java  15 May 2008 12:20:18 -0000  1.53
++++ src/com/jme/math/Vector3f.java  19 Jul 2009 20:48:35 -0000
+@@ -750,6 +750,7 @@
+     public float angleBetween(Vector3f otherVector) {
+         float dotProduct = dot(otherVector);
+         float angle = FastMath.acos(dotProduct);
++      
+         return angle;
+     }
+     
+Index: src/com/jme/scene/state/lwjgl/records/TextureRecord.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/state/lwjgl/records/TextureRecord.java,v
+retrieving revision 1.4
+diff -u -r1.4 TextureRecord.java
+--- src/com/jme/scene/state/lwjgl/records/TextureRecord.java    4 Jan 2008 17:07:17 -0000   1.4
++++ src/com/jme/scene/state/lwjgl/records/TextureRecord.java    19 Jul 2009 20:48:39 -0000
+@@ -38,7 +38,9 @@
+     public int wrapS, wrapT;
+     public int magFilter, minFilter;
+     public float anisoLevel;
++    
+ 
++    
+     public static final ColorRGBA defaultColor = new ColorRGBA(0,0,0,0);
+     
+     public TextureRecord() {
+@@ -51,5 +53,7 @@
+        wrapS = wrapT = 0;
+        magFilter = minFilter = 0;
+        anisoLevel = 0;
++       
++
+     }
+ }
+Index: src/com/jme/scene/state/lwjgl/LWJGLTextureState.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/state/lwjgl/LWJGLTextureState.java,v
+retrieving revision 1.100
+diff -u -r1.100 LWJGLTextureState.java
+--- src/com/jme/scene/state/lwjgl/LWJGLTextureState.java    22 Apr 2008 04:48:54 -0000  1.100
++++ src/com/jme/scene/state/lwjgl/LWJGLTextureState.java    19 Jul 2009 20:48:39 -0000
+@@ -54,8 +54,8 @@
+ import org.lwjgl.opengl.GL12;
+ import org.lwjgl.opengl.GLContext;
+ import org.lwjgl.opengl.Util;
+-import org.lwjgl.opengl.glu.GLU;
+-import org.lwjgl.opengl.glu.MipMap;
++import org.lwjgl.util.glu.GLU;
++import org.lwjgl.util.glu.MipMap;
+ 
+ import com.jme.image.Image;
+ import com.jme.image.Texture;
+@@ -218,21 +218,21 @@
+          * @see MipMap#glGetIntegerv(int)
+          */
+         protected static int glGetIntegerv(int what) {
+-            return org.lwjgl.opengl.glu.Util.glGetIntegerv(what);
++            return org.lwjgl.util.glu.Util.glGetIntegerv(what);
+         }
+ 
+         /**
+          * @see MipMap#nearestPower(int)
+          */
+         protected static int nearestPower(int value) {
+-            return org.lwjgl.opengl.glu.Util.nearestPower(value);
++            return org.lwjgl.util.glu.Util.nearestPower(value);
+         }
+ 
+         /**
+          * @see MipMap#bytesPerPixel(int, int)
+          */
+         protected static int bytesPerPixel(int format, int type) {
+-            return org.lwjgl.opengl.glu.Util.bytesPerPixel(format, type);
++            return org.lwjgl.util.glu.Util.bytesPerPixel(format, type);
+         }
+     }
+ 
+@@ -266,6 +266,15 @@
+                     record.units[unit].boundTexture = texture.getTextureId();
+                 return;
+             }
++        }else if (texture.getTextureId()!=0)
++        {
++   
++                       GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getTextureId());
++                       if (record != null)
++                           record.units[unit].boundTexture = texture.getTextureId();
++                       return;
++                   
++               
+         }
+ 
+         IntBuffer id = BufferUtils.createIntBuffer(1);
+@@ -364,9 +373,10 @@
+                 }
+ 
+                 for (int m = 0; m < max; m++) {
++           
+                     int width = Math.max(1, image.getWidth() >> m);
+                     int height = Math.max(1, image.getHeight() >> m);
+-
++                   
+                     data.position(pos);
+ 
+                     if (image.isCompressedType()) {
+@@ -956,6 +966,7 @@
+             if (doTrans) {
+                 GL11.glTranslatef(texture.getTranslation().x, texture
+                         .getTranslation().y, texture.getTranslation().z);
++   
+             }
+             if (doRot) {
+                 Vector3f vRot = record.tmp_rotation1;
+@@ -964,13 +975,20 @@
+                 GL11.glRotatef(rot, vRot.x, vRot.y, vRot.z);
+             }
+             if (doScale)
+-                GL11.glScalef(texture.getScale().x, texture.getScale().y,
+-                        texture.getScale().z);
++            {
++               GL11.glScalef(texture.getScale().x, texture.getScale().y,
++                        texture.getScale().z);
++            
++            }
++                       
+ 
+             record.units[unit].identityMatrix = false;
+         } else if (needsReset) {
+             checkAndSetUnit(unit, record);
+             matRecord.switchMode(GL11.GL_TEXTURE);
++           
++            GL11.glScalef(1,1,1);
++            GL11.glTranslatef(0,0,0);
+             GL11.glLoadIdentity();
+             record.units[unit].identityMatrix = true;
+         }
+Index: src/com/jme/renderer/lwjgl/LWJGLCamera.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/renderer/lwjgl/LWJGLCamera.java,v
+retrieving revision 1.22
+diff -u -r1.22 LWJGLCamera.java
+--- src/com/jme/renderer/lwjgl/LWJGLCamera.java 20 Sep 2007 15:14:43 -0000  1.22
++++ src/com/jme/renderer/lwjgl/LWJGLCamera.java 19 Jul 2009 20:48:36 -0000
+@@ -36,7 +36,7 @@
+ 
+ import org.lwjgl.BufferUtils;
+ import org.lwjgl.opengl.GL11;
+-import org.lwjgl.opengl.glu.GLU;
++import org.lwjgl.util.glu.GLU;
+ 
+ import com.jme.math.Matrix4f;
+ import com.jme.renderer.AbstractCamera;
+Index: src/com/jme/renderer/lwjgl/LWJGLRenderer.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/renderer/lwjgl/LWJGLRenderer.java,v
+retrieving revision 1.149
+diff -u -r1.149 LWJGLRenderer.java
+--- src/com/jme/renderer/lwjgl/LWJGLRenderer.java   21 Apr 2008 03:14:33 -0000  1.149
++++ src/com/jme/renderer/lwjgl/LWJGLRenderer.java   19 Jul 2009 20:48:37 -0000
+@@ -40,6 +40,7 @@
+ import java.nio.ByteOrder;
+ import java.nio.FloatBuffer;
+ import java.nio.IntBuffer;
++import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.logging.Logger;
+ 
+@@ -54,9 +55,10 @@
+ import org.lwjgl.opengl.GL12;
+ import org.lwjgl.opengl.GLContext;
+ import org.lwjgl.opengl.OpenGLException;
+-import org.lwjgl.opengl.glu.GLU;
++import org.lwjgl.util.glu.GLU;
+ 
+ import com.jme.curve.Curve;
++import com.jme.image.Texture;
+ import com.jme.math.FastMath;
+ import com.jme.math.Quaternion;
+ import com.jme.math.Vector3f;
+@@ -158,6 +160,8 @@
+ 
+     private boolean generatingDisplayList = false;
+     
++    private ArrayList<Integer> listsToDispose = new ArrayList<Integer>();
++
+     protected WeakIdentityCache<Buffer, Integer> vboMap = new WeakIdentityCache<Buffer, Integer>();
+ 
+     /**
+@@ -310,6 +314,17 @@
+         return new LWJGLMaterialState();
+     }
+ 
++/*    public MaterialState createMaterialState() {
++        return new MaterialState() {
++
++            private static final long serialVersionUID = 1L;
++
++            public void apply() {
++            }
++            public StateRecord createStateRecord() { return null; }
++        };
++    }*/
++
+     /**
+      * <code>createShadeState</code> returns a new LWJGLShadeState object as a
+      * regular ShadeState.
+@@ -329,7 +344,35 @@
+     public TextureState createTextureState() {
+         return new LWJGLTextureState();
+     }
++/*    class TextureStateN extends TextureState {
++
++        private static final long serialVersionUID = 1L;
++
++        TextureStateN() {
++            numTotalTexUnits = 1;
++            texture = new ArrayList<Texture>(1);
++        }
++
++        public void load( int unit ) {
++        }
++
++        public void delete( int unit ) {
++        }
++
++        public void deleteAll() {
++        }
+ 
++        public void deleteAll(boolean removeFromCache) {
++        }
++
++        public void apply() {
++        }
++        public StateRecord createStateRecord() { return null; }
++    }
++
++    public TextureState createTextureState() {
++        return new TextureStateN();
++    }*/
+     /**
+      * <code>createWireframeState</code> returns a new LWJGLWireframeState
+      * object as a regular WireframeState.
+@@ -505,13 +548,15 @@
+      * @see com.jme.renderer.Renderer#displayBackBuffer()
+      */
+     public void displayBackBuffer() {
++         this.flushStoredDisplayLists();
++       
+         renderQueue();
+ 
+         Renderer.defaultStateList[RenderState.RS_COLORMASK_STATE].apply();
+ 
+         reset();
+         
+-
++      
+         GL11.glFlush();
+         if (!isHeadless())
+             Display.update();
+@@ -1506,7 +1551,24 @@
+         GL11.glDeleteLists(listId, 1);
+     }
+ 
+-    // inherited documentation
++    @Override
++   public synchronized void futureReleaseDisplayList(int listID) {
++       listsToDispose.add(listID);
++   }
++    
++    private synchronized void flushStoredDisplayLists()
++    {
++       if(!listsToDispose.isEmpty())
++       {
++           for(Integer i:listsToDispose)
++               releaseDisplayList(i);
++           listsToDispose.clear();
++       }
++       
++  
++    }
++
++   // inherited documentation
+     public void setPolygonOffset(float factor, float offset) {
+         GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+         GL11.glPolygonOffset(factor, offset);
+Index: src/com/jme/scene/lod/DiscreteLodNode.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/scene/lod/DiscreteLodNode.java,v
+retrieving revision 1.11
+diff -u -r1.11 DiscreteLodNode.java
+--- src/com/jme/scene/lod/DiscreteLodNode.java  3 Dec 2007 16:20:12 -0000   1.11
++++ src/com/jme/scene/lod/DiscreteLodNode.java  19 Jul 2009 20:48:39 -0000
+@@ -54,11 +54,6 @@
+ public class DiscreteLodNode extends SwitchNode implements Savable {
+    private static final long serialVersionUID = 1L;
+ 
+-   private Vector3f modelCenter;
+-
+-   private Vector3f worldCenter = new Vector3f();
+-
+-   private static Vector3f tmpVs = new Vector3f();
+ 
+    private SwitchModel model;
+ 
+@@ -68,49 +63,27 @@
+    public DiscreteLodNode(String name, SwitchModel model) {
+        super(name);
+        this.model = model;
+-
+-       modelCenter = new Vector3f();
+-
+    }
+ 
+-   public void selectLevelOfDetail(Camera camera) {
+-       if (model == null) {
+-           return;
+-       }
+-       // compute world LOD center
+-       worldCenter = worldRotation.multLocal(worldCenter.set(modelCenter))
+-               .multLocal(worldScale).addLocal(worldTranslation);
+-
+-       // compute world squared distance intervals
+-
+-       float worldSqrScale = tmpVs.set(worldScale).multLocal(worldScale)
+-               .length();
+-       model.set(worldCenter.subtractLocal(camera.getLocation()));
+-       model.set(new Float(worldSqrScale));
+-       setActiveChild(model.getSwitchChild());
+ 
+-   }
+ 
+    public void draw(Renderer r) {
+-       selectLevelOfDetail(r.getCamera());
++       if(model!=null)
++           model.render(r, this);
+        super.draw(r);
+    }
+ 
+    public void write(JMEExporter e) throws IOException {
+        super.write(e);
+        OutputCapsule capsule = e.getCapsule(this);
+-       capsule.write(modelCenter, "modelCenter", Vector3f.ZERO);
+-       capsule.write(worldCenter, "worldCenter", Vector3f.ZERO);
++   
+        capsule.write(model, "model", null);
+    }
+ 
+    public void read(JMEImporter e) throws IOException {
+        super.read(e);
+        InputCapsule capsule = e.getCapsule(this);
+-       modelCenter = (Vector3f) capsule.readSavable("modelCenter",
+-               Vector3f.ZERO.clone());
+-       worldCenter = (Vector3f) capsule.readSavable("worldCenter",
+-               Vector3f.ZERO.clone());
++   
+        model = (SwitchModel) capsule.readSavable("model", null);
+    }
+ }
+Index: build.xml
+===================================================================
+RCS file: /cvs/jme/build.xml,v
+retrieving revision 1.48
+diff -u -r1.48 build.xml
+--- build.xml   22 Aug 2007 15:57:26 -0000  1.48
++++ build.xml   19 Jul 2009 20:48:34 -0000
+@@ -67,8 +67,13 @@
+        <jar jarfile="${jars}/jme-editors.jar" basedir="${class}" update="no" compress="true" includes="**/com/jmex/editors/**/*.class" />
+    </target>
+    <target name="dist-effects" depends="compile" description="generate jme jar file (effects)">
+-       <jar jarfile="${jars}/jme-effects.jar" basedir="${class}" update="no" compress="true" includes="**/com/jmex/effects/**/*.class, **/com/jmex/effects/**/data/*.*" />
++       <jar jarfile="${jars}/jme-effects.jar" basedir="${class}" update="no" compress="true" includes="**/com/jmex/effects/**/*.class" />
+    </target>
++   
++    <target name="dist-effects-data" depends="compile" description="generate jme jar file (effects data)">
++         <jar jarfile="${jars}/jme-effects-data.jar" basedir="${class}" update="no" compress="true" includes="**/com/jmex/effects/**/data/*.*" />
++    </target>
++   
+    <target name="dist-font" depends="compile" description="generate jme jar file (font)">
+        <jar jarfile="${jars}/jme-font.jar" basedir="${class}" update="no" compress="true" includes="**/com/jmex/font2d/**/*.class,**/com/jmex/font3d/**/*.class" />
+    </target>
+Index: src/jmetest/game/TestStandardGame.java
+===================================================================
+RCS file: /cvs/jme/src/jmetest/game/TestStandardGame.java,v
+retrieving revision 1.3
+diff -u -r1.3 TestStandardGame.java
+--- src/jmetest/game/TestStandardGame.java  14 Aug 2007 13:43:38 -0000  1.3
++++ src/jmetest/game/TestStandardGame.java  19 Jul 2009 20:48:42 -0000
+@@ -50,6 +50,7 @@
+ public class TestStandardGame {
+    public static void main(String[] args) throws Exception {
+        // Instantiate StandardGame
++       
+        StandardGame game = new StandardGame("A Simple Test");
+        // Show settings screen
+        if (GameSettingsPanel.prompt(game.getSettings())) {
+Index: src/jmetest/renderer/TestSphere.java
+===================================================================
+RCS file: /cvs/jme/src/jmetest/renderer/TestSphere.java,v
+retrieving revision 1.16
+diff -u -r1.16 TestSphere.java
+--- src/jmetest/renderer/TestSphere.java    17 Aug 2007 20:39:07 -0000  1.16
++++ src/jmetest/renderer/TestSphere.java    19 Jul 2009 20:48:42 -0000
+@@ -103,7 +103,7 @@
+         MultiFormatResourceLocator loc2 = new MultiFormatResourceLocator(new File("c:/").toURI(), ".jpg", ".png", ".tga");
+         ResourceLocatorTool.addResourceLocator(ResourceLocatorTool.TYPE_TEXTURE, loc2);
+     } catch (Exception e) {
+-        e.printStackTrace();
++       e.printStackTrace();
+     }
+     
+     URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE, "/model/grass.gif");
+Index: src/com/jme/image/Texture.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/image/Texture.java,v
+retrieving revision 1.45
+diff -u -r1.45 Texture.java
+--- src/com/jme/image/Texture.java  30 Nov 2007 17:45:19 -0000  1.45
++++ src/com/jme/image/Texture.java  19 Jul 2009 20:48:35 -0000
+@@ -319,6 +319,7 @@
+     combineScaleRGB = 1.0f;
+     combineScaleAlpha = 1.0f;
+     rttSource = Texture.RTT_SOURCE_RGBA;
++
+     memReq = 0;
+   }
+ 
+Index: src/com/jme/input/action/InputActionEvent.java
+===================================================================
+RCS file: /cvs/jme/src/com/jme/input/action/InputActionEvent.java,v
+retrieving revision 1.10
+diff -u -r1.10 InputActionEvent.java
+--- src/com/jme/input/action/InputActionEvent.java  25 Nov 2006 11:45:19 -0000  1.10
++++ src/com/jme/input/action/InputActionEvent.java  19 Jul 2009 20:48:35 -0000
+@@ -32,6 +32,8 @@
+ 
+ package com.jme.input.action;
+ 
++import java.lang.ref.WeakReference;
++
+ /**
+  * <code>InputActionEvent</code> defines an event that generates the
+  * processing of a given InputAction. This event contains information about the
+@@ -259,13 +261,13 @@
+      * @return some data data associated with the event, null if not applicable.
+      */
+     public Object getTriggerData() {
+-        return this.triggerData;
++        return this.triggerData.get();
+     }
+ 
+     /**
+      * @see #getTriggerData
+      */
+-    private Object triggerData;
++    private WeakReference<Object> triggerData;//make this a weak reference, otherwise physics data spills out through input handlers.
+ 
+     /**
+      * @see #getTriggerData
+@@ -273,6 +275,6 @@
+      * @param value new value
+      */
+     public void setTriggerData( final Object value ) {
+-        this.triggerData = value;
++        this.triggerData = new WeakReference<Object>(value);
+     }
+ }
+\ No newline at end of file
+Index: build/com/jmex/effects/water/data/projectedwatershader.vert
+===================================================================
+RCS file: build/com/jmex/effects/water/data/projectedwatershader.vert
+diff -N build/com/jmex/effects/water/data/projectedwatershader.vert
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/water/data/projectedwatershader.vert 1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,43 @@
++varying vec2 refrCoords;
++varying vec2 normCoords;
++varying vec2 foamCoords;
++varying vec4 viewCoords;
++varying vec3 viewTangetSpace;
++varying vec2 vnormal;
++varying vec4 vVertex;
++
++uniform vec3 cameraPos;
++uniform vec3 tangent;
++uniform vec3 binormal;
++uniform float normalTranslation, refractionTranslation;
++uniform float waterHeight;
++uniform float heightFalloffStart;
++uniform float heightFalloffSpeed;
++
++void main()
++{
++   viewCoords = gl_ModelViewProjectionMatrix * gl_Vertex;
++   vVertex = gl_Vertex;
++   float heightAdjust = 1.0 - clamp((viewCoords.z-heightFalloffStart)/heightFalloffSpeed,0.0,1.0);
++   vVertex.y = mix(waterHeight,vVertex.y,heightAdjust);
++   viewCoords = gl_ModelViewProjectionMatrix * vVertex;
++   gl_Position = viewCoords;
++   vVertex.w = waterHeight;
++
++   // Because we have a flat plane for water we already know the vectors for tangent space
++   vec3 normal = vec3(gl_Normal.x*heightAdjust,gl_Normal.y,gl_Normal.z*heightAdjust);
++   vnormal = normal.xz * 0.15;
++
++   // Calculate the vector coming from the vertex to the camera
++   vec3 viewDir = cameraPos - gl_Vertex.xyz;
++
++   // Compute tangent space for the view direction
++   viewTangetSpace.x = dot(viewDir, tangent);
++   viewTangetSpace.y = dot(viewDir, binormal);
++   viewTangetSpace.z = dot(viewDir, normal);
++
++   //todo test 0.8
++   refrCoords = gl_MultiTexCoord0.xy * vec2(2.0) + vec2(0.0,refractionTranslation);
++   normCoords = gl_MultiTexCoord0.xy + vec2(0.0,normalTranslation);
++   foamCoords = gl_MultiTexCoord0.xy + vec2(0.0,normalTranslation*0.4);
++}
+Index: build/com/jmex/effects/water/data/flatwatershader_refraction.frag
+===================================================================
+RCS file: build/com/jmex/effects/water/data/flatwatershader_refraction.frag
+diff -N build/com/jmex/effects/water/data/flatwatershader_refraction.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/water/data/flatwatershader_refraction.frag   1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,79 @@
++varying vec2 refrCoords;
++varying vec2 normCoords;
++varying vec4 viewCoords;
++varying vec3 viewTangetSpace;
++
++uniform sampler2D normalMap;
++uniform sampler2D reflection;
++uniform sampler2D dudvMap;
++uniform sampler2D refraction;
++uniform sampler2D depthMap;
++
++uniform vec4 waterColor;
++uniform vec4 waterColorEnd;
++uniform bool abovewater;
++uniform bool useFadeToFogColor;
++//uniform float dudvPower; //0.005
++//uniform float dudvColorPower; //0.01
++//uniform float normalPower; //0.5
++//uniform float normalOffsetPower; //0.6
++
++void main()
++{
++   float fogDist = clamp((viewCoords.z-gl_Fog.start)*gl_Fog.scale,0.0,1.0);
++
++   vec2 distOffset = texture2D(dudvMap, refrCoords).xy * 0.01;
++   vec3 dudvColor = texture2D(dudvMap, normCoords + distOffset).xyz;
++   dudvColor = normalize(dudvColor * 2.0 - 1.0) * 0.015;
++
++   vec3 normalVector = texture2D(normalMap, normCoords + distOffset * 0.6).xyz;
++   normalVector = normalVector * 2.0 - 1.0;
++   normalVector = normalize(normalVector);
++   normalVector.xy *= 0.5;
++
++   vec3 localView = normalize(viewTangetSpace);
++   float fresnel = dot(normalVector, localView);
++   if ( abovewater == false ) {
++       fresnel = -fresnel;
++   }
++   fresnel *= 1.0 - fogDist;
++   float fresnelTerm = 1.0 - fresnel;
++   fresnelTerm *= fresnelTerm;
++   fresnelTerm = fresnelTerm * 0.9 + 0.1;
++   fresnel = 1.0 - fresnelTerm;
++
++   vec2 projCoord = viewCoords.xy / viewCoords.q;
++   projCoord = (projCoord + 1.0) * 0.5;
++   vec2 projCoordDepth = projCoord;
++   if ( abovewater == true ) {
++       projCoord.x = 1.0 - projCoord.x;
++   }
++
++    projCoord += (dudvColor.xy * 0.5 + normalVector.xy * 0.2);
++   projCoord = clamp(projCoord, 0.001, 0.999);
++
++    projCoordDepth += (dudvColor.xy * 0.5 + normalVector.xy * 0.2);
++   projCoordDepth = clamp(projCoordDepth, 0.001, 0.999);
++
++   vec4 reflectionColor = texture2D(reflection, projCoord);
++   if ( abovewater == false ) {
++       reflectionColor *= vec4(0.8,0.9,1.0,1.0);
++       vec4 endColor = mix(reflectionColor,waterColor,fresnelTerm);
++       gl_FragColor = mix(endColor,waterColor,fogDist);
++   }
++   else {
++       vec4 waterColorNew = mix(waterColor,waterColorEnd,fresnelTerm);
++       vec4 refractionColor = texture2D(refraction, projCoordDepth);
++       float depth = texture2D(depthMap, projCoordDepth).r;
++       depth = pow(depth,15.0);
++       float invDepth = 1.0-depth;
++
++       vec4 endColor = refractionColor*vec4(invDepth*fresnel) + waterColorNew*vec4(depth*fresnel);
++       
++       if( useFadeToFogColor == false) {
++           gl_FragColor = endColor + reflectionColor * vec4(fresnelTerm);
++       } else {
++           gl_FragColor = (endColor + reflectionColor * vec4(fresnelTerm)) * (1.0-fogDist) + gl_Fog.color * fogDist;
++       }
++   }
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/motionblur.frag
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/motionblur.frag
+diff -N build/com/jmex/effects/glsl/data/motionblur.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/motionblur.frag    1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,55 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++uniform sampler2D screenTexture;
++
++varying vec4 viewCoords;
++varying vec2 velocity;
++
++void main(void)
++{
++   // sample scene texture along direction of motion
++   const float samples = 16.0;
++   const float w = 1.0 / samples; // sample weight
++
++   vec2 projCoord = viewCoords.xy / viewCoords.q;
++   projCoord = (projCoord + vec2(1.0)) * vec2(0.5);
++
++   vec4 a = vec4(0.0); // accumulator - fixed4
++   int i;
++   for(i=0; i<int(samples); i+=1) {
++       float t = float(i) / (samples-1.0);
++       a = a + texture2D(screenTexture, projCoord + velocity * vec2(t) ) * vec4(w);
++   }
++
++   gl_FragColor = a;
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/bloom_final.vert
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/bloom_final.vert
+diff -N build/com/jmex/effects/glsl/data/bloom_final.vert
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/bloom_final.vert   1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,41 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++varying vec2 vTexCoord;
++
++void main(void)
++{
++   vec2 Pos = sign(gl_Vertex.xy);
++   gl_Position = vec4(Pos.xy, 0, 1);
++   vTexCoord.x = 0.5 * (1.0 + Pos.x);
++   vTexCoord.y = 0.5 * (1.0 + Pos.y);
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/sketch_norm.vert
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/sketch_norm.vert
+diff -N build/com/jmex/effects/glsl/data/sketch_norm.vert
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/sketch_norm.vert   1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,47 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++varying vec3 vNormal;
++varying vec4 pos;
++varying float depth;
++
++uniform float nearClip;
++uniform float diffClip;
++
++void main(void)
++{
++    gl_Position = ftransform();
++    vNormal = (normalize(gl_NormalMatrix * gl_Normal)+1.0)*0.5;
++
++    pos = gl_ModelViewMatrix * gl_Vertex;
++    depth = -(pos.z-nearClip)/diffClip;
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/bloom_blur.vert
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/bloom_blur.vert
+diff -N build/com/jmex/effects/glsl/data/bloom_blur.vert
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/bloom_blur.vert    1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,43 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++//varying vec4 viewCoords;
++varying vec2 vTexCoord;
++
++void main(void)
++{
++   vec2 Pos = sign(gl_Vertex.xy);
++   gl_Position = vec4(Pos.xy, 0, 1);
++   vTexCoord.x = 0.5 * (1.0 + Pos.x);
++   vTexCoord.y = 0.5 * (1.0 + Pos.y);
++//   viewCoords = gl_ModelViewProjectionMatrix * gl_Vertex;
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/bloom_blur.frag
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/bloom_blur.frag
+diff -N build/com/jmex/effects/glsl/data/bloom_blur.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/bloom_blur.frag    1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,105 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++uniform float sampleDist0;
++uniform float blurIntensityMultiplier;
++uniform sampler2D RT;
++//uniform sampler2D depth;
++
++//varying vec4 viewCoords;
++varying vec2 vTexCoord;
++
++void main(void)
++{
++   vec2 samples00 = vec2(-0.326212, -0.405805);
++   vec2 samples01 = vec2(-0.840144, -0.073580);
++   vec2 samples02 = vec2(-0.695914,  0.457137);
++   vec2 samples03 = vec2(-0.203345,  0.620716);
++   vec2 samples04 = vec2( 0.962340, -0.194983);
++   vec2 samples05 = vec2( 0.473434, -0.480026);
++   vec2 samples06 = vec2( 0.519456,  0.767022);
++   vec2 samples07 = vec2( 0.185461, -0.893124);
++   vec2 samples08 = vec2( 0.507431,  0.064425);
++   vec2 samples09 = vec2( 0.896420,  0.412458);
++   vec2 samples10 = vec2(-0.321940, -0.932615);
++   vec2 samples11 = vec2(-0.791559, -0.597705);
++
++   vec2 newCoord;
++   vec4 sum = texture2D(RT, vTexCoord);
++
++ //depth of field
++// vec4 projCoord = viewCoords / viewCoords.q;
++// projCoord = (projCoord + 1.0) * 0.5;
++//  vec4 d = texture2D(depth, projCoord);
++//  sampleDist0 = (pow(d.x,25.0)-0.4)*sampleDist0;
++
++   newCoord = vTexCoord + sampleDist0 * samples00;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples01;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples02;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples03;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples04;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples05;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples06;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples07;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples08;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples09;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples10;
++   sum += texture2D(RT, newCoord);
++
++   newCoord = vTexCoord + sampleDist0 * samples11;
++   sum += texture2D(RT, newCoord);
++
++   sum /= 13.0;
++   sum *= blurIntensityMultiplier;
++
++   gl_FragColor = sum;
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/water/data/simplewatershader.frag
+===================================================================
+RCS file: build/com/jmex/effects/water/data/simplewatershader.frag
+diff -N build/com/jmex/effects/water/data/simplewatershader.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/water/data/simplewatershader.frag    1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,52 @@
++varying vec4 refrCoords; 
++varying vec4 normCoords; 
++varying vec4 viewCoords;
++varying vec4 viewTangetSpace;
++
++uniform sampler2D normalMap;
++uniform sampler2D reflection;
++uniform sampler2D dudvMap;
++
++uniform vec4 waterColor;
++uniform int abovewater;
++//varying float fog;
++
++void main()
++{
++   const float kShine = 128.0;
++   const float kDistortion = 0.01;
++   const float kRefraction = 0.01;
++
++   vec4 distOffset = texture2D(dudvMap, refrCoords.xy) * kDistortion;
++   vec4 dudvColor = texture2D(dudvMap, vec2(normCoords + distOffset));
++   dudvColor = normalize(dudvColor * 2.0 - 1.0) * kRefraction;
++
++   vec4 normalVector = texture2D(normalMap, vec2(normCoords + distOffset));
++   normalVector = normalVector * 2.0 - 1.0;
++   normalVector.a = 0.0;
++
++   vec4 localView = normalize(viewTangetSpace);
++
++   vec4 fresnelTerm = 1.0 - vec4( dot(normalVector, localView ) );
++   fresnelTerm = fresnelTerm * 0.65 + 0.3;
++
++   vec4 projCoord = viewCoords / viewCoords.q;
++   projCoord = (projCoord + 1.0) * 0.5;
++   if ( abovewater == 1 ) {
++       projCoord.x = 1.0 - projCoord.x;
++   }
++
++   projCoord += dudvColor * 0.8 + normalVector * 0.2;
++   projCoord = clamp(projCoord, 0.001, 0.999);
++
++   vec4 reflectionColor  = texture2D(reflection, projCoord.xy);
++   if ( abovewater == 0 ) {
++       reflectionColor *= vec4(0.5,0.6,0.7,1.0);
++   }
++
++   vec4 endColor = mix(waterColor,reflectionColor,fresnelTerm);
++
++   gl_FragColor = mix(endColor,reflectionColor,clamp((viewCoords.z-gl_Fog.start)*gl_Fog.scale,0.0,1.0));
++// gl_FragColor = mix(endColor,gl_Fog.color,clamp((viewCoords.z-gl_Fog.start)*gl_Fog.scale,0.0,1.0));
++//   gl_FragColor = mix(gl_Fog.color,endColor,fog);
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/water/data/flatwatershader.frag
+===================================================================
+RCS file: build/com/jmex/effects/water/data/flatwatershader.frag
+diff -N build/com/jmex/effects/water/data/flatwatershader.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/water/data/flatwatershader.frag  1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,67 @@
++varying vec2 refrCoords;
++varying vec2 normCoords;
++varying vec4 viewCoords;
++varying vec3 viewTangetSpace;
++
++uniform sampler2D normalMap;
++uniform sampler2D reflection;
++uniform sampler2D dudvMap;
++
++uniform vec4 waterColor;
++uniform vec4 waterColorEnd;
++uniform bool abovewater;
++uniform bool useFadeToFogColor;
++//uniform float dudvPower; //0.005
++//uniform float dudvColorPower; //0.01
++//uniform float normalPower; //0.5
++//uniform float normalOffsetPower; //0.6
++
++void main()
++{
++   float fogDist = clamp((viewCoords.z-gl_Fog.start)*gl_Fog.scale,0.0,1.0);
++
++   vec2 distOffset = texture2D(dudvMap, refrCoords).xy * 0.01;
++   vec3 dudvColor = texture2D(dudvMap, normCoords + distOffset).xyz;
++   dudvColor = normalize(dudvColor * 2.0 - 1.0) * 0.015;
++
++   vec3 normalVector = texture2D(normalMap, normCoords + distOffset * 0.6).xyz;
++   normalVector = normalVector * 2.0 - 1.0;
++   normalVector = normalize(normalVector);
++   normalVector.xy *= 0.5;
++
++   vec3 localView = normalize(viewTangetSpace);
++   float fresnel = dot(normalVector, localView);
++   if ( abovewater == false ) {
++       fresnel = -fresnel;
++   }
++   fresnel *= 1.0 - fogDist;
++   float fresnelTerm = 1.0 - fresnel;
++   fresnelTerm *= fresnelTerm;
++   fresnelTerm = fresnelTerm * 0.9 + 0.1;
++
++   vec2 projCoord = viewCoords.xy / viewCoords.q;
++   projCoord = (projCoord + 1.0) * 0.5;
++   if ( abovewater == true ) {
++       projCoord.x = 1.0 - projCoord.x;
++   }
++
++    projCoord += (dudvColor.xy * 0.5 + normalVector.xy * 0.2);
++   projCoord = clamp(projCoord, 0.001, 0.999);
++
++   vec4 reflectionColor = texture2D(reflection, projCoord);
++   if ( abovewater == false ) {
++       reflectionColor *= vec4(0.8,0.9,1.0,1.0);
++       vec4 endColor = mix(reflectionColor,waterColor,fresnelTerm);
++       gl_FragColor = mix(endColor,waterColor,fogDist);
++   }
++   else {
++       vec4 waterColorNew = mix(waterColor,waterColorEnd,fresnelTerm);
++       vec4 endColor = mix(waterColorNew,reflectionColor,fresnelTerm);
++       
++       if( useFadeToFogColor == false) {
++           gl_FragColor = mix(endColor,reflectionColor,fogDist);
++       } else {
++           gl_FragColor = mix(endColor,reflectionColor,fogDist) * (1.0-fogDist) + gl_Fog.color * fogDist;
++       }
++   }
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/bloom_extract.frag
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/bloom_extract.frag
+diff -N build/com/jmex/effects/glsl/data/bloom_extract.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/bloom_extract.frag 1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,47 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++uniform float exposurePow;
++uniform float exposureCutoff;
++uniform sampler2D RT;
++
++varying vec2 vTexCoord;
++
++void main(void)
++{
++   vec4 sum = texture2D(RT, vTexCoord);
++   if ( (sum.r+sum.g+sum.b)/3.0 < exposureCutoff ) {
++      sum = vec4(0.0);
++   }
++   sum = pow(sum,vec4(exposurePow));
++   gl_FragColor = sum;
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/bloom_extract.vert
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/bloom_extract.vert
+diff -N build/com/jmex/effects/glsl/data/bloom_extract.vert
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/bloom_extract.vert 1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,41 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++varying vec2 vTexCoord;
++
++void main(void)
++{
++   vec2 Pos = sign(gl_Vertex.xy);
++   gl_Position = vec4(Pos.xy, 0, 1);
++   vTexCoord.x = 0.5 * (1.0 + Pos.x);
++   vTexCoord.y = 0.5 * (1.0 + Pos.y);
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/motionblur.vert
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/motionblur.vert
+diff -N build/com/jmex/effects/glsl/data/motionblur.vert
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/motionblur.vert    1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,72 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++uniform mat4 prevModelViewMatrix;
++uniform mat4 prevModelViewProjectionMatrix;
++uniform vec2 halfWinSize;
++uniform float blurStrength;
++
++varying vec4 viewCoords;
++varying vec2 velocity;
++
++void main(void)
++{
++   // transform previous and current pos to eye space
++   vec4 P = gl_ModelViewMatrix * gl_Vertex;
++   vec4 Pprev = prevModelViewMatrix * gl_Vertex;  //TODO: should be previous coord
++   
++   // transform normal to eye space
++   vec3 N = gl_NormalMatrix * gl_Normal;
++
++   // calculate eye space motion vector
++   vec3 motionVector = P.xyz - Pprev.xyz;
++
++   // calculate clip space motion vector
++   vec4 addNormal = vec4(gl_Normal,0.0)*vec4(0.2);
++   P = gl_ModelViewProjectionMatrix * (gl_Vertex+addNormal);
++   Pprev = prevModelViewProjectionMatrix * (gl_Vertex+addNormal);  //TODO: should be previous coord
++
++   // choose previous or current position based
++   // on dot product between motion vector and normal
++   bool flag = dot(motionVector, N) > 0.0;
++   vec4 Pstretch = flag ? P : Pprev;
++
++   gl_Position = Pstretch;
++   viewCoords = Pstretch;
++
++   // do divide by W -> NDC coordinates
++   P.xy = P.xy / P.w;
++   Pprev.xy = Pprev.xy / Pprev.w;
++
++   // calculate window space velocity
++   velocity = halfWinSize.xy * (P.xy - Pprev.xy) * vec2(blurStrength);
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/water/data/projectedwatershader.frag
+===================================================================
+RCS file: build/com/jmex/effects/water/data/projectedwatershader.frag
+diff -N build/com/jmex/effects/water/data/projectedwatershader.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/water/data/projectedwatershader.frag 1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,78 @@
++varying vec2 refrCoords;
++varying vec2 normCoords;
++varying vec2 foamCoords;
++varying vec4 viewCoords;
++varying vec3 viewTangetSpace;
++varying vec2 vnormal;
++varying vec4 vVertex;
++
++uniform sampler2D normalMap;
++uniform sampler2D reflection;
++uniform sampler2D dudvMap;
++uniform sampler2D foamMap;
++
++uniform vec4 waterColor;
++uniform vec4 waterColorEnd;
++uniform bool abovewater;
++uniform bool useFadeToFogColor;
++uniform float amplitude;
++//uniform float dudvPower; //0.005
++//uniform float dudvColorPower; //0.01
++//uniform float normalPower; //0.5
++//uniform float normalOffsetPower; //0.6
++
++void main()
++{
++   float fogDist = clamp((viewCoords.z-gl_Fog.start)*gl_Fog.scale,0.0,1.0);
++
++   vec2 distOffset = texture2D(dudvMap, refrCoords).xy * 0.01;
++   vec3 dudvColor = texture2D(dudvMap, normCoords + distOffset).xyz;
++   dudvColor = normalize(dudvColor * 2.0 - 1.0) * 0.015;
++
++   vec3 normalVector = texture2D(normalMap, normCoords + distOffset * 0.6).xyz;
++   normalVector = normalVector * 2.0 - 1.0;
++   normalVector = normalize(normalVector);
++   normalVector.xy *= 0.5;
++
++   vec3 localView = normalize(viewTangetSpace);
++   float fresnel = dot(normalVector, localView);
++   fresnel *= 1.0 - fogDist;
++   float fresnelTerm = 1.0 - fresnel;
++   fresnelTerm *= fresnelTerm;
++   fresnelTerm *= fresnelTerm;
++   fresnelTerm = fresnelTerm * 0.9 + 0.1;
++
++   vec2 projCoord = viewCoords.xy / viewCoords.q;
++   projCoord = (projCoord + 1.0) * 0.5;
++   if ( abovewater == true ) {
++       projCoord.x = 1.0 - projCoord.x;
++   }
++
++    projCoord += (vnormal + dudvColor.xy * 0.5 + normalVector.xy * 0.2);
++   projCoord = clamp(projCoord, 0.001, 0.999);
++
++   vec4 reflectionColor = texture2D(reflection, projCoord);
++   if ( abovewater == false ) {
++       reflectionColor *= vec4(0.8,0.9,1.0,1.0);
++       vec4 endColor = mix(reflectionColor,waterColor,fresnelTerm);
++       gl_FragColor = mix(endColor,waterColor,fogDist);
++   }
++   else {
++       vec4 waterColorNew = mix(waterColor,waterColorEnd,fresnelTerm);
++       vec4 endColor = mix(waterColorNew,reflectionColor,fresnelTerm);
++   
++       float foamVal = (vVertex.y-vVertex.w) / (amplitude * 2.0);
++       foamVal = clamp(foamVal,0.0,1.0);
++       vec4 foamTex = texture2D(foamMap, foamCoords + vnormal * 0.6 + normalVector.xy * 0.05);
++       float normLength = length(vnormal*5.0);
++       foamVal *= 1.0-normLength;
++       foamVal *= foamTex.a;
++       endColor = mix(endColor,foamTex,clamp(foamVal,0.0,0.95));
++               
++       if( useFadeToFogColor == false) {
++           gl_FragColor = mix(endColor,reflectionColor,fogDist);
++       } else {
++           gl_FragColor = mix(endColor,reflectionColor,fogDist) * (1.0-fogDist) + gl_Fog.color * fogDist;
++       }
++   }
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/sketch_norm.frag
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/sketch_norm.frag
+diff -N build/com/jmex/effects/glsl/data/sketch_norm.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/sketch_norm.frag   1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,40 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++varying vec3 vNormal;
++varying vec4 pos;
++varying float depth;
++
++void main(void)
++{
++   gl_FragColor = vec4(vNormal,depth);
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/sketch_sobel.frag
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/sketch_sobel.frag
+diff -N build/com/jmex/effects/glsl/data/sketch_sobel.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/sketch_sobel.frag  1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,61 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++uniform sampler2D depth;
++
++uniform float normalMult;
++uniform float depthMult;
++uniform float off;
++
++varying vec2 vTexCoord;
++
++void main(void)
++{
++   vec4 s00 = texture2D(depth, vTexCoord + vec2(-off, -off));
++   vec4 s01 = texture2D(depth, vTexCoord + vec2( 0,   -off));
++   vec4 s02 = texture2D(depth, vTexCoord + vec2( off, -off));
++
++   vec4 s10 = texture2D(depth, vTexCoord + vec2(-off,  0));
++   vec4 s12 = texture2D(depth, vTexCoord + vec2( off,  0));
++
++   vec4 s20 = texture2D(depth, vTexCoord + vec2(-off,  off));
++   vec4 s21 = texture2D(depth, vTexCoord + vec2( 0,    off));
++   vec4 s22 = texture2D(depth, vTexCoord + vec2( off,  off));
++
++   vec4 sobelX = s00 + 2.0 * s10 + s20 - s02 - 2.0 * s12 - s22;
++   vec4 sobelY = s00 + 2.0 * s01 + s02 - s20 - 2.0 * s21 - s22;
++
++   vec4 edgeSqr = sobelX * sobelX + sobelY * sobelY;
++   float col = 1.0 - dot(edgeSqr, vec4(normalMult,normalMult,normalMult,depthMult));
++
++    gl_FragColor = vec4(col);
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/glsl/data/bloom_final.frag
+===================================================================
+RCS file: build/com/jmex/effects/glsl/data/bloom_final.frag
+diff -N build/com/jmex/effects/glsl/data/bloom_final.frag
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/glsl/data/bloom_final.frag   1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,40 @@
++/*
++ * Copyright (c) 2003-2006 jMonkeyEngine
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are
++ * met:
++ *
++ * * Redistributions of source code must retain the above copyright
++ *   notice, this list of conditions and the following disclaimer.
++ *
++ * * Redistributions in binary form must reproduce the above copyright
++ *   notice, this list of conditions and the following disclaimer in the
++ *   documentation and/or other materials provided with the distribution.
++ *
++ * * Neither the name of 'jMonkeyEngine' nor the names of its contributors 
++ *   may be used to endorse or promote products derived from this software 
++ *   without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
++ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++uniform sampler2D RT;
++
++varying vec2 vTexCoord;
++
++void main(void)
++{
++   gl_FragColor = texture2D(RT, vTexCoord);
++}
+\ No newline at end of file
+Index: build/com/jmex/effects/water/data/flatwatershader_refraction.vert
+===================================================================
+RCS file: build/com/jmex/effects/water/data/flatwatershader_refraction.vert
+diff -N build/com/jmex/effects/water/data/flatwatershader_refraction.vert
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jmex/effects/water/data/flatwatershader_refraction.vert   1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,39 @@
++varying vec2 refrCoords;
++varying vec2 normCoords;
++varying vec4 viewCoords;
++varying vec3 viewTangetSpace;
++
++//uniform vec3 cameraPos;
++uniform vec3 tangent;
++uniform vec3 binormal;
++uniform float normalTranslation, refractionTranslation;
++
++void main()
++{
++   // Because we have a flat plane for water we already know the vectors for tangent space
++// vec3 normal = gl_Normal;
++   vec3 normal = gl_NormalMatrix * gl_Normal;
++   normal = normalize(normal);
++   vec3 tangent2 = gl_NormalMatrix * tangent;
++   tangent2 = normalize(tangent2);
++   vec3 binormal2 = gl_NormalMatrix * binormal;
++   binormal2 = normalize(binormal2);
++
++   // Calculate the vector coming from the vertex to the camera
++// vec3 viewDir = cameraPos - gl_Vertex.xyz;
++   vec4 v = gl_ModelViewMatrix * gl_Vertex;
++   vec3 viewDir = -(v.xyz/v.w);
++   viewDir = normalize(viewDir);
++
++   // Compute tangent space for the view direction
++   viewTangetSpace.x = dot(viewDir, tangent2);
++   viewTangetSpace.y = dot(viewDir, binormal2);
++   viewTangetSpace.z = dot(viewDir, normal);
++
++   refrCoords = gl_MultiTexCoord0.xy * vec2(0.8) + vec2(0.0,refractionTranslation);
++   normCoords = gl_MultiTexCoord0.xy + vec2(0.0,normalTranslation);
++
++   // This calculates our current projection coordinates
++   viewCoords = gl_ModelViewProjectionMatrix * gl_Vertex;
++   gl_Position = viewCoords;
++}
+Index: build/com/jme/app/defaultfont.tga
+===================================================================
+RCS file: build/com/jme/app/defaultfont.tga
+diff -N build/com/jme/app/defaultfont.tga
+--- /dev/null   1 Jan 1970 00:00:00 -0000
++++ build/com/jme/app/defaultfont.tga   1 Jan 1970 00:00:00 -0000
+@@ -0,0 +1,1 @@
++

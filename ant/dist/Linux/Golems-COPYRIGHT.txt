@@ -1,0 +1,6 @@
+Golems Universal Constructor
+Copyright 2008, Sam Bayless
+
+Notice:
+Golems is still very much a work in progress and may contain bugs. 
+Use at your own risk.

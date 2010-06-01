@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="module_buoyancy" default="dist.buoyancy" basedir=".">
+
+	
+	  <property name="buoyancy.src" location="../buoyancy/"/>
+	  <property name="buoyancy.build" location="buoyancy-build"/>
+	  <property name="buoyancy.dist"  location="dist"/>
+	  <path id="buoyancy.class.path">
+	   
+	  	<pathelement location="../lib/jme.jar"/>
+	  		 <pathelement location="../lib/"/>
+		<pathelement location="../lib/native/"/>
+		<pathelement location="../lib/FengGUI.jar"/>
+		<pathelement location="../lib/jme-physics.jar"/>
+		<pathelement location="../lib/jme-gamestates.jar"/>
+		<pathelement location="../lib/jme-awt.jar"/>
+		<pathelement location="../lib/jme-scene.jar"/>
+		<pathelement location="../lib/simplemonkey.jar"/>
+		<pathelement location="../lib/jme-settings-panel.jar"/>
+	  	<pathelement location="../lib/commons-math-1.2-SNAPSHOT.jar"/>
+	  	<pathelement location="../lib/jinput.jar"/>
+	  	<pathelement location="../lib/lwjgl.jar"/>
+	  	<pathelement location="../lib/svgSalamander-tiny.jar"/>
+	  	<pathelement location="../lib/jorbis.jar"/>
+
+	  </path>
+	  <target name="init">
+	    <!-- Create the time stamp -->
+	    <tstamp/>
+	    <!-- Create the build directory structure used by compile -->
+	    <mkdir dir="${buoyancy.build}"/>
+	  </target>
+
+	
+	  <target name="compile.buoyancy" depends="init"
+	        description="compile the source " >
+	    <!-- Compile the java code from ${src} into ${build} -->
+	    <javac srcdir="${buoyancy.src}" destdir="${buoyancy.build}">
+	    	 <classpath refid="buoyancy.class.path"/>
+	  	</javac>
+	  </target>
+	  
+	
+	
+	<target name="dist.buoyancy" depends="compile.buoyancy"
+		        description="generate the distribution" >
+		    <!-- Put everything in ${build} into the jar file -->
+		 	<mkdir dir="${buoyancy.dist}"/>
+		    <jar destfile="${buoyancy.dist}/jme-physics-buoyancy.jar" basedir="${buoyancy.build}"/>
+		        
+		 
+		  </target>
+	
+	<target name="clean.buoyancy" depends=""
+		        description="generate the distribution" >
+
+		 <delete dir="${buoyancy.build}"/>
+		 
+		  </target>
+	
+</project>

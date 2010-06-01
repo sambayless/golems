@@ -1,0 +1,2740 @@
+### Eclipse Workspace Patch 1.0
+#P FengGUI
+Index: src/org/fenggui/binding/render/jogl/JOGLBinding.java
+===================================================================
+--- src/org/fenggui/binding/render/jogl/JOGLBinding.java    (revision 579)
++++ src/org/fenggui/binding/render/jogl/JOGLBinding.java    (working copy)
+@@ -25,6 +25,7 @@
+ import java.awt.image.BufferedImage;
+ import java.io.IOException;
+ import java.io.InputStream;
++import java.nio.ByteBuffer;
+ 
+ import javax.imageio.ImageIO;
+ import javax.media.opengl.DebugGL;
+@@ -121,6 +122,12 @@
+        return JOGLTexture.createTexture(gl, bi);
+    }
+ 
++   @Override
++   public ITexture getTexture(ByteBuffer buffer, int width,
++           int height, boolean includeAlphaChanel) {
++       return JOGLTexture.createTexture(gl, buffer, width, height, includeAlphaChanel);
++   }
++
+    /*
+     * (non-Javadoc)
+     * 
+Index: src/org/fenggui/Display.java
+===================================================================
+--- src/org/fenggui/Display.java    (revision 579)
++++ src/org/fenggui/Display.java    (working copy)
+@@ -21,6 +21,7 @@
+ 
+ import java.io.IOException;
+ import java.util.ArrayList;
++import java.util.List;
+ import java.util.concurrent.CopyOnWriteArrayList;
+ 
+ import org.fenggui.binding.render.Binding;
+@@ -114,8 +115,8 @@
+    @Override
+    public void process(InputOutputStream stream) throws IOException, IXMLStreamableException {
+        setLayoutManager((LayoutManager) stream.processChild(getLayoutManager(), XMLTheme.TYPE_REGISTRY));
+-       stream.processChildren(notifyList, XMLTheme.TYPE_REGISTRY);
+-       for (IWidget w : notifyList) {
++       stream.processChildren(notifyList.getList(Container.NORMAL_PRIORITY), XMLTheme.TYPE_REGISTRY);
++       for (IWidget w : super.getWidgets()) {
+            w.setParent(this);
+        }
+ 
+@@ -136,7 +137,7 @@
+     */
+    public void displayPopUp(Widget pus) {
+        // addWidget calls setParent() and addedToWidgetTree()
+-       addWidget(pus);
++       addWidget(pus, POPUP_PRIORITY);
+        popupWidget = pus;
+    }
+ 
+@@ -225,13 +226,10 @@
+        g.resetTransformations();
+        g.forceColor(true);
+        
+-       ArrayList<IWidget> widgets = null;
++   
++       
+ 
+-       synchronized (this.notifyList) {
+-           widgets = new ArrayList<IWidget>(notifyList);
+-       }
+-
+-       for (IWidget c : widgets) {
++       for (IWidget c : notifyList) {
+            if (c == null) {
+                // TODO: bug, removing components from cont. causes null pointers here # this
+                // should not happen anymore
+@@ -244,9 +242,9 @@
+            clipWidget(g, c);
+ 
+            g.translate(c.getX(), c.getY());
++           if (c.getSize().getWidth()> 0 && c.getSize().getHeight()> 0)
++               c.paint(g);
+ 
+-           c.paint(g);
+-
+            g.translate(-c.getX(), -c.getY());
+            opengl.popMatrix();
+ 
+@@ -740,4 +738,13 @@
+    public KeyPressTracker getKeyPressTracker() {
+        return keyPressTracker;
+    }
++
++   public int getWidgetPriority(IWidget widget) {
++       List<IWidget> list = this.notifyList.getListContainingElement(widget);
++       if(list == null)
++           return Container.NORMAL_PRIORITY;
++       
++       int priority = notifyList.getPriorityOfList(list);
++       return priority;
++   }
+ }
+Index: src/org/fenggui/IBasicContainer.java
+===================================================================
+--- src/org/fenggui/IBasicContainer.java    (revision 579)
++++ src/org/fenggui/IBasicContainer.java    (working copy)
+@@ -43,4 +43,5 @@
+    
+    public void layout();
+ 
++   //=public void layoutToRoot();
+ }
+Index: src/org/fenggui/layout/LayoutManager.java
+===================================================================
+--- src/org/fenggui/layout/LayoutManager.java   (revision 579)
++++ src/org/fenggui/layout/LayoutManager.java   (working copy)
+@@ -42,17 +42,21 @@
+    public int getValidMinHeight(IWidget w)
+    {
+        if(w.isShrinkable()) return w.getMinSize().getHeight();
+-       else return w.getSize().getHeight();
++       else return Math.max( w.getSize().getHeight(), w.getMinSize().getHeight());
+    }
+ 
+    public int getValidMinWidth(IWidget w)
+    {
+        if(w.isShrinkable()) return w.getMinSize().getWidth();
+-       else return w.getSize().getWidth();
++       else return Math.max( w.getSize().getWidth(), w.getMinSize().getWidth());
+    }
+    
+    public void setValidSize(IWidget widget, int width, int height)
+    {
++       if(width < 0)
++           width = 0;
++       if(height< 0)
++           height = 0;
+        int height2Set = widget.getSize().getHeight();
+        int width2Set = widget.getSize().getWidth();
+        
+@@ -73,12 +77,16 @@
+        {
+            if (widget.isExpandable()) width2Set = width;
+        }
+-
++       
++   //  widget.getSize().setWidth(width2Set);
++   //  widget.getSize().setHeight(height2Set);
+        widget.setSize(new Dimension(width2Set, height2Set));
+    }
+    
+    public void setValidHeight(IWidget widget, int height)
+    {
++       if(height<0)
++           height = 0;
+        if (widget.getSize().getHeight() > height)
+        {
+            if (widget.isShrinkable()) 
+@@ -93,6 +101,8 @@
+    
+    public void setValidWidth(IWidget widget, int width)
+    {
++       if(width<0)
++           width = 0;
+        if (widget.getSize().getWidth() > width)
+        {
+            if (widget.isShrinkable()) 
+Index: src/org/fenggui/TextEditor.java
+===================================================================
+--- src/org/fenggui/TextEditor.java (revision 579)
++++ src/org/fenggui/TextEditor.java (working copy)
+@@ -21,6 +21,7 @@
+ import java.io.IOException;
+ import java.util.ArrayList;
+ import java.util.Set;
++import java.util.concurrent.CopyOnWriteArrayList;
+ import java.util.regex.Pattern;
+ 
+ import org.fenggui.appearance.TextEditorAppearance;
+@@ -29,7 +30,12 @@
+ import org.fenggui.binding.render.Graphics;
+ import org.fenggui.binding.render.IOpenGL;
+ import org.fenggui.binding.render.CursorFactory.CursorType;
+-import org.fenggui.event.*;
++import org.fenggui.event.FocusEvent;
++import org.fenggui.event.IDragAndDropListener;
++import org.fenggui.event.ISizeChangedListener;
++import org.fenggui.event.ITextChangedListener;
++import org.fenggui.event.SizeChangedEvent;
++import org.fenggui.event.TextChangedEvent;
+ import org.fenggui.event.key.Key;
+ import org.fenggui.event.key.KeyPressedEvent;
+ import org.fenggui.event.key.KeyTypedEvent;
+@@ -39,7 +45,6 @@
+ import org.fenggui.event.mouse.MouseExitedEvent;
+ import org.fenggui.theme.xml.IXMLStreamableException;
+ import org.fenggui.theme.xml.InputOutputStream;
+-import org.fenggui.util.Color;
+ import org.fenggui.util.Dimension;
+ 
+ /**
+@@ -62,7 +67,7 @@
+    public static final String RESTRICT_LETTERSANDNUMBERS = "[A-Z0-9]+";
+    public static final String RESTRICT_EMAIL = "[A-Z0-9\\._%\\+\\-@]+";
+ 
+-   private ArrayList<ITextChangedListener> textChangedHook = new ArrayList<ITextChangedListener>();
++   private CopyOnWriteArrayList<ITextChangedListener> textChangedHook = new CopyOnWriteArrayList<ITextChangedListener>();
+ 
+    private TextEditorDnDListener dndListener = null;
+    private ISizeChangedListener textSizeChangedListener;
+@@ -217,7 +222,7 @@
+        if (this.maxCharacters >= 0 && this.getText().length() >= this.maxCharacters && !this.getAppearance().getData().hasSelection())
+            return false;
+ 
+-       if (!(e.getKey() == '\t') && !(e.isPressed(Key.META)))
++       if (!(e.getKey() == '\t'))
+        {
+        if (getAppearance().getRenderer().isValidChar(getAppearance().getData(), e.getKey())
+                && Character.isDefined(e.getKey()))
+@@ -246,7 +251,7 @@
+            // also this is not platform independent
+        String vers = System.getProperty("os.name").toLowerCase();
+        boolean isMac = vers.indexOf("mac") != -1;
+-           if ((!isMac && e.isPressed(Key.CTRL)) || (isMac && e.isPressed(Key.META)))
++           if ((!isMac && (e.isPressed(Key.CTRL_LEFT) || e.isPressed(Key.CTRL_RIGHT))) || (isMac && (e.isPressed(Key.META_LEFT)|| e.isPressed(Key.META_RIGHT))))
+            {
+                if (e.getKey() == 'C')
+                {
+Index: src/org/fenggui/layout/GridLayout.java
+===================================================================
+--- src/org/fenggui/layout/GridLayout.java  (revision 579)
++++ src/org/fenggui/layout/GridLayout.java  (working copy)
+@@ -37,6 +37,22 @@
+ {
+    private int rows, columns;
+ 
++   public int getRows() {
++       return rows;
++   }
++
++   public void setRows(int rows) {
++       this.rows = rows;
++   }
++
++   public int getColumns() {
++       return columns;
++   }
++
++   public void setColumns(int columns) {
++       this.columns = columns;
++   }
++
+    public GridLayout(int rows, int columns) 
+    {
+        super();
+@@ -125,6 +141,9 @@
+    @Override
+    public void doLayout(Container container, List<IWidget> content)
+    {
++       if(rows == 0 || columns == 0)
++           return;
++       
+        IWidget[][] grid = buildWidgetGrid(content);
+        
+        Dimension minSize = container.getMinContentSize();
+Index: src/org/fenggui/Container.java
+===================================================================
+--- src/org/fenggui/Container.java  (revision 579)
++++ src/org/fenggui/Container.java  (working copy)
+@@ -21,14 +21,19 @@
+ 
+ import java.io.IOException;
+ import java.util.ArrayList;
++import java.util.ConcurrentModificationException;
+ import java.util.List;
+-import java.util.concurrent.CopyOnWriteArrayList;
++import java.util.NoSuchElementException;
+ 
+ import org.fenggui.appearance.DefaultAppearance;
+ import org.fenggui.binding.render.Binding;
+ import org.fenggui.binding.render.Graphics;
+ import org.fenggui.binding.render.IOpenGL;
+-import org.fenggui.event.*;
++import org.fenggui.composite.Window;
++import org.fenggui.event.FocusEvent;
++import org.fenggui.event.IWidgetListChangedListener;
++import org.fenggui.event.PositionChangedEvent;
++import org.fenggui.event.WidgetListChangedEvent;
+ import org.fenggui.layout.LayoutManager;
+ import org.fenggui.layout.RowLayout;
+ import org.fenggui.theme.XMLTheme;
+@@ -36,6 +41,7 @@
+ import org.fenggui.theme.xml.InputOutputStream;
+ import org.fenggui.theme.xml.MissingElementException;
+ import org.fenggui.util.Dimension;
++import org.fenggui.util.DoubleList;
+ 
+ /**
+  * A Container is a set of Widgets. The
+@@ -55,7 +61,30 @@
+ public class Container extends StandardWidget implements IContainer
+ {
+    private LayoutManager layoutManager = null;
+-   protected List<IWidget> notifyList = new CopyOnWriteArrayList<IWidget>();
++   
++   public static final int NORMAL_PRIORITY = 0;
++   public static final int RAISED_PRIORITY = 64;
++   public static final int MAX_PRIORITY = 0x3f3f3f3f;
++   public static final int LOWERED_PRIORITY = -64;
++   public static final int POPUP_PRIORITY = 1024;
++   
++   protected DoubleList<IWidget> notifyList = new DoubleList<IWidget>();
++   
++   /**
++    * New notify list system:
++    * 
++    * 
++    * There is a getNotifyList() function, that returns an Iterable that iterates, sequentially, through all the notifiables.
++    * 
++    * There will now be an ordered list of notify Lists.
++    * The ordered list is by the priority of the list,
++    * each list then operates the same way that the notify list did before.
++    * 
++    * When widgets are added to the notify list, they are actually added to a bucket list at their priority; or default
++    * priority if not specified.
++    */
++
++
+    private boolean keyTraversalRoot = false;
+    private DefaultAppearance appearance = null;
+    private List<IWidgetListChangedListener> widgetListChangedHook = new ArrayList<IWidgetListChangedListener>(0);
+@@ -87,6 +116,24 @@
+        this.layoutManager = container.layoutManager;
+        this.appearance = new DefaultAppearance(this, container.appearance);
+    }
++   
++   /**
++   * The function try to find a parent who is a scrollcontainer in the parent chain
++   * 
++   * @return true if the container is a child (or sub child) of a ScrollContainer
++   */
++   private boolean hasScrollCntParent()
++   {
++       IBasicContainer cnt = this.getParent();
++       while (cnt!=null)
++       {
++       if (cnt instanceof ScrollContainer)
++           return true;
++       else
++           cnt = cnt.getParent();
++       }
++       return false;
++   }
+ 
+    public void addWidgetListChangedListener(IWidgetListChangedListener listener)
+    {
+@@ -171,7 +218,7 @@
+    public void setSize(Dimension s)
+    {
+        super.setSize(s);
+-       this.layout();
++   //  this.layout();//this causes exponential slow down with large numbers of elements being laid out
+    }
+ 
+    /**
+@@ -241,17 +288,20 @@
+     * Returns the children of this container.
+     * @return the children Widgets
+     */
+-   public java.util.List<IWidget> getContent()
++   public java.util.Collection<IWidget> getContent()
+    {
+        return notifyList;
+    }
+ 
++
++   
++   
+    /**
+     * Adds a Widget to the container.
+     * @param c
+     *      The Widget to be added.
+     */
+-   public final void addWidget(IWidget c, int position)
++   public final void addWidget(IWidget c, int priority)
+    {
+        if (c == null) return;
+ 
+@@ -259,9 +309,9 @@
+ 
+        if (c.equals(getParent())) { throw new IllegalArgumentException("Can't add my parent!"); }
+ 
+-       if (position < 0) position = 0;
++       
+ 
+-       addWidgetInternal(c, position);
++       addWidgetInternal(c, priority);
+        updateMinSize();
+        widgetAdded(new WidgetListChangedEvent(this, c));
+    }
+@@ -272,20 +322,20 @@
+     * @param c
+     * @param position
+     */
+-   private void addWidgetInternal(IWidget c, int position)
++   private void addWidgetInternal(IWidget c,int priority)
+    {
+        synchronized (notifyList)
+        {
+-           if (position > notifyList.size()) position = notifyList.size();
++           
+ 
+            if (notifyList.contains(c))
+            {
+-               System.err.println("Container.addWidget: Widget " + c + " is already in the container (" + this + ")");
++               //System.err.println("Container.addWidget: Widget " + c + " is already in the container (" + this + ")");
+            }
+            else
+            {
+                //if(relyFocus() == null && c.relyFocus() != null) setRelyFocus(c);
+-               notifyList.add(position, c);
++               notifyList.getList(priority).add(notifyList.getList(priority).size(),c);
+ 
+                c.setParent(this);
+ 
+@@ -302,11 +352,17 @@
+    {
+        synchronized (notifyList)
+        {
+-           if (!notifyList.contains(child)) throw new IllegalArgumentException(
+-                   "The given child must be in this container");
++   
++           if (!notifyList.contains(child))
++               throw new IllegalArgumentException("The given child must be in this container");
+ 
+-           notifyList.remove(child);
+-           notifyList.add(notifyList.size(), child);
++
++           List<IWidget> list = notifyList.getListContainingElement(child);
++           if(list == null)
++               return;
++           
++           list.remove(child);
++           list.add(list.size(), child);
+        }
+    }
+ 
+@@ -314,7 +370,7 @@
+    {
+        for (IWidget w : widgets)
+        {
+-           addWidgetInternal(w, notifyList.size());
++           addWidgetInternal(w, NORMAL_PRIORITY);
+        }
+ 
+        updateMinSize();
+@@ -325,7 +381,7 @@
+    public void removedFromWidgetTree()
+    {
+        super.removedFromWidgetTree();
+-       synchronized (notifyList)
++
+        {
+            for (IWidget w : notifyList)
+                w.removedFromWidgetTree();
+@@ -383,7 +439,7 @@
+        // and my own size. Since i know the min. size of the children and
+        // my final size, I can set the final size of my children as well.
+ 
+-       layoutManager.doLayout(this, widgets);
++       layoutManager.doLayout(this, widgets);
+ 
+        synchronized (notifyList)
+        {
+@@ -507,10 +563,16 @@
+ 
+        synchronized (notifyList)
+        {
+-           for (int i = 0; i < notifyList.size(); i++)
++           int i = 0;
++           for (IWidget widget:getWidgets())
+            {
+-               s += notifyList.get(i).getClass().getSimpleName();
+-               if (i < notifyList.size() - 1) s += ", ";
++
++               
++               s += widget.getClass().getSimpleName();
++               if (i < size() - 1)
++                   s += ", ";
++
++               i++;
+            }
+        }
+        s += "}";
+@@ -527,7 +589,7 @@
+ 
+        synchronized (notifyList)
+        {
+-           for (IWidget widget : notifyList)
++           for (IWidget widget : getWidgets())
+            {
+                widget.positionChanged(event);
+            }
+@@ -563,6 +625,11 @@
+    {
+        return notifyList;
+    }
++   
++   public Iterable<IWidget> getWidgetsReverse()
++   {
++       return notifyList.reverseIteratable();
++   }
+ 
+    @Override
+    public int getDisplayX()
+@@ -600,20 +667,10 @@
+     */
+    public IWidget getPreviousWidget(IWidget currentWidget)
+    {
+-       int i;
+        synchronized (notifyList)
+        {
+-           if (currentWidget == null) i = size() - 1;
+-           else i = notifyList.indexOf(currentWidget) - 1;
++           return notifyList.getPrevious(currentWidget, isKeyTraversalRoot());
+ 
+-           if (i < 0)
+-           {
+-               if (isKeyTraversalRoot() && 0 != size() - 1) i = size() - 1;
+-               else return null;
+-               //              return getParent().getPreviousWidget(this);
+-           }
+-
+-           return notifyList.get(i);
+        }
+    }
+ 
+@@ -623,22 +680,14 @@
+     * @return next widget
+     */
+    public IWidget getNextWidget(IWidget currentWidget)
+-   {
+-       int i;
++   {       
+        synchronized (notifyList)
+        {
+-           if (currentWidget == null) i = 0;
+-           else i = notifyList.indexOf(currentWidget) + 1;
+ 
+-           if (i > size() - 1)
+-           {
+-               if (isKeyTraversalRoot() && (size() - 1) != 0) i = 0;
+-               else return null;
+-           }
++       return notifyList.getNext(currentWidget, isKeyTraversalRoot());
+ 
+-           return notifyList.get(i);
+-       }
+    }
++   }
+ 
+    /**
+     * Returns the next traversable widget.
+@@ -649,9 +698,9 @@
+    {
+        if (currentWidget != null && !notifyList.contains(currentWidget)) throw new IllegalArgumentException(
+                "currentWidget is not child of this container!");
+-
++   
+        IWidget w = getNextWidget(currentWidget);
+-
++   //  System.out.println(this + "\t" + w);
+        //search in this and deeper levels
+        while (w != null)
+        {
+@@ -679,16 +728,17 @@
+        }
+ 
+        //no widgets here go one level up and search there
+-       if (w == null && this.getParent() != null && !isKeyTraversalRoot())
++   /*  if (w == null && this.getParent() != null && !isKeyTraversalRoot())
+        {
+            w = this.getParent().getNextTraversableWidget(this);
+        }
+-       else if (w == null && isKeyTraversalRoot())
++       else */if (w == null && isKeyTraversalRoot())
+        {
+            w = getNextTraversableWidget(null);
+        }
+-
+-       return w;
++       if (w != currentWidget)
++           return w;
++       return null;
+    }
+ 
+    /**
+@@ -729,12 +779,12 @@
+            w = getPreviousWidget(w);
+        }
+ 
+-       //no widgets here go one level up and search there
++/*     //no widgets here go one level up and search there
+        if (w == null && this.getParent() != null && !isKeyTraversalRoot())
+        {
+            w = this.getParent().getPreviousTraversableWidget(this);
+        }
+-       else if (w == null && isKeyTraversalRoot())
++       else */if (w == null && isKeyTraversalRoot())
+        {
+            w = getPreviousTraversableWidget(null);
+        }
+@@ -759,7 +809,8 @@
+ 
+        if (stream.startSubcontext("children"))
+        {
+-           stream.processChildren(notifyList, XMLTheme.TYPE_REGISTRY);
++           //note: this forces all loaded children into normal priority...
++           stream.processChildren(notifyList.getList(0), XMLTheme.TYPE_REGISTRY);
+            stream.endSubcontext();
+        }
+    }
+@@ -769,52 +820,76 @@
+    {
+        IOpenGL opengl = g.getOpenGL();
+ 
+-       synchronized (this.notifyList)
+-       {
+-           for (IWidget c : notifyList)
++       try{
++           synchronized (this.notifyList)
+            {
+-               // if widget lays completely outside
+-               if (c.getX() > this.getWidth() || c.getY() > this.getHeight()) continue;
+-
+-               //XXX the upper statement does not recognize the margins of the container!
+-
+-               // if parent is a Scroll Container we have to make sure that
+-               // the current clip space will NOT be overridden because the
+-               // inner container is likely to be bigger than the view
+-               // rectangle. The inner container would set the clip space
+-               // to his size, resulting in rendering widgets from the inner
+-               // container which are not in the view rectangle.
+-               if (!(this.getParent() instanceof ScrollContainer))
++               for (IWidget c : getWidgets())
+                {
+-                   boolean valid = this.clipWidget(g, c);
+-
+-                   if (!valid) return;
++                   
++                   // if widget lays completely outside
++                   if (c.getX() > this.getWidth() || c.getY() > this.getHeight()) continue;
++   
++                   //XXX the upper statement does not recognize the margins of the container!
++   
++                   // if parent is a Scroll Container we have to make sure that
++                   // the current clip space will NOT be overridden because the
++                   // inner container is likely to be bigger than the view
++                   // rectangle. The inner container would set the clip space
++                   // to his size, resulting in rendering widgets from the inner
++                   // container which are not in the view rectangle.
++                   boolean hasScrollCntParent = hasScrollCntParent();
++                   if (!hasScrollCntParent)
++                   {
++                       boolean valid = this.clipWidget(g, c);
++   
++                       if (!valid) return;
++                   }
++   
++                   opengl.pushMatrix();
++                   g.translate(c.getX(), c.getY());
++                   if (c.getSize().getWidth()> 0 && c.getSize().getHeight()> 0)
++                       c.paint(g);
++   
++                   g.translate(-c.getX(), -c.getY());
++                   opengl.popMatrix();
++                   if (!hasScrollCntParent)
++                       g.resetClipSpace();
+                }
+-
+-               opengl.pushMatrix();
+-               g.translate(c.getX(), c.getY());
+-
+-               c.paint(g);
+-
+-               g.translate(-c.getX(), -c.getY());
+-               opengl.popMatrix();
+-
+-               g.resetClipSpace();
+            }
++       }catch(NullPointerException e)
++       {
++           e.printStackTrace();
++       }catch(ConcurrentModificationException e){
++           e.printStackTrace();
+        }
+    }
+ 
++
+    @Override
+    public Dimension getMinContentSize()
+    {
+        //only use visible widgets
+-       List<IWidget> widgets = new ArrayList<IWidget>(notifyList.size());
++       List<IWidget> widgets = new ArrayList<IWidget>(size());
+ 
+-       for (IWidget widget : notifyList)
++       for (IWidget widget : getWidgets())
+        {
+            if (widget.isVisible()) widgets.add(widget);
+        }
+ 
+        return this.getLayoutManager().computeMinSize(this, widgets);
+    }
++
++   public void layoutToRoot() {
++       if(this.getParent()!=null &&! (this.getParent() instanceof Display))
++       {
++           if(this.getParent() instanceof Container)           
++               ((Container)this.getParent()).layoutToRoot();
++           else
++               this.getParent().layout();
++       }else
++           this.layout();
++   }
++
++   
++   
+ }
+Index: src/org/fenggui/util/jdom/Element.java
+===================================================================
+--- src/org/fenggui/util/jdom/Element.java  (revision 579)
++++ src/org/fenggui/util/jdom/Element.java  (working copy)
+@@ -40,7 +40,7 @@
+    
+    public Element(String name, int lineNumber)
+    {
+-       this.name = name;
++       this.name = name.intern();
+        this.line = lineNumber;
+    }
+    
+@@ -51,7 +51,8 @@
+ 
+    public void setAttribute(String name, String value)
+    {
+-       attributes.put(name, value);
++       //these create frequent duplicates, apparently
++       attributes.put(name.intern(), value.intern());
+    }
+    
+    public String getAttributeValue(String name)
+Index: src/org/fenggui/theme/xml/XMLInputStream.java
+===================================================================
+--- src/org/fenggui/theme/xml/XMLInputStream.java   (revision 579)
++++ src/org/fenggui/theme/xml/XMLInputStream.java   (working copy)
+@@ -152,8 +152,15 @@
+        else throw MalformedElementException.createDefaultMalformedAttributeException(name, getParsingContext());
+    }
+ 
++   /*
++    * Note: this method was determined to be the reason behind a huge slow down in the themeing process.
++    * (non-Javadoc)
++    * @see org.fenggui.theme.xml.InputOutputStream#getParsingContext()
++    */
+    protected String getParsingContext()
+    {
++       return "disabled";
++       /*
+        Element parent = activeElement.getParent();
+        
+        if (parent != null) {
+@@ -167,7 +174,7 @@
+        StringBuilder elementStr = new StringBuilder();
+        activeElement.toXML("", elementStr);
+        return XMLProcessPointer.getParsingContext(elementStr.toString(),
+-               0, 0);
++               0, 0);*/
+    }
+ 
+    public boolean startSubcontext(Element el) 
+Index: src/org/fenggui/binding/render/dummy/DummyBinding.java
+===================================================================
+--- src/org/fenggui/binding/render/dummy/DummyBinding.java  (revision 579)
++++ src/org/fenggui/binding/render/dummy/DummyBinding.java  (working copy)
+@@ -3,6 +3,7 @@
+ import java.awt.image.BufferedImage;
+ import java.io.IOException;
+ import java.io.InputStream;
++import java.nio.ByteBuffer;
+ 
+ import org.fenggui.binding.clipboard.DummyClipboard;
+ import org.fenggui.binding.clipboard.IClipboard;
+@@ -13,6 +14,13 @@
+ 
+ public class DummyBinding extends Binding
+ {
++   @Override
++   public ITexture getTexture(ByteBuffer buffer, int width,
++           int height, boolean includeAlphaChanel) {
++       return new DummyTexture();
++   }
++
++
+    private DummyClipboard clipboard = new DummyClipboard();
+    
+    public DummyBinding()
+Index: src/org/fenggui/binding/render/jogl/EventHelper.java
+===================================================================
+--- src/org/fenggui/binding/render/jogl/EventHelper.java    (revision 579)
++++ src/org/fenggui/binding/render/jogl/EventHelper.java    (working copy)
+@@ -90,16 +90,16 @@
+            keyClass = Key.HOME;
+            break;
+         case KeyEvent.VK_SHIFT:
+-           keyClass = Key.SHIFT;
++           keyClass = Key.SHIFT_LEFT;
+             break;
+         case KeyEvent.VK_ALT:
+-           keyClass = Key.ALT;
++           keyClass = Key.ALT_LEFT;
+             break;
+         case KeyEvent.VK_ALT_GRAPH:
+-           keyClass = Key.ALT_GRAPH;
++           keyClass = Key.ALT_RIGHT;
+            break;
+         case KeyEvent.VK_CONTROL:
+-           keyClass = Key.CTRL;
++           keyClass = Key.CTRL_LEFT;
+             break;
+         case KeyEvent.VK_INSERT:
+            keyClass = Key.INSERT;
+@@ -151,7 +151,7 @@
+            break;
+         case KeyEvent.VK_META:
+         case KeyEvent.VK_WINDOWS:
+-           keyClass = Key.META;
++           keyClass = Key.META_LEFT;
+            break;
+         default:
+            if("1234567890".indexOf(ke.getKeyChar()) != -1) {
+Index: src/org/fenggui/binding/render/text/advanced/AdvancedTextRendererData.java
+===================================================================
+--- src/org/fenggui/binding/render/text/advanced/AdvancedTextRendererData.java  (revision 579)
++++ src/org/fenggui/binding/render/text/advanced/AdvancedTextRendererData.java  (working copy)
+@@ -233,7 +233,7 @@
+        this.setMultiline(stream.processAttribute("multiline", this.isMultiline(), false));
+        this.setWordWarping(stream.processAttribute("wordwarped", this.isWordWarping(), false));
+        this.setPasswordField(stream.processAttribute("passwordField", this.isPasswordField(), false));
+-
++       
+        cursor = stream.processChild("Cursor", cursor, null, Pixmap.class);
+        cursorColor = stream.processChild("CursorColor", cursorColor, Color.BLACK, Color.class);
+    }
+@@ -325,7 +325,7 @@
+    {
+        manager.clearSelection();
+        long pos = manager.findAtomOnPosition(x, this.getSize().getHeight() - y);
+-       if (manager.hasActiveLine() && modifiers.contains(Key.SHIFT))
++       if (manager.hasActiveLine() &&( modifiers.contains(Key.SHIFT_LEFT)||  modifiers.contains(Key.SHIFT_RIGHT)))
+        {
+            selectionStart = (int) manager.getActiveAtom();
+        }
+@@ -495,6 +495,7 @@
+    public void setActiveFont(IFont font)
+    {
+        this.activeFont = font;
++       
+    }
+ 
+    public IFont getActiveFont()
+@@ -525,7 +526,8 @@
+                result = true;
+            }
+            break;
+-       case SHIFT:
++       case SHIFT_LEFT:
++       case SHIFT_RIGHT:
+            break;
+        case DELETE:
+            if (!isReadonly())
+@@ -544,7 +546,7 @@
+            }
+            break;
+        case UP:
+-           if (!isReadonly() && modifiers.contains(Key.SHIFT))
++           if (!isReadonly() && (modifiers.contains(Key.SHIFT_LEFT) ||  modifiers.contains(Key.SHIFT_RIGHT)))
+            {
+                manager.clearSelection();
+                manager.moveUp();
+@@ -569,7 +571,7 @@
+            result = true;
+            break;
+        case RIGHT:
+-           if (!isReadonly() && modifiers.contains(Key.SHIFT))
++           if (!isReadonly() && modifiers.contains(Key.SHIFT_LEFT))
+            {
+                manager.clearSelection();
+                manager.moveRight();
+@@ -594,7 +596,7 @@
+            result = true;
+            break;
+        case LEFT:
+-           if (!isReadonly() && modifiers.contains(Key.SHIFT))
++           if (!isReadonly() && modifiers.contains(Key.SHIFT_LEFT))
+            {
+                manager.clearSelection();
+                manager.moveLeft();
+@@ -619,7 +621,7 @@
+            result = true;
+            break;
+        case DOWN:
+-           if (!isReadonly() && modifiers.contains(Key.SHIFT))
++           if (!isReadonly() && modifiers.contains(Key.SHIFT_LEFT))
+            {
+                manager.clearSelection();
+                manager.moveDown();
+@@ -642,7 +644,7 @@
+            result = true;
+            break;
+        case END:
+-           if (!isReadonly() && modifiers.contains(Key.SHIFT))
++           if (!isReadonly() && modifiers.contains(Key.SHIFT_LEFT))
+            {
+                manager.clearSelection();
+                manager.setActiveAtom(manager.getAtomsTillActiveLineEnd());
+@@ -659,7 +661,7 @@
+            result = true;
+            break;
+        case HOME:
+-           if (!isReadonly() && modifiers.contains(Key.SHIFT))
++           if (!isReadonly() && modifiers.contains(Key.SHIFT_LEFT))
+            {
+                manager.clearSelection();
+                manager.setActiveAtom(manager.getAtomsTillActiveLine());
+@@ -699,7 +701,8 @@
+                result = true;
+            }
+            break;
+-       case CTRL:
++       case CTRL_LEFT:
++       case CTRL_RIGHT:
+            break;
+        }
+        
+Index: src/org/fenggui/composite/Window.java
+===================================================================
+--- src/org/fenggui/composite/Window.java   (revision 579)
++++ src/org/fenggui/composite/Window.java   (working copy)
+@@ -44,6 +44,7 @@
+ import org.fenggui.layout.RowLayout;
+ import org.fenggui.theme.xml.IXMLStreamableException;
+ import org.fenggui.theme.xml.InputOutputStream;
++import org.fenggui.util.Dimension;
+ 
+ /**
+  * Resizable, movable container with header and buttons for closing, minimizing and maximizing. It is pretty much
+@@ -91,6 +92,17 @@
+        this(closeBtn, maximizeBtn, minimizeBtn, true);
+    }
+ 
++   @Override
++   public void layout() {
++       int oldWidth = this.getWidth();
++       int oldHeight = this.getHeight();
++       super.layout();
++       if (this.getWidth()!= oldWidth)
++           setCheckedWidth(this.getWidth());
++       if(this.getHeight()!=oldHeight)
++           setCheckedHeight(this.getHeight());
++   }
++
+    /**
+     * Creates a new window.
+     * @param closeBtn if the window has a close button
+@@ -149,6 +161,24 @@
+        content = c;
+    }
+ 
++   @Override
++   public void setSize(Dimension s) {
++       if(!this.getSize().equals(s))
++       {
++           int oldWidth = this.getWidth();
++           int oldHeight = this.getHeight();
++       //  super.setSize(s);
++   /*      if(oldWidth!=s.getWidth())
++               this.setCheckedWidth(s.getWidth());
++           if(oldHeight!=s.getHeight())
++               this.setCheckedHeight(s.getHeight());*/
++           super.setSize(s);
++           this.fireResizedEvent(oldWidth, oldHeight);
++       }
++       
++   //  super.setSize(s);
++   }
++
+    /**
+     * Build the window structure. Override this method if you want to change the inner widgets
+     * placement.
+@@ -685,7 +715,8 @@
+    public void close()
+    {
+        //Display.getInstance().removeDndListener(dndListener);
+-       ((Container) getParent()).removeWidget(this);
++       if(getParent()!=null)
++           ((Container) getParent()).removeWidget(this);
+        //fireWindowClosedEvent();
+    }
+ 
+@@ -731,6 +762,8 @@
+    /**
+     * Notifies this window that it has been removed from the widget tree. It will
+     * unregister its drag and drop listeners from the display.
++    * 
++    * Note: this fails is the window is already removed from the display...
+     */
+    @Override
+    public void removedFromWidgetTree()
+Index: src/org/fenggui/appearance/DecoratorAppearance.java
+===================================================================
+--- src/org/fenggui/appearance/DecoratorAppearance.java (revision 579)
++++ src/org/fenggui/appearance/DecoratorAppearance.java (working copy)
+@@ -157,24 +157,32 @@
+    @Override
+    public final void paintBackground(Graphics g, IOpenGL gl)
+    {
+-       for (int i = 0; i < backgroundDecorators.size(); i++)
++       int width = getWidget().getSize().getWidth();
++       int height = getWidget().getSize().getHeight();
++       if(width>0 && height>0)
+        {
+-           int width = getWidget().getSize().getWidth();
+-           int height = getWidget().getSize().getHeight();
+-
+-           paintDecorator(backgroundDecorators.get(i), g, gl, this, width, height);
++           for (int i = 0; i < backgroundDecorators.size(); i++)
++           {
++   
++               
++               paintDecorator(backgroundDecorators.get(i), g, gl, this, width, height);
++           }
+        }
+    }
+ 
+    @Override
+    public final void paintForeground(Graphics g, IOpenGL gl)
+    {
+-       for (int i = 0; i < foregroundDecorators.size(); i++)
++       int width = getWidget().getSize().getWidth();
++       int height = getWidget().getSize().getHeight();
++       if(width>0 && height>0)
+        {
+-           int width = getWidget().getSize().getWidth();
+-           int height = getWidget().getSize().getHeight();
+-
+-           paintDecorator(foregroundDecorators.get(i), g, gl, this, width, height);
++           for (int i = 0; i < foregroundDecorators.size(); i++)
++           {
++   
++   
++               paintDecorator(foregroundDecorators.get(i), g, gl, this, width, height);
++           }
+        }
+    }
+ 
+@@ -273,6 +281,12 @@
+        foregroundDecorators.clear();
+        switches.clear();
+    }
++   
++   public void remove(IDecorator decorator)
++   {
++       this.backgroundDecorators.remove(decorator);
++       this.foregroundDecorators.remove(decorator);
++   }
+ 
+    @Override
+    public void process(InputOutputStream stream) throws IOException, IXMLStreamableException
+Index: src/org/fenggui/CheckBox.java
+===================================================================
+--- src/org/fenggui/CheckBox.java   (revision 579)
++++ src/org/fenggui/CheckBox.java   (working copy)
+@@ -19,7 +19,7 @@
+ package org.fenggui;
+ 
+ import java.io.IOException;
+-import java.util.ArrayList;
++import java.util.concurrent.CopyOnWriteArrayList;
+ 
+ import org.fenggui.event.ISelectionChangedListener;
+ import org.fenggui.event.SelectionChangedEvent;
+@@ -43,7 +43,7 @@
+  */
+ public class CheckBox<E> extends ObservableLabelWidget implements IToggable<E>
+ {
+-   private ArrayList<ISelectionChangedListener> selectionChangedHook = new ArrayList<ISelectionChangedListener>();
++   private CopyOnWriteArrayList<ISelectionChangedListener> selectionChangedHook = new CopyOnWriteArrayList<ISelectionChangedListener>();
+ 
+    private E value = null;
+    private boolean selected = false;
+Index: src/org/fenggui/binding/render/Pixmap.java
+===================================================================
+--- src/org/fenggui/binding/render/Pixmap.java  (revision 579)
++++ src/org/fenggui/binding/render/Pixmap.java  (working copy)
+@@ -147,6 +147,8 @@
+     */
+    public float getEndX() 
+    {
++       if(texture == null)//These checks are necessary because (it would seem that) currently, if a texture if very slow to load, then sometimes it is requested before the pixmap is actually ready.
++           return (float) (width+x);
+        return (float) (width+x) / (float) texture.getTextureWidth();
+    }
+ 
+@@ -157,6 +159,8 @@
+     */
+    public float getEndY() 
+    {
++       if(texture == null)//These checks are necessary because (it would seem that) currently, if a texture if very slow to load, then sometimes it is requested before the pixmap is actually ready.
++           return (float) (height+y);
+        return (float) (height+y) / (float) texture.getTextureHeight();
+    }
+ 
+@@ -166,6 +170,8 @@
+     */
+    public float getStartX() 
+    {
++       if(texture == null)//These checks are necessary because (it would seem that) currently, if a texture if very slow to load, then sometimes it is requested before the pixmap is actually ready.
++           return (float) x;
+        return (float) x / (float) texture.getTextureWidth();
+    }
+ 
+@@ -175,6 +181,8 @@
+     */
+    public float getStartY() 
+    {
++       if(texture == null)//These checks are necessary because (it would seem that) currently, if a texture if very slow to load, then sometimes it is requested before the pixmap is actually ready.
++           return (float) y;
+        return (float) y / (float) texture.getTextureHeight();
+    }
+    
+Index: src/org/fenggui/binding/render/lwjgl/LWJGLTexture.java
+===================================================================
+--- src/org/fenggui/binding/render/lwjgl/LWJGLTexture.java  (revision 579)
++++ src/org/fenggui/binding/render/lwjgl/LWJGLTexture.java  (working copy)
+@@ -2,6 +2,7 @@
+ package org.fenggui.binding.render.lwjgl;
+ 
+ import java.awt.image.BufferedImage;
++import java.awt.image.renderable.RenderContext;
+ import java.io.IOException;
+ import java.nio.ByteBuffer;
+ import java.nio.ByteOrder;
+@@ -192,13 +193,13 @@
+    {
+        int textureID = createTextureID();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
++   
++   //  GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+        
+-       GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+-       
+        // convert that image into a byte buffer of texture data
+         ByteBuffer textureBuffer = ImageConverter.convertPowerOf2(awtImage);
+         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+-        
++     
+         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+@@ -210,11 +211,52 @@
+         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 
+            texWidth, texHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, textureBuffer);
+         
++        //this causes problems for jmes texturing, which assumes that texture2D is enabled...
++
+         GL11.glDisable(GL11.GL_TEXTURE_2D);
++        
+        return new LWJGLTexture(textureID, awtImage.getWidth(), awtImage.getHeight(), texWidth, texHeight);
+    }
+ 
++   public static LWJGLTexture createTexture(ByteBuffer data,int width,int height, boolean useAlphaChanel)
++   {
++       int textureID = createTextureID();
++       GL11.glEnable(GL11.GL_TEXTURE_2D);
++       
++       GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
++   
++       
++       ByteBuffer textureBuffer =data;
++        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
++             
++        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
++        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
++        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
++        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
++   
++       
++        int texWidth = ImageConverter.powerOf2(width);
++        int texHeight = ImageConverter.powerOf2(height);
++        
++        if (useAlphaChanel)
++        {
++            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 
++                       width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, textureBuffer);
++        }else
++        {
++            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, 
++                       width, height, 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, textureBuffer);
++        }
++        
+ 
++        
++        GL11.glDisable(GL11.GL_TEXTURE_2D);
++       return new LWJGLTexture(textureID, width,height, texWidth, texHeight);
++   }
++
++   
++
++
+    public int getID()
+    {
+        return textureID;
+Index: src/org/fenggui/binding/render/lwjgl/LWJGLBinding.java
+===================================================================
+--- src/org/fenggui/binding/render/lwjgl/LWJGLBinding.java  (revision 579)
++++ src/org/fenggui/binding/render/lwjgl/LWJGLBinding.java  (working copy)
+@@ -22,6 +22,7 @@
+ import java.awt.image.BufferedImage;
+ import java.io.IOException;
+ import java.io.InputStream;
++import java.nio.ByteBuffer;
+ 
+ import javax.imageio.ImageIO;
+ 
+@@ -71,7 +72,14 @@
+ 
+     
+ 
+-    /* (non-Javadoc)
++    @Override
++   public ITexture getTexture(ByteBuffer buffer, int width,
++           int height, boolean includeAlphaChanel) {
++
++       return LWJGLTexture.createTexture(buffer, width, height,includeAlphaChanel);
++   }
++
++   /* (non-Javadoc)
+      * @see joglui.binding.Binding#getCanvasWidth()
+      */
+     public int getCanvasWidth() 
+Index: src/org/fenggui/StandardWidget.java
+===================================================================
+--- src/org/fenggui/StandardWidget.java (revision 579)
++++ src/org/fenggui/StandardWidget.java (working copy)
+@@ -86,6 +86,9 @@
+ 
+    public void paint(Graphics g)
+    {
++       if(this.getHeight()<= 0 || this.getWidth() <= 0) 
++           return;
++       
+        if (isVisible())
+        {
+            if (getAppearance() != null)
+Index: src/org/fenggui/event/IWindowClosedListener.java
+===================================================================
+--- src/org/fenggui/event/IWindowClosedListener.java    (revision 579)
++++ src/org/fenggui/event/IWindowClosedListener.java    (working copy)
+@@ -21,5 +21,9 @@
+ 
+ public interface IWindowClosedListener
+ {
++   /**
++    * Note: This is called only in the event that a window is closed with the 'x' button.
++    * @param windowClosedEvent
++    */
+    public void windowClosed(WindowClosedEvent windowClosedEvent);
+ }
+Index: src/org/fenggui/FengGUI.java
+===================================================================
+--- src/org/fenggui/FengGUI.java    (revision 579)
++++ src/org/fenggui/FengGUI.java    (working copy)
+@@ -22,6 +22,7 @@
+ import org.fenggui.binding.render.ITexture;
+ import org.fenggui.binding.render.Pixmap;
+ import org.fenggui.binding.render.text.ComplexTextRendererData;
++import org.fenggui.binding.render.text.advanced.ContentManager;
+ import org.fenggui.composite.Window;
+ import org.fenggui.composite.menu.Menu;
+ import org.fenggui.composite.menu.MenuBar;
+@@ -429,9 +430,8 @@
+        return item;
+    }
+ 
+-   
+    /**
+-    * Creates a new list Widget.
++    * Creates a new list Widget.
+     * @return new list
+     */
+    public static <T> List<T> createList()
+@@ -440,7 +440,7 @@
+        FengGUI.setUpAppearance(btn);
+        return btn;
+    }
+-
++   
+    /**
+     * Creates a new list Widget.
+     * @param parent the parent container
+@@ -819,6 +819,11 @@
+     */
+    protected static IWidget setUpAppearance(IWidget toBeSetUp)
+    {
++       if(toBeSetUp instanceof TextEditor)
++       {
++       
++           //((TextEditor)toBeSetUp).getApp
++       }
+        if (theme != null)
+            theme.setUp(toBeSetUp);
+        return toBeSetUp;
+Index: src/org/fenggui/event/key/Key.java
+===================================================================
+--- src/org/fenggui/event/key/Key.java  (revision 579)
++++ src/org/fenggui/event/key/Key.java  (working copy)
+@@ -29,12 +29,12 @@
+ public enum Key {
+ 
+    UNDEFINED, LETTER, DIGIT, ESCAPE,
+-   LEFT, RIGHT, UP, DOWN, SHIFT, CTRL, 
+-   ALT, ALT_GRAPH, ENTER, INSERT, DELETE, HOME,
++   LEFT, RIGHT, UP, DOWN, SHIFT_LEFT, CTRL_LEFT, 
++   ALT_LEFT,  ENTER, INSERT, DELETE, HOME,
+    END, PAGE_UP, PAGE_DOWN, BACKSPACE, TAB,
+    COPY, CUT, PASTE, UNDO, REDO,
+    F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
+-   META
++   META_LEFT,CAPS,ALT_RIGHT,CTRL_RIGHT,META_RIGHT,SHIFT_RIGHT, NUMLOCK;
+    
+    
+    
+Index: src/org/fenggui/Label.java
+===================================================================
+--- src/org/fenggui/Label.java  (revision 579)
++++ src/org/fenggui/Label.java  (working copy)
+@@ -150,11 +150,14 @@
+        int width;
+        int height;
+ 
++
++//if (text != null && text.length() > 0) {
+        String text = getAppearance().getData().getText();
+        Dimension size = getAppearance().getTextContentSize();
+        width = size.getWidth();
+        height = size.getHeight();
+ 
++
+        if (pixmap != null) {
+            width += pixmap.getWidth();
+            if (text != null && text.length() > 0)
+Index: src/org/fenggui/event/key/KeyPressedEvent.java
+===================================================================
+--- src/org/fenggui/event/key/KeyPressedEvent.java  (revision 579)
++++ src/org/fenggui/event/key/KeyPressedEvent.java  (working copy)
+@@ -26,7 +26,7 @@
+ public class KeyPressedEvent extends KeyEvent
+ {
+ 
+-   public KeyPressedEvent(IWidget source, char key, Key keyClass, Set<Key> modifiers)
++   public KeyPressedEvent(IWidget source, char key,  Key keyClass, Set<Key> modifiers)
+    {
+        super(source, key, keyClass, modifiers);
+    }
+Index: src/org/fenggui/binding/render/lwjgl/EventHelper.java
+===================================================================
+--- src/org/fenggui/binding/render/lwjgl/EventHelper.java   (revision 579)
++++ src/org/fenggui/binding/render/lwjgl/EventHelper.java   (working copy)
+@@ -54,7 +54,7 @@
+    public static Key mapEventKey() 
+    {
+        Key keyClass;
+-       
++   
+         switch(Keyboard.getEventKey()) 
+         {
+         case Keyboard.KEY_END:
+@@ -91,25 +91,25 @@
+            keyClass = Key.DOWN;
+             break;
+         case Keyboard.KEY_SCROLL:
+-           keyClass = Key.SHIFT;
++           keyClass = Key.SHIFT_LEFT;
+             break;
+         case Keyboard.KEY_LMENU:
+-           keyClass = Key.ALT;
++           keyClass = Key.ALT_LEFT;
+             break;
+         case Keyboard.KEY_RMENU:
+-           keyClass = Key.ALT_GRAPH;
++           keyClass = Key.ALT_RIGHT;
+             break;
+         case Keyboard.KEY_LCONTROL:
+-           keyClass = Key.CTRL;
++           keyClass = Key.CTRL_LEFT;
+             break;
+         case Keyboard.KEY_RSHIFT:
+-           keyClass = Key.SHIFT;
++           keyClass = Key.SHIFT_RIGHT;
+             break;     
+         case Keyboard.KEY_LSHIFT:
+-           keyClass = Key.SHIFT;
++           keyClass = Key.SHIFT_LEFT;
+             break;              
+         case Keyboard.KEY_RCONTROL:
+-           keyClass = Key.CTRL;
++           keyClass = Key.CTRL_RIGHT;
+             break;
+         case Keyboard.KEY_INSERT:
+            keyClass = Key.INSERT;
+@@ -144,9 +144,14 @@
+         case Keyboard.KEY_F4:
+            keyClass = Key.F4;
+             break;
++        case Keyboard.KEY_CAPITAL:
++           keyClass = Key.CAPS;
++            break;
+         case Keyboard.KEY_LWIN:
++           keyClass = Key.META_LEFT;
++           break;
+         case Keyboard.KEY_RWIN:
+-           keyClass = Key.META;
++           keyClass = Key.META_RIGHT;
+            break;                       
+         default:
+            if("1234567890".indexOf(Keyboard.getEventCharacter()) != -1) {
+Index: src/org/fenggui/layout/CenteringLayout.java
+===================================================================
+--- src/org/fenggui/layout/CenteringLayout.java (revision 0)
++++ src/org/fenggui/layout/CenteringLayout.java (revision 0)
+@@ -0,0 +1,159 @@
++/*
++ * FengGUI - Java GUIs in OpenGL (http://www.fenggui.org)
++ * 
++ * Copyright (c) 2005, 2006 FengGUI Project
++ * 
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ * 
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details:
++ * http://www.gnu.org/copyleft/lesser.html#TOC3
++ * 
++ */
++package org.fenggui.layout;
++
++import java.io.IOException;
++import java.util.List;
++
++import org.fenggui.Container;
++import org.fenggui.IWidget;
++import org.fenggui.theme.xml.IXMLStreamableException;
++import org.fenggui.theme.xml.InputOutputStream;
++import org.fenggui.util.Dimension;
++
++/**
++ * Takes a single widget and centers it, horizontally and/or vertically, at its current size, within the
++ * available space.
++ * @author Sam Bayless
++ *
++ */
++public class CenteringLayout extends LayoutManager {
++
++   public static enum CenterStyle {
++       HORIZONTAL,VERTICAL,BOTH;
++   }
++   
++   /**
++    * The type of centering to provide - horizontal, vertical, or both.
++    */
++   private CenterStyle centerStyle;
++   
++   /**
++    * The amount to shift the center of the widget by.
++    * Can be positive or negative.
++    * Only applied if centering horizontally (or both).
++    */
++   private int xOffset=0;
++   
++   
++   /**
++    * The amount to shift the center of the widget by.
++    * Can be positive or negative.
++    * Only applied if centering vertically (or both).
++    */
++   private int yOffset=0;
++
++   public CenteringLayout()
++   {
++       this(CenterStyle.BOTH);
++   }
++   
++   /**
++    * A layout manager that just centers each widget.
++    * @param centerStyle The type of centering to provide - horizontal, vertical, or both.
++    */
++   public CenteringLayout(CenterStyle centerStyle) {
++       super();
++       
++       this.centerStyle = centerStyle;
++       if(centerStyle == null)
++           this.centerStyle = CenterStyle.BOTH;
++   }
++
++   @Override
++   public Dimension computeMinSize(Container container, List<IWidget> content) {
++       if(content.isEmpty())
++           return new Dimension(0,0);
++       return(content.get(0).getMinSize());
++
++   }
++
++   @Override
++   public void doLayout(Container container, List<IWidget> content) {
++       if(content.isEmpty())
++           return;
++       
++       int contentWidth = container.getAppearance().getContentWidth();
++       int contentHeight = container.getAppearance().getContentHeight();
++       
++       int left = container.getAppearance().getLeftMargins();
++       int bottom = container.getAppearance().getBottomMargins();
++       
++       for (IWidget widget:content)
++       {
++               
++           int xPosition=0;
++               
++           int yPosition=0;
++               
++           
++           if(centerStyle == CenterStyle.BOTH || centerStyle == CenterStyle.HORIZONTAL )
++               xPosition= left + contentWidth/2 -widget.getSize().getWidth()/2 + getXOffset();
++           
++           if(centerStyle == CenterStyle.BOTH || centerStyle == CenterStyle.VERTICAL )
++               yPosition= bottom + contentHeight/2 -widget.getSize().getHeight()/2 + getYOffset();
++           
++           widget.getPosition().setXY(xPosition, yPosition);
++       }
++   }
++   /**
++    * The amount to shift the center of the widget by.
++    * Can be positive or negative.
++    * Only applied if centering vertically (or both).
++    */
++   public int getYOffset() {
++       return yOffset;
++   }
++
++   /**
++    * The amount to shift the center of the widget by.
++    * Can be positive or negative.
++    * Only applied if centering vertically (or both).
++    * @param offset the amount to offset the center by. Can be positive or negative.
++    */
++   public void setYOffset(int offset) {
++       yOffset = offset;
++   }
++   
++   /**
++    * The amount to shift the center of the widget by.
++    * Can be positive or negative.
++    * Only applied if centering horizontally (or both).
++    */
++   public int getXOffset() {
++       return xOffset;
++   }
++
++   /**
++    * The amount to shift the center of the widget by.
++    * Can be positive or negative.
++    * Only applied if centering horizontally (or both).
++    * @param offset the amount to offset the center by. Can be positive or negative.
++    */
++   public void setXOffset(int offset) {
++       xOffset = offset;
++   }
++
++
++   public void process(InputOutputStream stream) throws IOException,
++           IXMLStreamableException {
++       xOffset = stream.processAttribute("xOffset", xOffset);
++       yOffset = stream.processAttribute("yOffset", yOffset);
++   }
++
++}
+Index: src/org/fenggui/binding/render/jogl/JOGLTexture.java
+===================================================================
+--- src/org/fenggui/binding/render/jogl/JOGLTexture.java    (revision 579)
++++ src/org/fenggui/binding/render/jogl/JOGLTexture.java    (working copy)
+@@ -201,7 +201,38 @@
+        return new JOGLTexture(gl, textureID, awtImage.getWidth(), awtImage.getHeight(), texWidth, texHeight);
+    }
+ 
++   public static JOGLTexture createTexture(GL gl, ByteBuffer data,int width,int height, boolean useAlphaChanel)
++   {
++       int textureID = createTextureID(gl);
+ 
++       gl.glEnable(GL.GL_TEXTURE_2D);
++       
++       // convert that image into a byte buffer of texture data
++        ByteBuffer textureBuffer = data;
++        gl.glBindTexture(GL.GL_TEXTURE_2D, textureID);
++
++        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
++        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
++        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
++        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
++        
++        int texWidth = ImageConverter.powerOf2(width);
++        int texHeight = ImageConverter.powerOf2(height);
++        
++        if (useAlphaChanel)
++        {
++           gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, 
++               texWidth, texHeight, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, textureBuffer);
++        }else
++        {
++           gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, 
++                   texWidth, texHeight, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, textureBuffer);
++        }
++        gl.glDisable(GL.GL_TEXTURE_2D);
++        
++       return new JOGLTexture(gl, textureID, width,height, texWidth, texHeight);
++   }
++
+    public int getID()
+    {
+        return textureID;
+Index: src/org/fenggui/binding/render/text/ComplexTextRenderer.java
+===================================================================
+--- src/org/fenggui/binding/render/text/ComplexTextRenderer.java    (revision 579)
++++ src/org/fenggui/binding/render/text/ComplexTextRenderer.java    (working copy)
+@@ -103,7 +103,10 @@
+        if (!(data instanceof ComplexTextRendererData))
+            throw new IllegalArgumentException("Wrong render Data in use.");
+        ComplexTextRendererData cData = (ComplexTextRendererData) data;
+-       return cData.getRenderer().getWidth(cData.getContent()[0]);
++       if (cData.getContent().length > 0)
++           return cData.getRenderer().getWidth(cData.getContent()[0]);
++       else
++           return 0;
+    }
+ 
+    public String getUniqueName()
+Index: src/org/fenggui/util/Util.java
+===================================================================
+--- src/org/fenggui/util/Util.java  (revision 579)
++++ src/org/fenggui/util/Util.java  (working copy)
+@@ -110,7 +110,7 @@
+        if (root instanceof IContainer)
+        {
+            IContainer container = (IContainer) root;
+-           List<IWidget> childs = container.getContent();
++           Iterable<IWidget> childs = container.getContent();
+            
+            for (IWidget widget: childs)
+            {
+Index: src/org/fenggui/util/ImageConverter.java
+===================================================================
+--- src/org/fenggui/util/ImageConverter.java    (revision 579)
++++ src/org/fenggui/util/ImageConverter.java    (working copy)
+@@ -48,16 +48,14 @@
+    {
+        if(img.getColorModel() != COLOR_MODEL) return false;
+        if(!(img.getRaster().getDataBuffer() instanceof DataBufferByte)) return false;
+-       if(img.getRaster().getDataBuffer().getNumBanks() != 4) return false;
++       if(img.getRaster().getNumBands() != 4) return false;
+        return true;
+    }
+    
+    public static boolean isPowerOf2(int value)
+    {
+-       int i = 2;
+-        while (i < value) i *= 2;
+-        if(i == value) return true;
+-        return false; 
++       int nearestPower  = powerOf2(value);
++        return value == nearestPower; 
+    }
+    
+    /**
+@@ -68,9 +66,9 @@
+    public static int powerOf2(int value)
+    {
+        if(value < 3) throw new IllegalArgumentException("value must be greater or equals 3!");
+-       int i = 2;
+-        while (i < value) i *= 2;
+-        return i; 
++
++       int power = Integer.highestOneBit(value - 1);
++       return 2 * power; 
+    }
+    
+    /**
+Index: src/org/fenggui/IWidget.java
+===================================================================
+--- src/org/fenggui/IWidget.java    (revision 579)
++++ src/org/fenggui/IWidget.java    (working copy)
+@@ -34,6 +34,7 @@
+ public interface IWidget
+ {
+ 
++
+    /* (non-Javadoc)
+     * @see org.fenggui.IWidget#getLayoutData()
+     */
+Index: src/org/fenggui/ObservableWidget.java
+===================================================================
+--- src/org/fenggui/ObservableWidget.java   (revision 579)
++++ src/org/fenggui/ObservableWidget.java   (working copy)
+@@ -18,11 +18,41 @@
+  */
+ package org.fenggui;
+ 
+-import org.fenggui.event.*;
+-import org.fenggui.event.key.*;
+-import org.fenggui.event.mouse.*;
++import java.util.concurrent.CopyOnWriteArrayList;
+ 
+-import java.util.ArrayList;
++import org.fenggui.event.ActivationEvent;
++import org.fenggui.event.Event;
++import org.fenggui.event.FocusEvent;
++import org.fenggui.event.IActivationListener;
++import org.fenggui.event.IEventListener;
++import org.fenggui.event.IFocusListener;
++import org.fenggui.event.key.IKeyListener;
++import org.fenggui.event.key.IKeyPressedListener;
++import org.fenggui.event.key.IKeyReleasedListener;
++import org.fenggui.event.key.IKeyTypedListener;
++import org.fenggui.event.key.Key;
++import org.fenggui.event.key.KeyAdapter;
++import org.fenggui.event.key.KeyPressedEvent;
++import org.fenggui.event.key.KeyReleasedEvent;
++import org.fenggui.event.key.KeyTypedEvent;
++import org.fenggui.event.mouse.IMouseDraggedListener;
++import org.fenggui.event.mouse.IMouseEnteredListener;
++import org.fenggui.event.mouse.IMouseExitedListener;
++import org.fenggui.event.mouse.IMouseListener;
++import org.fenggui.event.mouse.IMouseMovedListener;
++import org.fenggui.event.mouse.IMousePressedListener;
++import org.fenggui.event.mouse.IMouseReleasedListener;
++import org.fenggui.event.mouse.IMouseWheelListener;
++import org.fenggui.event.mouse.MouseAdapter;
++import org.fenggui.event.mouse.MouseClickedEvent;
++import org.fenggui.event.mouse.MouseDoubleClickedEvent;
++import org.fenggui.event.mouse.MouseDraggedEvent;
++import org.fenggui.event.mouse.MouseEnteredEvent;
++import org.fenggui.event.mouse.MouseExitedEvent;
++import org.fenggui.event.mouse.MouseMovedEvent;
++import org.fenggui.event.mouse.MousePressedEvent;
++import org.fenggui.event.mouse.MouseReleasedEvent;
++import org.fenggui.event.mouse.MouseWheelEvent;
+ 
+ /**
+  * Widget that travels between states.
+@@ -108,7 +138,7 @@
+                    if (keyPressedEvent.getKeyClass() == Key.TAB)
+                    {
+                        IWidget w;
+-                       if (keyPressedEvent.isPressed(Key.SHIFT))
++                       if (keyPressedEvent.isPressed(Key.SHIFT_LEFT)||keyPressedEvent.isPressed(Key.SHIFT_RIGHT))
+                        {
+                            w = getPreviousTraversableWidget();
+                        }
+@@ -176,20 +206,20 @@
+        }
+    }
+ 
+-   private ArrayList<IActivationListener> activationHook = new ArrayList<IActivationListener>(0);
+-   private ArrayList<IMouseEnteredListener> mouseEnteredHook = new ArrayList<IMouseEnteredListener>(0);
+-   private ArrayList<IMouseMovedListener> mouseMovedHook = new ArrayList<IMouseMovedListener>(0);
+-   private ArrayList<IMouseExitedListener> mouseExitedHook = new ArrayList<IMouseExitedListener>(0);
+-   private ArrayList<IMousePressedListener> mousePressedHook = new ArrayList<IMousePressedListener>(0);
+-   private ArrayList<IMouseReleasedListener> mouseReleasedHook = new ArrayList<IMouseReleasedListener>(0);
+-   private ArrayList<IFocusListener> focusGainedHook = new ArrayList<IFocusListener>(0);
+-   private ArrayList<IMouseDraggedListener> mouseDraggedHook = new ArrayList<IMouseDraggedListener>(0);
+-   private ArrayList<IMouseWheelListener> mouseWheeledHook = new ArrayList<IMouseWheelListener>(0);
+-   private ArrayList<IKeyPressedListener> keyPressedHook = new ArrayList<IKeyPressedListener>(0);
+-   private ArrayList<IKeyReleasedListener> keyReleasedHook = new ArrayList<IKeyReleasedListener>(0);
+-   private ArrayList<IKeyTypedListener> keyTypedHook = new ArrayList<IKeyTypedListener>(0);
+-   private ArrayList<IMouseListener> mouseHook = new ArrayList<IMouseListener>(0);
+-   private ArrayList<IKeyListener> keyHook = new ArrayList<IKeyListener>(0);
++   private CopyOnWriteArrayList<IActivationListener> activationHook = new CopyOnWriteArrayList<IActivationListener>();
++   private CopyOnWriteArrayList<IMouseEnteredListener> mouseEnteredHook = new CopyOnWriteArrayList<IMouseEnteredListener>();
++   private CopyOnWriteArrayList<IMouseMovedListener> mouseMovedHook = new CopyOnWriteArrayList<IMouseMovedListener>();
++   private CopyOnWriteArrayList<IMouseExitedListener> mouseExitedHook = new CopyOnWriteArrayList<IMouseExitedListener>();
++   private CopyOnWriteArrayList<IMousePressedListener> mousePressedHook = new CopyOnWriteArrayList<IMousePressedListener>();
++   private CopyOnWriteArrayList<IMouseReleasedListener> mouseReleasedHook = new CopyOnWriteArrayList<IMouseReleasedListener>();
++   private CopyOnWriteArrayList<IFocusListener> focusGainedHook = new CopyOnWriteArrayList<IFocusListener>();
++   private CopyOnWriteArrayList<IMouseDraggedListener> mouseDraggedHook = new CopyOnWriteArrayList<IMouseDraggedListener>();
++   private CopyOnWriteArrayList<IMouseWheelListener> mouseWheeledHook = new CopyOnWriteArrayList<IMouseWheelListener>();
++   private CopyOnWriteArrayList<IKeyPressedListener> keyPressedHook = new CopyOnWriteArrayList<IKeyPressedListener>();
++   private CopyOnWriteArrayList<IKeyReleasedListener> keyReleasedHook = new CopyOnWriteArrayList<IKeyReleasedListener>();
++   private CopyOnWriteArrayList<IKeyTypedListener> keyTypedHook = new CopyOnWriteArrayList<IKeyTypedListener>();
++   private CopyOnWriteArrayList<IMouseListener> mouseHook = new CopyOnWriteArrayList<IMouseListener>();
++   private CopyOnWriteArrayList<IKeyListener> keyHook = new CopyOnWriteArrayList<IKeyListener>();
+ 
+    public void addKeyListener(IKeyListener l)
+    {
+Index: src/org/fenggui/util/NumberedCopyOnWriteArrayList.java
+===================================================================
+--- src/org/fenggui/util/NumberedCopyOnWriteArrayList.java  (revision 0)
++++ src/org/fenggui/util/NumberedCopyOnWriteArrayList.java  (revision 0)
+@@ -0,0 +1,41 @@
++package org.fenggui.util;
++
++import java.util.concurrent.CopyOnWriteArrayList;
++
++/**
++ * This is just a copy on write array list that has associated with it
++ * a number, and a natural ordering (of the list itself, not the elements in the list).
++ * @author Sam
++ *
++ */
++public class NumberedCopyOnWriteArrayList<E> extends CopyOnWriteArrayList<E> implements Comparable<NumberedCopyOnWriteArrayList<?> >{
++
++   private static final long serialVersionUID = 1L;
++
++   
++   private int number = 0;
++   
++   
++   public int getNumber() {
++       return number;
++   }
++
++
++   public void setNumber(int number) {
++       this.number = number;
++   }
++
++
++
++   public int compareTo(NumberedCopyOnWriteArrayList<?> o) {
++
++       if(number>o.getNumber())
++           return 1;
++       
++       if (number < o.getNumber())
++           return -1;
++       
++       return 0;
++   }
++
++}
+Index: src/org/fenggui/Widget.java
+===================================================================
+--- src/org/fenggui/Widget.java (revision 579)
++++ src/org/fenggui/Widget.java (working copy)
+@@ -530,7 +530,7 @@
+        this.parent = parent;
+    }
+ 
+-   @Override
++/* @Override
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer();
+@@ -547,7 +547,7 @@
+        sb.append(minSize);
+ 
+        return sb.toString();
+-   }
++   }*/
+ 
+    /* (non-Javadoc)
+     * @see org.fenggui.IWidget#focusChanged(org.fenggui.event.FocusEvent)
+@@ -717,6 +717,8 @@
+ 
+    public boolean isVisible()
+    {
++   
++       
+        if (getParent() != null)
+            return visible && getParent().isVisible();
+        else
+Index: src/org/fenggui/IContainer.java
+===================================================================
+--- src/org/fenggui/IContainer.java (revision 579)
++++ src/org/fenggui/IContainer.java (working copy)
+@@ -47,5 +47,5 @@
+     * Returns the children of this container.
+     * @return the children Widgets
+     */
+-   public java.util.List<IWidget> getContent();
++   public java.util.Collection<IWidget> getContent();
+ }
+Index: src/org/fenggui/ComboBox.java
+===================================================================
+--- src/org/fenggui/ComboBox.java   (revision 579)
++++ src/org/fenggui/ComboBox.java   (working copy)
+@@ -29,8 +29,7 @@
+ import org.fenggui.event.key.Key;
+ import org.fenggui.event.key.KeyReleasedEvent;
+ import org.fenggui.event.mouse.MouseButton;
+-import org.fenggui.event.mouse.MouseClickedEvent;
+-import org.fenggui.event.mouse.MouseDoubleClickedEvent;
++import org.fenggui.event.mouse.MousePressedEvent;
+ import org.fenggui.theme.xml.IXMLStreamableException;
+ import org.fenggui.theme.xml.InputOnlyStream;
+ import org.fenggui.theme.xml.InputOutputStream;
+@@ -84,6 +83,7 @@
+ 
+            public void selectionChanged(SelectionChangedEvent e) {
+ 
++   
+                // dont listen to de-select events!
+                if (!e.isSelected())
+                    return;
+@@ -241,6 +241,18 @@
+    }
+ 
+    /**
++    * Open the popup only if it is not already opened; close it otherwise.
++    */
++   private void togglePopup()
++   {
++       if (getDisplay().getPopupWidget() == popupContainer)
++       {
++           getDisplay().removePopup();
++       }else
++           openPopup();
++   }
++
++   /**
+     * Opens the popup menu
+     */
+    private void openPopup() {
+@@ -308,7 +320,7 @@
+     * 
+     * @see org.fenggui.ObservableWidget#mouseClicked(org.fenggui.event.mouse.MouseClickedEvent)
+     */
+-   @Override
++   /*@Override
+    public void mouseClicked(MouseClickedEvent event) {
+        if (!event.isAlreadyUsed() && event.getButton() == MouseButton.LEFT) {
+            if (list == null || !list.isInWidgetTree()) {
+@@ -318,11 +330,11 @@
+        }
+      super.mouseClicked(event);
+    }
+-
++*/
+    /* (non-Javadoc)
+    * @see org.fenggui.ObservableWidget#mouseDoubleClicked(org.fenggui.event.mouse.MouseDoubleClickedEvent)
+    */
+-  @Override
++  /*@Override
+   public void mouseDoubleClicked(MouseDoubleClickedEvent event) {
+    if (!event.isAlreadyUsed() && event.getButton() == MouseButton.LEFT) {
+            if (list == null || !list.isInWidgetTree()) {
+@@ -331,7 +343,7 @@
+            }
+        }
+      super.mouseDoubleClicked(event);
+-  }
++  }*/
+ 
+    public IWidget getNextTraversableWidget(IWidget start) {
+        if (start == null)
+@@ -416,4 +428,26 @@
+    public boolean isKeyTraversalRoot() {
+      return false;
+   }
++
++   @Override
++   public void mousePressed(MousePressedEvent event) {
++       if (!event.isAlreadyUsed() && event.getButton() == MouseButton.LEFT) {
++           if (list == null || !list.isInWidgetTree()) {
++               togglePopup();
++               event.setUsed();
++           }
++       }
++     super.mousePressed(event);
++   }
++
++   public void layoutToRoot() {
++/*     if(this.getParent()!=null)
++           this.getParent().layout();
++       else
++           this.layout();*/
++   }
++
++
++
++
+ }
+Index: src/org/fenggui/theme/XMLTheme.java
+===================================================================
+--- src/org/fenggui/theme/XMLTheme.java (revision 579)
++++ src/org/fenggui/theme/XMLTheme.java (working copy)
+@@ -20,10 +20,27 @@
+ package org.fenggui.theme;
+ 
+ import java.io.IOException;
++import java.io.InputStream;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+-import org.fenggui.*;
++import org.fenggui.Button;
++import org.fenggui.Canvas;
++import org.fenggui.CheckBox;
++import org.fenggui.ComboBox;
++import org.fenggui.Container;
++import org.fenggui.DecoratorLayer;
++import org.fenggui.Display;
++import org.fenggui.IWidget;
++import org.fenggui.Label;
++import org.fenggui.ProgressBar;
++import org.fenggui.RadioButton;
++import org.fenggui.ScrollBar;
++import org.fenggui.ScrollContainer;
++import org.fenggui.Slider;
++import org.fenggui.SplitContainer;
++import org.fenggui.StandardWidget;
++import org.fenggui.TextEditor;
+ import org.fenggui.binding.render.AWTFont;
+ import org.fenggui.binding.render.Binding;
+ import org.fenggui.binding.render.ImageFont;
+@@ -43,13 +60,28 @@
+ import org.fenggui.decorator.background.GradientBackground;
+ import org.fenggui.decorator.background.PixmapBackground;
+ import org.fenggui.decorator.background.PlainBackground;
+-import org.fenggui.decorator.border.*;
++import org.fenggui.decorator.border.BevelBorder;
++import org.fenggui.decorator.border.PixmapBorder;
++import org.fenggui.decorator.border.PixmapBorder16;
++import org.fenggui.decorator.border.PixmapBorder16FixedCenters;
++import org.fenggui.decorator.border.PlainBorder;
++import org.fenggui.decorator.border.RoundedBorder;
++import org.fenggui.decorator.border.TitledBorder;
+ import org.fenggui.decorator.switches.SetActiveFontSwitch;
+ import org.fenggui.decorator.switches.SetMarginSwitch;
+ import org.fenggui.decorator.switches.SetPixmapSwitch;
+ import org.fenggui.decorator.switches.SetTextColorSwitch;
+-import org.fenggui.layout.*;
+-import org.fenggui.theme.xml.*;
++import org.fenggui.layout.BorderLayout;
++import org.fenggui.layout.FormLayout;
++import org.fenggui.layout.GridLayout;
++import org.fenggui.layout.RowLayout;
++import org.fenggui.layout.StaticLayout;
++import org.fenggui.theme.xml.GlobalContextHandler;
++import org.fenggui.theme.xml.IXMLStreamable;
++import org.fenggui.theme.xml.IXMLStreamableException;
++import org.fenggui.theme.xml.InputOutputStream;
++import org.fenggui.theme.xml.TypeRegister;
++import org.fenggui.theme.xml.XMLInputStream;
+ import org.fenggui.tooltip.LabelTooltipDecorator;
+ import org.fenggui.tooltip.LabelTooltipManager;
+ import org.fenggui.util.Color;
+@@ -205,6 +237,73 @@
+            contextHandler = xis.getContextHandler();
+        }
+    }
++   
++   /**
++    * Create an XML theme that can be loaded in two stages at a later time.
++    */
++   public XMLTheme()
++   {
++       
++   }
++   
++   /**
++    * Performs the final loading segment of the theme - this must occur in the OpenGL thread.
++    * @param xis
++    * @throws IOException
++    * @throws IXMLStreamableException
++    */
++   public void loadTheme(XMLInputStream xis) throws IOException, IXMLStreamableException
++   {
++       
++       List<IXMLStreamable> contents = new ArrayList<IXMLStreamable>();
++       xis.processChildren(contents, XMLTheme.TYPE_REGISTRY);
++       handleWarnings(xis);
++       contextHandler = xis.getContextHandler();
++   }
++   
++   public XMLInputStream loadXML(InputStream xmlTheme, String resourcePath) throws IOException, IXMLStreamableException
++   {
++       this.resourcePath = resourcePath;
++       
++       /* parse the XML file in out JDOM */
++       Reader r = new Reader();
++       document = r.parse(xmlTheme);
++       
++       /* will throw an exception if the bnding has not been initialized yet
++          see http://www.jmonkeyengine.com/jmeforum/index.php?topic=4483.15 */
++       Binding.getInstance();
++       
++       Element el = document.getChild("FengGUI:init");
++       
++       if(el != null)
++       {
++       
++           XMLInputStream xis = new XMLInputStream(el);
++           xis.setResourcePath(resourcePath);
++           return xis;
++       }
++       throw new IOException("Failed to load theme");
++   }
++   
++   /**
++    * Performs initial theme loading.
++    * @param xmlThemeFile
++    * @return
++    * @throws IOException
++    * @throws IXMLStreamableException
++    */
++   public XMLInputStream loadXML(String resourcePath,String xmlResource) throws IOException, IXMLStreamableException
++   {
++           this.resourcePath = resourcePath;
++   /*       extract path to xml file 
++           if(xmlThemeFile.indexOf('/') != -1)
++               this.resourcePath = xmlThemeFile.substring(0, xmlThemeFile.lastIndexOf('/')+1);
++           else
++               this.resourcePath = xmlThemeFile.substring(0, xmlThemeFile.lastIndexOf('\\')+1);
++           */
++           return loadXML(Binding.getInstance().getResource(xmlResource), this.resourcePath);
++       
++   }
+ 
+    public Document getRoot()
+    {
+Index: src/org/fenggui/binding/render/text/DirectTextRenderer.java
+===================================================================
+--- src/org/fenggui/binding/render/text/DirectTextRenderer.java (revision 579)
++++ src/org/fenggui/binding/render/text/DirectTextRenderer.java (working copy)
+@@ -97,13 +97,15 @@
+                if (init)
+                {
+                    ITexture tex = pixmap.getTexture();
+-
+-                   if (tex.hasAlpha())
++                   if(tex != null)
+                    {
+-                       gl.setTexEnvModeModulate();
++                       if (tex.hasAlpha())
++                       {
++                           gl.setTexEnvModeModulate();
++                       }
++   
++                       tex.bind();
+                    }
+-
+-                   tex.bind();
+                    gl.startQuads();
+                    init = false;
+                }
+Index: src/org/fenggui/binding/render/lwjgl/LWJGLCursor.java
+===================================================================
+--- src/org/fenggui/binding/render/lwjgl/LWJGLCursor.java   (revision 579)
++++ src/org/fenggui/binding/render/lwjgl/LWJGLCursor.java   (working copy)
+@@ -60,13 +60,21 @@
+    @Override
+    public void show() 
+    {
+-       try 
++       if(showCursor())
+        {
+-           Mouse.setNativeCursor(cursor);
+-       } 
+-       catch (LWJGLException e) 
+-       {
+-           e.printStackTrace();
++           try 
++           {
++               Mouse.setNativeCursor(cursor);//on macs the cursor is killed sometimes by this command. watch out.
++           } 
++           catch (LWJGLException e) 
++           {
++               e.printStackTrace();
++               try {
++                   Mouse.setNativeCursor(null);
++               } catch (LWJGLException e1) {
++                   e1.printStackTrace();
++               }
++           }
+        }
+    }
+ 
+Index: src/org/fenggui/util/DoubleList.java
+===================================================================
+--- src/org/fenggui/util/DoubleList.java    (revision 0)
++++ src/org/fenggui/util/DoubleList.java    (revision 0)
+@@ -0,0 +1,422 @@
++package org.fenggui.util;
++
++import java.util.Collection;
++import java.util.Collections;
++import java.util.Iterator;
++import java.util.List;
++import java.util.ListIterator;
++import java.util.NoSuchElementException;
++import java.util.concurrent.CopyOnWriteArrayList;
++
++import org.fenggui.IWidget;
++
++public class DoubleList<E> implements Collection<E> {
++
++   private List<NumberedCopyOnWriteArrayList<E>> orderedLists = new CopyOnWriteArrayList<NumberedCopyOnWriteArrayList<E>>();
++   
++   private class ReverseIterable implements Iterable<E>
++   {
++       private int startingIndex;
++       
++       public ReverseIterable(int startingIndex) {
++           super();
++           this.startingIndex = startingIndex;
++       }
++
++       public ReverseIterable() {
++           super();
++           startingIndex = orderedLists.size()-1;
++       }
++
++   
++       public Iterator<E> iterator() {
++           return new NotifyIterator(orderedLists.listIterator(startingIndex),true);
++       }
++       
++   }
++   
++   private class NotifyIterator implements Iterator<E> 
++   {
++       private ListIterator<E> currentIterator;
++       private ListIterator<NumberedCopyOnWriteArrayList<E>> listIterator;
++       private E mostRecentElement = null;
++       private boolean reverse;
++       public NotifyIterator(ListIterator<NumberedCopyOnWriteArrayList<E>> listIterator)
++       {
++           this(listIterator,false);
++       }
++       
++       public NotifyIterator(ListIterator<NumberedCopyOnWriteArrayList<E>> listIterator, boolean reverse) {
++           super();
++           this.reverse = reverse;
++           this.listIterator = listIterator;
++           
++           if(reverse)
++           {//skip the iterator to the end - there may be a better way of doing this..
++               
++               while(listIterator.hasNext())
++                   listIterator.next();
++               
++           }
++           
++           if(reverse? listIterator.hasPrevious():listIterator.hasNext())
++           {
++               currentIterator = listIterator.next().listIterator();
++           }
++       }
++
++       public boolean hasNext() {
++           
++           if( currentIterator == null)
++               return false;
++           if (isEmpty())
++               return false;
++           if(!(reverse? currentIterator.hasPrevious(): currentIterator.hasNext()))
++           {
++               if(reverse?listIterator.hasPrevious():listIterator.hasNext())
++               {
++                   currentIterator = reverse ? listIterator.previous().listIterator():listIterator.next().listIterator();
++                   return hasNext();
++               }
++               else
++                   return false;
++           }
++           Object next = (reverse? currentIterator.previous(): currentIterator.next());
++           if (!reverse)
++           {
++               currentIterator.previous();
++           }else
++           {
++               currentIterator.next();
++           }
++           return next != null;
++       }
++
++   
++       public E next() throws NoSuchElementException {
++       
++           if(hasNext())
++           {
++               mostRecentElement =  reverse? currentIterator.previous(): currentIterator.next();
++       
++               return mostRecentElement;
++           }
++           else
++               throw new NoSuchElementException();
++       }
++
++   
++       public void remove() {
++       
++           DoubleList.this.remove(mostRecentElement);
++       }
++       
++   }
++
++
++   public boolean add(E e) {
++       if(e == null)
++           return false;
++       return add(e, 0);
++   }
++   
++   /**
++    * Add element e to the list of the given priority (create that list if it doesnt exist)
++    * @param e
++    * @param destination
++    * @return
++    */
++   public boolean add(E e, int priority)
++   {
++       if(e == null)
++           return false;
++       List<E> listToAddTo = getList(priority);
++       return listToAddTo.add(e);
++   }
++   
++   /**
++    * Get the list at the given priority (creating it if it didnt exist).
++    * @param priority
++    * @return
++    */
++   public List<E> getList(int priority)
++   {
++       synchronized(orderedLists)
++       {
++           NumberedCopyOnWriteArrayList<E> returnList = null;
++           for(NumberedCopyOnWriteArrayList<E> list:orderedLists)
++           {
++               if(list.getNumber() == priority)
++               {
++                   returnList = list;
++                   break;
++               }
++           }
++           
++           if(returnList == null)
++           {
++               returnList = new NumberedCopyOnWriteArrayList<E>();
++               returnList.setNumber(priority);
++               
++               //find the best insertion point
++               int i=0;
++               for(i = 0; i < orderedLists.size();i++)
++               {
++                   NumberedCopyOnWriteArrayList<E> list = orderedLists.get(i);
++                   if (list.getNumber()>priority)
++                   {
++                       i = i-1;
++                       break;
++                   }
++               }
++               if(i<0)
++                   i = 0;
++               orderedLists.add(i,returnList);
++               
++           }
++           return returnList;
++       }
++   }
++   
++   public E get(int i)
++   {
++       int p = 0;
++       
++       for(List<E> list:orderedLists)
++       {
++           if(i<p+list.size())
++           {
++               return list.get(i-p);
++           }
++           p+= list.size();
++       }
++       return null;
++   }
++   
++   /**
++    * Get the (first) list that contains the given element,or return null if no list contains the element.
++    * @param element
++    * @return
++    */
++   public List<E> getListContainingElement(E element)
++   {
++       int index = getIndexOfListContainingElement(element);
++       if(index<0)
++           return null;
++       return orderedLists.get(index);
++   }
++   
++   private int getIndexOfListContainingElement(E element)
++   {
++       int i = 0;
++       for(List<E> list:orderedLists)
++       {
++           if(list.contains(element))
++           {
++               return i;
++           }
++           i++;
++       }
++       return -1;
++   }
++   
++
++   public boolean addAll(Collection<? extends E> c) {
++       boolean changed = false;
++       for(E element: c)
++       {
++           changed |= add(element);
++       }
++       return changed;
++   }
++
++   public void clear() {
++       orderedLists.clear();
++   }
++
++   public boolean contains(Object o) {
++       for(E element:this)
++       {
++           if(o.equals(element))
++               return true;
++       }
++       return false;
++   }
++
++   
++   public boolean containsAll(Collection<?> c) {
++       for(Object e:c)
++       {
++           if(!contains(e))
++               return false;
++       }
++       
++       return true;
++   }
++
++   
++   
++   public boolean isEmpty() {
++       for(List<E> list:orderedLists)
++       {
++           if(!list.isEmpty())
++               return false;
++       }
++       return true;
++   }
++
++
++   public Iterator<E> iterator() {
++       return new NotifyIterator(orderedLists.listIterator(),false);
++   }
++   
++   public Iterable<E> reverseIteratable() {
++       return new ReverseIterable();
++   }
++
++
++   public synchronized boolean remove(Object o) {
++       for (List<E> list:orderedLists)
++       {
++           for (int i = 0; i < list.size();i++)
++           {
++               if(list.get(i).equals(o))
++               {
++                   list.remove(i);
++                   return true;
++               }
++           }
++       }
++       return false;
++   }
++
++
++   
++   public boolean removeAll(Collection<?> c) {
++       boolean changed = false;
++       
++       for(Object o:c)
++       {
++           changed |= this.remove(o);
++       }
++       
++       return changed;
++   }
++
++
++   public boolean retainAll(Collection<?> c) {
++       throw new UnsupportedOperationException();
++   }
++
++   public E getPrevious(E element, boolean wrap)
++   {
++       if(size() == 1)
++           return null;
++       
++       int index=getIndexOfListContainingElement(element);
++       if(index < 0)
++           return null;
++       List<E> list = orderedLists.get(index);
++       int i = list.indexOf(element);
++       
++       if (i == 0)
++       {
++           int listPos;
++           if(index == 0)
++           {
++               if(wrap)
++                   listPos = 1;
++               else
++                   return null;
++           }else
++           {
++               listPos = orderedLists.size()-(index+1);
++           }
++           
++               List<E> lastList = orderedLists.get(orderedLists.size()-listPos++);
++               
++               while (lastList.isEmpty())
++               {
++                   lastList = orderedLists.get(orderedLists.size()-listPos++);
++               }
++               
++               return lastList.get(lastList.size()-1);
++       }else
++       {
++           return list.get(i-1);
++       }
++   }
++   
++   public E getNext(E element, boolean wrap)
++   {
++       if(size() == 1)
++           return null;
++       
++       int index=getIndexOfListContainingElement(element);
++       if(index < 0)
++           return null;
++       
++       List<E> list = orderedLists.get(index);
++       int i = list.indexOf(element);
++       
++       if (i == list.size()-1)
++       {
++           int listPos;
++           if(index == orderedLists.size()-1)
++           {
++               if(wrap)
++                   listPos = 0;
++               else
++                   return null;
++           }else
++           {
++               listPos = index+1;
++           }
++           
++               List<E> lastList = orderedLists.get(listPos++);
++               
++               while (lastList.isEmpty())
++               {
++                   lastList = orderedLists.get(listPos++);
++               }
++               
++               return lastList.get(0);
++       }else
++       {
++           return list.get(i+1);
++       }
++   }
++   
++
++
++   public int size() {
++       int size = 0;
++       for(List<E> list:orderedLists)
++       {
++           if(list!= null)
++               size+= list.size();
++       }
++       return size;
++   }
++
++   
++   public Object[] toArray() {
++       throw new UnsupportedOperationException();
++   
++   }
++
++
++   public <T> T[] toArray(T[] a) {
++       throw new UnsupportedOperationException();
++   }
++
++   public int getPriorityOfList(List<IWidget> list) {
++       if(list instanceof NumberedCopyOnWriteArrayList)
++       {
++           return ((NumberedCopyOnWriteArrayList<?>)list).getNumber();
++       }
++       return 0;
++   }
++
++
++}
+Index: src/org/fenggui/binding/render/lwjgl/LWJGLOpenGL.java
+===================================================================
+--- src/org/fenggui/binding/render/lwjgl/LWJGLOpenGL.java   (revision 579)
++++ src/org/fenggui/binding/render/lwjgl/LWJGLOpenGL.java   (working copy)
+@@ -28,8 +28,9 @@
+ import org.lwjgl.opengl.GL11;
+ import org.lwjgl.opengl.GL12;
+ import org.lwjgl.opengl.GL13;
+-import org.lwjgl.opengl.glu.GLU;
++import org.lwjgl.util.glu.GLU;
+ 
++
+ /**
+  * @author oliver_carr
+  *
+Index: src/org/fenggui/ToggableGroup.java
+===================================================================
+--- src/org/fenggui/ToggableGroup.java  (revision 579)
++++ src/org/fenggui/ToggableGroup.java  (working copy)
+@@ -20,6 +20,7 @@
+ 
+ import java.lang.reflect.Array;
+ import java.util.ArrayList;
++import java.util.concurrent.CopyOnWriteArrayList;
+ 
+ import org.fenggui.event.ISelectionChangedListener;
+ import org.fenggui.event.SelectionChangedEvent;
+@@ -50,7 +51,7 @@
+ 
+    // private ArrayList<IToggable<E>> members = new ArrayList<IToggable<E>>();
+    private ArrayList<IToggable<E>> selected = new ArrayList<IToggable<E>>();
+-   private ArrayList<ISelectionChangedListener> selectionChangedHook = new ArrayList<ISelectionChangedListener>();
++   private CopyOnWriteArrayList<ISelectionChangedListener> selectionChangedHook = new CopyOnWriteArrayList<ISelectionChangedListener>();
+ 
+    /**
+     * Creates a new <code>ToggableWidgetGroup</code> instance.
+Index: src/org/fenggui/binding/render/Cursor.java
+===================================================================
+--- src/org/fenggui/binding/render/Cursor.java  (revision 579)
++++ src/org/fenggui/binding/render/Cursor.java  (working copy)
+@@ -8,7 +8,13 @@
+  */
+ public abstract class Cursor 
+ {
+-
++   private static boolean showCursor=true;
++   public static boolean showCursor() {
++       return showCursor;
++   }
++   public static void setShowCursor(boolean showCursor) {
++       Cursor.showCursor = showCursor;
++   }
+    public abstract void show();
+    
+ }
+Index: src/org/fenggui/binding/render/Binding.java
+===================================================================
+--- src/org/fenggui/binding/render/Binding.java (revision 579)
++++ src/org/fenggui/binding/render/Binding.java (working copy)
+@@ -26,6 +26,7 @@
+ import java.io.InputStream;
+ import java.net.MalformedURLException;
+ import java.net.URL;
++import java.nio.ByteBuffer;
+ import java.util.ArrayList;
+ 
+ import org.fenggui.binding.clipboard.IClipboard;
+@@ -66,6 +67,19 @@
+    public abstract ITexture getTexture(InputStream inputStream) throws IOException;
+ 
+    public abstract ITexture getTexture(BufferedImage bi);
++   
++   /**
++    * Create a texture directly from a byte buffer of pixel-interleaved color data
++    * The buffer should be in the format [r,g,b,a,r,g,b,a... ], with each (r,g,b,a) representing the color of one pixel.
++    * The pixels in the buffer are ordered by column, then by row. So pixel one is at (0,0), pixel two is at (0,1), and so on.
++    * If includeAlphaChanel is false, the buffer will be read as [r,g,b,r,g,b], and the texture will be created without an alpha channel;
++    * @param buffer A byte buffer filled with pixel-interleaved color data.
++    * @param width The width of the image in the buffer.
++    * @param height The height of the image in the buffer
++    * @param includeAlphaChanel Whether or not the buffer includes alpha data
++    * @return A Texture created from this byte buffer.
++    */
++   public abstract ITexture getTexture(ByteBuffer buffer,int width, int height, boolean includeAlphaChanel);
+ 
+    /**
+     * Returns whether FengGUI loads all resources through the class loader.
+Index: src/org/fenggui/binding/render/lwjgl/AWTGLCanvasBinding.java
+===================================================================
+--- src/org/fenggui/binding/render/lwjgl/AWTGLCanvasBinding.java    (revision 579)
++++ src/org/fenggui/binding/render/lwjgl/AWTGLCanvasBinding.java    (working copy)
+@@ -24,6 +24,7 @@
+ import java.awt.image.BufferedImage;
+ import java.io.IOException;
+ import java.io.InputStream;
++import java.nio.ByteBuffer;
+ 
+ import javax.imageio.ImageIO;
+ 
+@@ -93,6 +94,13 @@
+        return LWJGLTexture.createTexture(bi);
+    }
+ 
++    @Override
++   public ITexture getTexture(ByteBuffer buffer, int width,
++           int height, boolean includeAlphaChanel) {
++
++       return LWJGLTexture.createTexture(buffer, width, height,includeAlphaChanel);
++   }
++
+    @Override
+    public int getCanvasWidth()
+    {

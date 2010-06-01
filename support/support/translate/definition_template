@@ -1,0 +1,585 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+
+GOLEMS{
+    GOLEMS~Golems
+    VERSION~Version
+
+   
+         MAIN_MENU~Main Menu
+        MAIN_MENU{
+            OK~OK
+            CANCEL~Cancel
+            NO~No
+            YES~Yes
+            MAIN~Main
+                FILE_MENU{
+                    NEW~New Machine
+                    SAVE~Save Machine
+                    LOAD~Load Machine
+                    IMPORT~Import Machine
+                    RECORD~Record Video
+                    EXIT~Exit Program                    
+                   
+                }
+          SETTINGS~Settings
+             DISPLAY~Display
+             DISPLAY{
+                QUALITY~Display Quality
+                 QUALITY_LOW~Low
+                 QUALITY_NORMAL~Normal (medium)
+                 SETTINGS~Display Settings
+                QUALITY_HIGH~High
+                RESOLUTION~Resolution
+                FULL_SCREEN~Full Screen
+                FREQ~Frequency
+                COLOR_DEPTH~Color Depth
+                FPS~Frame Rate
+                VSYNC~Use VSync
+                TOOLTIPS~Tooltips
+                SHOW_TOOLTIPS~Show Tooltips
+              }
+              
+        KEYBOARD~Keyboard
+        KEYBOARD{
+            SHORTCUTS~ Keyboard Shortcuts
+            CTRL_POINTS~Control Points
+            ROTATE~Rotate
+            XY_PLANE~XY-Plane
+            YZ_PLANE~YZ-Plane
+            GRID_SNAP~Snap
+            AXIS_LOCK~Axis-Lock
+            STATICS~Statics Selectable
+            SHOW_LAYERS~Show Layers
+            ISLAND_SELECT~Select Connected Objects
+            MULTI_SELECT~Select Multiple Objects
+            PROPERTIES~Show Object Properties
+            COPY~Copy
+            DEL~Delete
+            FOCUS~Focus
+            ZOOM~Zoom
+            NEXT_CAM~Next Camera
+            PREV_CAM~Previous Camera
+            DEF_CAM~Default Camera
+            MENU~Menu
+            SCREEN_SHOT~Screen Shot       
+        }
+        
+        RECORDING~Recording Options
+          RECORDING{
+                
+              FORMAT~  Video Format
+              COMPRESSION~Video Compression
+                QUALITY~Compression Quality (1 to 100)
+                FPS~Frames Per Second
+                BEGIN~Begin Recording
+                STOP~STOP Recording
+                SIZE~Size
+                LENGTH~Length
+                TIME~Time
+                PAUSE~Pause
+                MEMORY~Memory
+                BEGIN~Begin
+                RESUME~Resume
+          }
+          
+          MACHINE~Machine
+           MACHINE{
+                
+                NAME~Name
+                DESCRIPTION~Description
+           }
+           
+           ENVIRONMENT~Environment
+            ENVIRONMENT{
+                
+                SPEED~Speed
+                SPEED_NORMAL~Normal
+                SPEED_PAUSED~(Paused)
+                SPEED_HALF~Half
+                SPEED_DOUBLE~Double
+                SPEED_UNLIMITED~(Unlimited)
+                GRAVITY~Gravity in each direction (x,y,z)
+                GRID_SPACING~Grid Spacing
+                LOCK~Lock
+                UNITS~Units (x,y,z)
+                ROTATION~Rotation
+                ANGLES~Angles to snap to (degrees)
+                BACKGROUND~Background
+                COLOR~Color
+                CLOUDS~Clouds
+                SERENE~Serene
+                SUNSET~Sunset
+                STARS~Stars
+                SHOW_GRID~Show grid in design mode
+           }
+           
+            EXIT~Exit
+           EXIT{              
+               CHECK~ Are you sure you want to exit?
+
+           }
+           
+            
+    }
+
+    STATUSBAR{
+        ENGAGE~Engage physics!
+        LAYERS~Layers
+        SENSORS~Sensors
+        AXIS~Axis
+        SNAP~Snap
+        STATIC~Static
+        
+        LAYERS{
+            NEW~New Layer
+            COPY~Copy Layer
+            SELECT~Select Layer
+            MOVE~Move to Layer
+            DELETE~Delete Layer
+            GROUND~Ground
+            LOCK~Lock
+            HIDE~Hide     
+        }
+    }
+
+     TOOLBAR{
+        SHOW_TOOLBAR~Show the Toolbar
+        MENU~Menu
+        AUTOCLOSE~Auto-Close the Toolbar
+        HIDE~Hide the Toolbar
+        MENU.TOOLTIP~From the menu, you can load and save machines
+        (as well as turn off these tooltips). You can also press $MENU_KEY to open the menu.
+ 
+        SELECT~Select
+        SELECT.TOOLTIP~Click and hold an object to select it. 
+                While selected, press enter to change its properties. 
+                To change the plane of movement, hold down $Z_AXIS_KEY or $X_AXIS_KEY.
+        
+        
+        ISLAND~Island Select
+        ISLAND.TOOLTIP~Select connected things all at once. 
+        You can also select multiple things by holding down $MULTI_SELECT_KEY.
+               
+        ROTATE~Rotate
+        ROTATE.TOOLTIP~Select something, then click and drag around it to rotate. 
+                To change the axis of rotation, hold down $Z_AXIS_KEY or $X_AXIS_KEY. 
+                You can also rotate something by holding $ROTATE_KEY.
+                
+        STRETCH~Stretch
+        STRETCH.TOOLTIP~Select something, then drag one of the white control spheres to change its shape. 
+                You can also stretch something by holding down $STRETCH_KEY.
+                
+        WIRE_MODE~Show Wires
+        WIRE_MODE.TOOLTIP~Wire mode lets you see the wires connecting different parts of your machine, 
+                as well as functional components like batteries. 
+                Components that can be connected with wires have green or yellow ports.
+                
+        BOX~Box
+        BOX.TOOLTIP~Create a box.
+        
+        SPHERE~Sphere
+        SPHERE.TOOLTIP~Create a sphere.
+         
+        CYLINDER~Cylinder
+        CYLINDER.TOOLTIP~Create a cylinder.
+        
+        TUBE~Tube
+        TUBE.TOOLTIP~Create a tube.
+        
+        PYRAMID~Pyramid
+        PYRAMID.TOOLTIP~Create a square-base pyramid.
+        
+        CONE~Cone
+        CONE.TOOLTIP~Create a cone.
+        
+        ELLIPSOID~Ellipsoid
+        ELLIPSOID.TOOLTIP~Create an ellipsoid (a sphere that you can stretch along each axis).
+        
+        CAPSULE~Capsule
+        CAPSULE.TOOLTIP~Create a capsule (a cylinder capped with half-spheres).
+        
+        AXLE~Axle
+        AXLE.TOOLTIP~The two ends of an axle are free to rotate around each other along their main axis. 
+                An axle will act as a motor if it is wired to a battery or other signal.
+                
+        HINGE~Hinge
+        HINGE.TOOLTIP~The two ends of a hinge can rotate around each other along
+                the axis that runs perpendicular to their main axis. 
+                A hinge can be powered if it is wired to a battery or other signal.
+                
+        HYDRAULIC~Hydraulic
+        HYDRAULIC.TOOLTIP~The two ends of a hydraulic can move closer or farther apart, up to limits that you can set in its properties. A hydraulic can be powered if it is wired to a battery or other signal.
+        
+        BALL_SOCKET~Ball and Socket
+        BALL_SOCKET.TOOLTIP~The two ends of a ball and socket are free
+                to rotate about each other on all three axes.
+                
+        BATTERY~Battery
+        BATTERY.TOOLTIP~Batteries are functional components. 
+                In wire view, you can click and drag on the top port to create a wire that can power motors. 
+                In the properties window, you can set batteries to output a signal that changes over time.
+                
+        FUNCTION~Function
+        FUNCTION.TOOLTIP~Takes a signal and changes it according to a function you can design in the properties window. By connecting a wire to the top input port, you can turn the function on and off, or have it remember its current signal.
+        
+        INPUT~Input
+        INPUT.TOOLTIP~When your machine is running, this allows the user to control a signal with key presses or visual controls.
+        
+        OSCILLOSCOPE~Oscilloscope
+        OSCILLOSCOPE.TOOLTIP~When your machine is running, oscilloscopes will graph the signal they receive.
+        
+        TOUCH~Touch sensor
+        TOUCH.TOOLTIP~A touch sensor is a box that outputs a signal when it contacts an object.
+        
+        DISTANCE~Distance sensor
+        DISTANCE.TOOLTIP~A distance sensor detects when any object enters its 'view'. Select the sensor to see its view shape. You can move, stretch, and rotate the view shape or you can choose a different view shape in the properties window.
+        
+        MULTIMETER~Multimeter
+        MULTIMETER.TOOLTIP~A box that can detect its position, rotation, velocity, or acceleration.
+        
+        CONTACT~Contact
+        CONTACT.TOOLTIP~Contacts are like electrical conductors. If they touch, then signals will pass through them.
+        
+       ROCKET~ Rocket
+        ROCKET.TOOLTIP~A rocket will output a force proportional to its signal. (Wire a battery to the rocket to create a signal). You can adjust the maximum force in its properties menu.
+        
+       GEAR~ Gear
+        GEAR.TOOLTIP~Create a gear
+               
+       FORCE_BEAM~ Force Beam
+         FORCE_BEAM.TOOLTIP~A force beam that either grapples or pushes. Outputs how close the beam is to the object it hits.
+        
+       CAMERA~ Camera
+        CAMERA.TOOLTIP~Cameras let you see the world from their view. Press $NEXT_CAMERA to switch your current camera. Cameras are only visible in wire mode.         
+         
+       }  
+     PROPERTIES~Properties
+     PROPERTIES{
+       
+        
+        
+        MATTER~Matter
+        MATTER{
+            DENSITY~Density  (g/cm^3):
+            MATERIAL~Material:
+            DEFAULT~Default
+            IRON~Iron
+            WOOD~Wood
+            CONCRETE~Concrete
+            GRANITE~Granite
+            GLASS~Glass
+            PLASTIC~Plastic
+            RUBBER~Rubber
+            ICE~Ice
+            HELIUM~Helium
+            
+            STATIC_DESCRIPTION~Make this object static (it won't react to physics, but other objects can still crash into it)
+            
+            STICKY_DESCRIPTION~Make this object sticky
+            
+            POSITION~Position
+            ROTATION~Rotation
+            SIZE~Size
+            RADIUS~Radius
+            HEIGHT~Height
+            WIDTH~Width
+            LENGTH~Length
+            RADIUS_INNER~Inner Radius
+            ARC~Arc
+            INPUT~Input
+        }
+        
+        APPEARANCE~Appearance
+        
+           APPEARANCE{
+           
+                PRIMARY~Primary
+                HIGHLIGHT~Highlight
+                SHOW_TEXT~Show Text
+                NONE~None
+                CAMO~Camouflage
+                CHECKERS~Checkers
+                METAL_GALV~Galvanized metal
+                RIVETS~Rivets
+                SPOTS~Spots
+                STAR~Star
+                 STARS~Stars
+                STEEL_BOX~Steel Box
+                STRIPES~Stripes
+                TREADPLATE~Treadplate
+                
+                CHOOSER~Color Chooser
+               HUE~ Hue
+               SATURATION~ Saturation
+                LUMINOSITY~Luminosity
+                RED~Red
+               GREEN~ Green
+               BLUE~ Blue
+                ALPHA~Alpha
+           }
+           
+           
+          MOTOR~Motor
+          
+          MOTOR{
+                BEARING~Ball Bearing
+                RADIUS_LEFT~Left Radius
+                RADIS_RIGHT~Right Radius
+                LENGTH_LEFT~Left Length
+                LENGTH_RIGHT~Right Length
+                ANGLE_LEFT~Left Angle
+                ANGLE_RIGHT~Right Angle
+                DISTANCE~Distance
+                MIN_DISTANCE~Min Distance
+                MAX_DISTANCE~Max Distance
+                MIN_SEP~Minimum Separation of End Points
+                MAX_SEP~Maximum Separation of End Points
+                JOINT_UNIVERSAL~ Universal Joint
+                UNIVERSAL_JOINT_DESCRIPTION~ Universal Joint (A universal joint constrains rotation on the 3rd axis)   
+                JOINT_LENGTH~Joint Length
+                JOINT_RADIUS~ Joint Radius
+                BALL_RADIUS~ Ball Radius
+                MOTOR_DESCRIPTION_INPUT~ This motor should interpret input as
+                MOTOR_DESCRIPTION_OUTPUT~ This motor should interpret output as 
+                FORCE~Force
+                VELOCITY~Velocity
+                ACCELERATION~Acceleration
+                MAX_VEL~Maximum velocity
+                MAX_FORCE~Maximum force
+                SPRING~Spring
+                SPRING_DESCRIPTION~Treat as spring
+                SPRING_CONSTANT~Spring Constant
+                SPRING_FRICTION~Spring Friction
+            }
+            
+            SENSOR~ Sensor
+            
+            SENSOR{
+              IGNORE_ATTACHED~ Ignore Attached Objects (not including joints)
+               IGNORE_JOINTS~ Ignore Attached Objects (Including joints)
+               IGNORE_NON_STATIC~ Ignore Non-Static Objects
+               IGNORE_STATIC~ Ignore Static Objects
+            }
+            
+              BATTERY~Battery Options
+            BATTERY{
+              
+            }
+            
+            ROCKET~Rocket
+            ROCKET{
+                MAX_FORCE~Maximum Force (Newtons)
+                EFFECTS~ Effects
+                EFFECT_ORIGINAL~(Original Effect)
+                EFFECT_MAGIC~Magic
+                EFFECT_NOVA~Nova
+                EFFECT_PLASMA~Plasma
+                EFFECT_RINGS~Rings
+                EFFECT_ROCKET~Rocket
+                #Translation note - this is a reference to the NASA moon rocket
+                EFFECT_SAT_V~Saturn V
+                EFFECT_SMOKE~Smoke
+                EFFECT_SPARK~Spark
+                EFFECT_SPUTTER~Sputter
+                EFFECT_NAME~Name
+                LUMINESCENT~Luminescent Trail
+                ANGLE~Min, Max Angle
+                LIFESPAN~Min, Max Lifespan (milliseconds)
+                SIZE~Initial, Final Size
+                PARTICLE_NUM~Number of Particles
+                VELOCITY~Initial Velocity
+                SAVE~Save Effect
+                ENABLE~Enable Effects
+            }
+            
+            FORCE_BEAM{
+               MAX_FORCE~ Max Grapple/Push Force
+               BEAM_LENGTH~ Beam Length
+               SHOW_BEAM~ Show Beam
+               LUMINOUS_BEAM~ Luminous Beam
+               COLOR_PUSH~ Push Colour
+               COLOR_PULL~ Pull Colour
+            
+            
+            }
+            
+            GEAR{
+            
+               TOOTH_WIDTH~ Tooth Width
+               TOOTH_HEGIHT~ Tooth Height
+               TOOTH_ANGLE~ Tooth Angle
+            }
+            
+            MULTIMETER{
+                ALTITUDE~Altitude
+                MAX_HEIGHT~Maximum Height
+                MIN_HEIGHT~Minimum Height
+                ORIENTATION~Orientation
+                POSITION~Position
+                RELATIVE~ Report values relative to the orientation of the component
+                MAX_X_RANGE~Maximum X Range
+                MIN_X_RANGE~Minimum X Range
+                VELOCITY~Velocity
+                ACCELERATION~Acceleration
+            }
+            
+            CAMERA{
+                 LOCK~Lock Camera Orientation
+            }
+            
+            INPUT{
+                
+                DEVICE_NAME~Input Device Name
+                TYPE~Input Type
+                SLIDER~Slider
+                TEXT~Text
+                KEY_EVENT_TYPE~Key Event Type
+                HOLD_DOWN~Hold Down
+                TOGGLE~Toggle
+                KEY~Key
+                UNKNOWN~(Unknown key)
+                OUTPUT_NEGATIVE_DESCRIPTION~Output -1 when unpressed (0 otherwise)
+            }
+            
+            FUNCTION{
+                FUN_UNNAMED~ Unnamed
+                FUN_LINE~Line
+                FUN_ZERO~Zero
+                FUN_PARABOLA~Parabolic
+                FUN_CUBIC~Cubic
+                FUN_SINE~Sine
+                FUN_SQRT~Sine
+                FUN_COS~Cosine
+                FUN_DERIVATIVE~(Slope)
+                FUNCTION_NAME~Function Name
+                OPTIONS_BATTERY~Battery Options
+                OPTIONS_MODIFIER~Modifier Options
+                SWITCH~Battery Switch
+                THRESHOLD_DESCRIPTION~Set the minimum signal needed to activate the switch.
+                SWITCH_THRESHOLD~Switch Threshold
+                #Note: These two threshold descriptions (2 and 3) form a single sentence, such as "Input must be > threshold to activate"
+                THRESHOLD_DESCRIPTION_2~Input must be
+                THRESHOLD_DESCRIPTION_3~the threshold to activate.
+                SWITCH_ACTION~Switch Action
+                TURN_ON~Turn Off/On
+                INVERT~Invert Signal
+                HOLD~Hold Value
+                MULT~Multiply Value
+                EXAMPLE~Example : If Threshold is 0.5, 
+                and the operation is >=, and the action is 'Off/On', then the function will output 0 unless the switch receives an input of 0.5 or greater
+            
+            }
+     }
+ }
+
+
+

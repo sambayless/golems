@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="Golems" default="dist" basedir=".">
+
+	
+
+	  <!-- set global properties for this build -->
+	  <property name="src" location="../loading"/>
+	  <property name="build" location="build-loading/"/>
+	  <property name="dist"  location="dist"/>
+
+	
+	  <target name="init">
+	    <!-- Create the time stamp -->
+	    <tstamp/>
+	    <!-- Create the build directory structure used by compile -->
+	   <mkdir dir="${build}"/> 
+	  </target>
+	
+	  <target name="compile" depends="init"
+	        description="compile the source " >
+	  
+	    <!-- Compile the java code from ${src} into ${build} -->
+	    <javac srcdir="${src}" destdir="${build}">
+
+	    </javac>
+	    	
+	  	
+	  </target>
+
+	  <target name="dist" depends="compile"
+	        description="generate the distribution" >
+	    <!-- Put everything in ${build} into the jar file -->
+	  	<mkdir dir="${dist}"/>
+	  	
+	    <jar destfile="${dist}/notification.jar" basedir="${build}" filesetmanifest="mergewithoutmain" compress="true">
+	        <manifest>
+	        	 <attribute name="Created-By" value="Sam Bayless"/>
+	            <attribute name="Built-By" value="Sam Bayless"/>
+	            <attribute name="Main-Class" value="com.golemgame.notification.Notification"/>
+	           </manifest>
+	    </jar>
+
+	  </target>
+
+	  <target name="clean"
+	        description="clean up" >
+	    <!-- Delete the ${build} and ${dist} directory trees -->
+	    <delete dir="${build}"/>
+	    <delete dir="${dist}"/>
+	  </target>
+
+   
+	
+</project>
+
+
+
