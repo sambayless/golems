@@ -557,7 +557,7 @@ GOLEMS{
                 FUN_PARABOLA~Parabolic
                 FUN_CUBIC~Cubic
                 FUN_SINE~Sine
-                FUN_SQRT~Sine
+                FUN_SQRT~Square Root
                 FUN_COS~Cosine
                 FUN_DERIVATIVE~(Slope)
                 FUNCTION_NAME~Function Name

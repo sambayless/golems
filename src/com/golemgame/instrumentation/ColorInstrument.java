@@ -86,6 +86,7 @@ public class ColorInstrument implements Instrument{
 			}
 			
 		});
+		window.setMinSize(1,1);
 //		setWindowed(false);
 	}
 	

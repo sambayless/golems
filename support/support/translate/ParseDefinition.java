@@ -141,7 +141,7 @@ public class ParseDefinition {
 				 */
 				classWriter.close();
 			}else{
-				System.out.println("Class File already exists: " + classFile);
+				System.out.println("Java File already exists: " + classFile + "(No changes needed)");
 			}
 		}
 	}

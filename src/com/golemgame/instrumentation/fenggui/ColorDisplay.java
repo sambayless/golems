@@ -55,6 +55,7 @@ public class ColorDisplay extends StatefullWidget<DefaultAppearance>{
 	public ColorDisplay() {
 		super();
 		this.setAppearance(new DefaultAppearance(this));
+		this.setMinSize(1,1);
 	}
 
 	public static final Dimension MIN_SIZE = new Dimension(1,1);
