@@ -206,6 +206,17 @@ public class ActionToolSettings
 			
 		});
 		
+		wireModeKey.addKeyListener(new KeyInputListener()
+		{
+
+			public void onKey(char character, int keyCode, boolean pressed) {
+				if (pressed)
+					wireMode.setValue(!wireMode.isValue());
+				
+			}
+			
+		});
+		
 		this.gridUnits.setIsTransient(true);
 		this.gridOrigin.setIsTransient(true);
 		this.snapSingleAxis.setIsTransient(true);	
@@ -352,8 +363,12 @@ public class ActionToolSettings
 	}
 
 	private  final BooleanSetting wireMode =  SettingsManager.getInstance().createBooleanSetting("wires",false);
+	private  final KeySetting wireModeKey=  SettingsManager.getInstance().createKeySetting("wires.key",KeyInput.KEY_GRAVE);
+
 	
-	
+	public KeySetting getWireModeKey() {
+		return wireModeKey;
+	}
 	public BooleanSetting getWireMode() {
 		return wireMode;
 	}
@@ -381,28 +396,20 @@ public class ActionToolSettings
 	
 	private  final BooleanSetting modify =  SettingsManager.getInstance().createBooleanSetting("modify",false);
 	private  final KeySetting modifyKey=  SettingsManager.getInstance().createKeySetting("mmodify.key",KeyInput.KEY_LMENU);
-	{
 
-	}
 	private  final KeySetting staticsKey=  SettingsManager.getInstance().createKeySetting("staticsSelectable.key",KeySetting.NO_KEY);
 
 	
 	private  final BooleanSetting rotate =  SettingsManager.getInstance().createBooleanSetting("rotate",false);
 	private  final KeySetting rotateKey=  SettingsManager.getInstance().createKeySetting("rotate.key",KeyInput.KEY_LSHIFT);
-	{
 
-	}
 	
 	private  final KeySetting propertiesKey =  SettingsManager.getInstance().createKeySetting("properties.key",KeyInput.KEY_RETURN);
-	{
 
-	}
 	
 	private  final KeySetting groupSelectionKey = SettingsManager.getInstance().createKeySetting("groupSelectionMode.key");
 
-	
-	{
-	}
+
 	private  final BooleanSetting groupSelectionMode = SettingsManager.getInstance().createBooleanSetting("groupSelectionMode",false);
 	public  void setGroupSelectionMode(boolean selectGroups) {
 		groupSelectionMode.setValue(selectGroups);
@@ -434,9 +441,7 @@ public class ActionToolSettings
 	 */
 	private final  ListenerGroup actionSettings = new ListenerGroup();
 	
-	{
-	
-	}
+
 
 	public  BooleanSetting getSnap() {
 		return snap;

@@ -154,8 +154,10 @@ public class KeyMappingConversion {
 		keyList.add(new KeyConvert('7', KeyInput.KEY_7));
 		keyList.add(new KeyConvert('8', KeyInput.KEY_8));
 		keyList.add(new KeyConvert('9', KeyInput.KEY_9));
-		
-		
+		keyList.add(new KeyConvert('\'', KeyInput.KEY_APOSTROPHE,"Apostraphe"));
+		keyList.add(new KeyConvert('\"', KeyInput.KEY_APOSTROPHE,"Apostraphe"));
+		keyList.add(new KeyConvert('`', KeyInput.KEY_GRAVE, "Tilde"));
+		keyList.add(new KeyConvert('~', KeyInput.KEY_GRAVE, "Tilde"));
 	
 		
 		

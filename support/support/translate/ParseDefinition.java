@@ -144,6 +144,7 @@ public class ParseDefinition {
 				System.out.println("Java File already exists: " + classFile + "(No changes needed)");
 			}
 		}
+		System.out.println("Dont forget to refresh the dataFolder for changes to take effect.");
 	}
 	
 	private static void writeAlphabet(Collection<Character> alphabet, File alpha) throws FileNotFoundException, IOException {

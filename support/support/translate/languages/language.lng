@@ -282,6 +282,7 @@ GOLEMS{
         WIRE_MODE.TOOLTIP~Wire mode lets you see the wires connecting different parts of your machine, 
                 as well as functional components like batteries. 
                 Components that can be connected with wires have green or yellow ports.
+                You can also toggle wire mode with $WIRE_MODE_KEY.
                 
         BOX~Box
         BOX.TOOLTIP~Create a box.

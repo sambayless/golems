@@ -9,7 +9,7 @@ import com.jme.input.KeyInputListener;
 
 /**
  * This is a special setting type: its value is the identity of a key; its value is changed not by pressing or releasing that key
- * but by changing which key it should respond to. KeySetting has as a secondary function that it will listen to key press events
+ * but by changing which key it should respond to. KeySetting has as a secondary function in that it will listen to key press events
  * and notify any attached listeners when actions corresponding to its key occur. 
  * The intended use of this is to provide customizable key actions, including actions that change other settings.
  * @author Sam

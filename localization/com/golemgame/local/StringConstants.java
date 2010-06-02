@@ -91,6 +91,12 @@ public class StringConstants {
 				}
 		});
 		
+		registerKeyword("$WIRE_MODE_KEY", new Keyword(){
+			public String get() {
+				return ActionToolSettings.getInstance().getWireModeKey().getKeyName();
+				}
+		});
+		
 		registerKeyword("$ROTATE_KEY", new Keyword(){
 			public String get() {
 				return ActionToolSettings.getInstance().getRotateKey().getKeyName();

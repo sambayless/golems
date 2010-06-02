@@ -275,6 +275,8 @@ public class KeyMappingsTab extends ImageTabAdapter {
 		
 		mapList.add(new KeyMapping("Select Grouped Objects" , ActionToolSettings.getInstance().getGroupSelectionKey()));
 
+		mapList.add(new KeyMapping("Toggle Wire Mode", ActionToolSettings.getInstance().getWireModeKey()));
+		
 		mapList.add(new KeyMapping("Select Multiple Objects", ActionToolSettings.getInstance().getMultipleSelectKey()));
 		
 		mapList.add(new KeyMapping("Show Object Properties", ActionToolSettings.getInstance().getPropertiesKey()));
