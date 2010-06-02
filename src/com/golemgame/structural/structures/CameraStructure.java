@@ -2,6 +2,7 @@ package com.golemgame.structural.structures;
 
 import java.util.Collection;
 
+import com.golemgame.functional.WirePort;
 import com.golemgame.mechanical.StructuralMachine;
 import com.golemgame.model.Model;
 import com.golemgame.model.ParentModel;
@@ -15,6 +16,8 @@ import com.golemgame.properties.Property;
 import com.golemgame.states.camera.EmbeddedCamera;
 import com.golemgame.structural.collision.CollisionMember;
 import com.golemgame.structural.collision.NonPropagatingCollisionMember;
+import com.jme.math.FastMath;
+import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 
 public class CameraStructure extends FunctionalStructure  {
@@ -28,16 +31,14 @@ public class CameraStructure extends FunctionalStructure  {
 	
 	private EmbeddedCamera embeddedCamera;
 
+	private WirePort input;
 	
 	private CameraInterpreter interpreter;
 	public CameraStructure(PropertyStore store) {
 		super(store);
 		this.interpreter = new CameraInterpreter(store);
 		this.model = new NodeModel(this);
-	
-		
-	
-		
+
 		cameraModel=new CameraModel(true);
 	
 		cameraFacade = new CameraFacade();
@@ -48,16 +49,20 @@ public class CameraStructure extends FunctionalStructure  {
 		embeddedCamera = new EmbeddedCamera();
 		//embeddedCamera.getCameraModel().getLocalRotation().multLocal(new Quaternion().fromAngleNormalAxis(0,Vector3f.UNIT_Y));
 		this.model.addChild(embeddedCamera.getCameraModel());
-		
-	
-		
-	
+
 			this.collisionMember = new NonPropagatingCollisionMember(model,this.getActionable());
-			collisionMember.registerCollidingModel(cameraModel);
-		
+			collisionMember.registerCollidingModel(cameraModel);	
 		
 		cameraModel.setActionable(this);
 		controlledModels = new Model[]{cameraModel,cameraFacade};
+		
+		input = new WirePort(this,true);
+		input.getModel().getLocalTranslation().x = -2f/3f;
+		input.getModel().getLocalRotation().fromAngleNormalAxis(FastMath.HALF_PI, Vector3f.UNIT_Z);
+		input.getModel().updateWorldData();
+		super.registerWirePort(input);	
+		getModel().addChild(input.getModel());
+
 		super.initialize();
 		
 		//this.getAppearance().addEffect(new TintableColorEffect(new ColorRGBA(0.1f,0.1f,0.1f,1f)),true);

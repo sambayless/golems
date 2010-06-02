@@ -418,8 +418,8 @@ GEAR.TOOLTIP~Créer un engrenage
         FORCE_BEAM~ Laser force
 FORCE_BEAM.TOOLTIP~Les laser vous permet d'appliquer une force sur les objets que le laser croise, La sortir (dans le mode fils) vous permet de "voir" a quelle distance est située l'objet.
             
-        CAMERA~Camera
-CAMERA.TOOLTIP~Les cameras vous permette de voir votre création de la ou vous l'avez placée.Appuyer sur $NEXT_CAMERA pour passer d'un camera a l'autre.
+        CAMERA~
+.TOOLTIP~Les s vous permette de voir votre création de la ou vous l'avez placée.Appuyer sur $NEXT_ pour passer d'un  a l'autre.
 
         }
 

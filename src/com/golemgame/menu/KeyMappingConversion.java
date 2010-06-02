@@ -145,21 +145,50 @@ public class KeyMappingConversion {
 		
 		
 		keyList.add(new KeyConvert('0', KeyInput.KEY_0));
+		keyList.add(new KeyConvert(')', KeyInput.KEY_0));
 		keyList.add(new KeyConvert('1', KeyInput.KEY_1));
+		keyList.add(new KeyConvert('!', KeyInput.KEY_1));
 		keyList.add(new KeyConvert('2', KeyInput.KEY_2));
+		keyList.add(new KeyConvert('@', KeyInput.KEY_2));
 		keyList.add(new KeyConvert('3', KeyInput.KEY_3));
+		keyList.add(new KeyConvert('#', KeyInput.KEY_3));
 		keyList.add(new KeyConvert('4', KeyInput.KEY_4));
+		keyList.add(new KeyConvert('$', KeyInput.KEY_4));
 		keyList.add(new KeyConvert('5', KeyInput.KEY_5));
+		keyList.add(new KeyConvert('%', KeyInput.KEY_5));
 		keyList.add(new KeyConvert('6', KeyInput.KEY_6));
+		keyList.add(new KeyConvert('^', KeyInput.KEY_6));
 		keyList.add(new KeyConvert('7', KeyInput.KEY_7));
+		keyList.add(new KeyConvert('&', KeyInput.KEY_7));
 		keyList.add(new KeyConvert('8', KeyInput.KEY_8));
+		keyList.add(new KeyConvert('*', KeyInput.KEY_8));
 		keyList.add(new KeyConvert('9', KeyInput.KEY_9));
+		keyList.add(new KeyConvert('(', KeyInput.KEY_9));
+		
+		
 		keyList.add(new KeyConvert('\'', KeyInput.KEY_APOSTROPHE,"Apostraphe"));
 		keyList.add(new KeyConvert('\"', KeyInput.KEY_APOSTROPHE,"Apostraphe"));
 		keyList.add(new KeyConvert('`', KeyInput.KEY_GRAVE, "Tilde"));
 		keyList.add(new KeyConvert('~', KeyInput.KEY_GRAVE, "Tilde"));
-	
+		keyList.add(new KeyConvert('=', KeyInput.KEY_EQUALS, "Equals"));
+		keyList.add(new KeyConvert('+', KeyInput.KEY_EQUALS, "Equals"));
+		keyList.add(new KeyConvert('-', KeyInput.KEY_MINUS, "Minus"));
+		keyList.add(new KeyConvert('_', KeyInput.KEY_MINUS, "Minus"));
 		
+		keyList.add(new KeyConvert('>', KeyInput.KEY_PERIOD, "Period"));
+		keyList.add(new KeyConvert('.', KeyInput.KEY_PERIOD, "Period"));
+		keyList.add(new KeyConvert('<', KeyInput.KEY_COMMA, "Comma"));
+		keyList.add(new KeyConvert(',', KeyInput.KEY_COMMA, "Comma"));
+		
+		keyList.add(new KeyConvert('?', KeyInput.KEY_SLASH, "Slash"));
+		keyList.add(new KeyConvert('/', KeyInput.KEY_SLASH, "Slash"));
+		keyList.add(new KeyConvert('\\', KeyInput.KEY_BACKSLASH, "Back Slash"));
+		keyList.add(new KeyConvert('|', KeyInput.KEY_BACKSLASH, "Back Slash"));
+		
+		keyList.add(new KeyConvert(']', KeyInput.KEY_RBRACKET, "Bracket (Right)"));
+		keyList.add(new KeyConvert('}', KeyInput.KEY_RBRACKET, "Bracket (Right)"));
+		keyList.add(new KeyConvert('{', KeyInput.KEY_LBRACKET, "Bracket (Left)"));
+		keyList.add(new KeyConvert('[', KeyInput.KEY_LBRACKET, "Bracket (Left)"));
 		
 		
 		keyList.add(new KeyConvert(Key.UNDEFINED, KeyInput.KEY_UNLABELED,"(Unknown Key)"));

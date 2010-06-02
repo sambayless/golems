@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.golemgame.mvc.DataType;
 import com.golemgame.mvc.PropertyStore;
 
-public class CameraInterpreter extends PhysicalStructureInterpreter {
+public class CameraInterpreter extends StandardFunctionalInterpreter {
 
 	public static final String LOCK_ROLL = "lock.roll";
 	public static final String LOCK_PITCH = "lock.pitch";
@@ -13,9 +13,10 @@ public class CameraInterpreter extends PhysicalStructureInterpreter {
 	
 	public static final String LOCK_ALL = "lock.all";
 	
-	public CameraInterpreter() {
-		this(new PropertyStore());
+	public static final String VIEW_THRESHOLD = "view.threshold";
 	
+	public CameraInterpreter() {
+		this(new PropertyStore());	
 	}
 
 	public CameraInterpreter(PropertyStore store) {
@@ -29,6 +30,7 @@ public class CameraInterpreter extends PhysicalStructureInterpreter {
 		keys.add(LOCK_PITCH);	
 		keys.add(LOCK_YAW);	
 		keys.add(LOCK_ALL);	
+		keys.add(VIEW_THRESHOLD);
 		return super.enumerateKeys(keys);
 	}
 	
@@ -43,7 +45,19 @@ public class CameraInterpreter extends PhysicalStructureInterpreter {
 			return defaultBool;
 		if(key.equals(LOCK_ALL))
 			return defaultBool;
+		if(key.equals(VIEW_THRESHOLD))
+			return defaultFloat;
 		return super.getDefaultValue(key);
+	}
+	
+	public float getViewThreshold()
+	{
+		return getStore().getFloat(VIEW_THRESHOLD);
+	}
+	
+	public void setViewThreshold(float threshold)
+	{
+		getStore().setProperty(VIEW_THRESHOLD, threshold);
 	}
 	
 	public boolean isOrientationLocked()

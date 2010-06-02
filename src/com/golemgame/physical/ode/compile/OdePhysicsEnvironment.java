@@ -11,6 +11,8 @@ import com.golemgame.mechanical.InteractionServer;
 import com.golemgame.physical.PhysicsEnvironment;
 import com.golemgame.physical.ode.OdeContactManager;
 import com.golemgame.physical.ode.OdeContactStructure;
+import com.golemgame.states.camera.CameraDelegate;
+import com.golemgame.states.camera.CameraManager;
 import com.golemgame.structural.Interactor;
 import com.jmex.physics.CollisionGroup;
 import com.jmex.physics.Joint;
@@ -43,8 +45,21 @@ public class OdePhysicsEnvironment extends PhysicsEnvironment {
 	
 	private OdeContactManager contactManager = new OdeContactManager();
 	
+	private CameraManager cameraManager;
+	
 	//private int uniqueContactID = 0;
 	
+	public void setCameraManager(CameraManager cameraManager) {
+		this.cameraManager = cameraManager;
+	}
+
+	@Override
+	public void setCameraDelegate(CameraDelegate camera) {
+		if(this.cameraManager!=null)
+			this.cameraManager.setCameraDelegate(camera);
+		super.setCameraDelegate(camera);
+	}
+
 	/**
 	 * Generate a unique int for an OdeContact
 	 * @return

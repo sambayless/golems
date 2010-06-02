@@ -782,6 +782,7 @@ GOLEMS{
 
             LOCK~
 
+			TRIGGER~
         }
 
         INPUT{

@@ -5,10 +5,16 @@ import java.util.Map;
 import com.golemgame.constructor.Updatable;
 import com.golemgame.constructor.UpdateManager;
 import com.golemgame.constructor.UpdateManager.Stream;
+import com.golemgame.functional.component.BComponent;
+import com.golemgame.functional.component.BGenericInput;
+import com.golemgame.functional.component.BGenericSource;
+import com.golemgame.functional.component.BMind;
 import com.golemgame.model.spatial.ManualUpdateNodeModel;
 import com.golemgame.model.spatial.shape.CameraModel;
 import com.golemgame.mvc.PropertyStore;
+import com.golemgame.mvc.Reference;
 import com.golemgame.mvc.golems.CameraInterpreter;
+import com.golemgame.mvc.golems.WirePortInterpreter;
 import com.golemgame.physical.ode.compile.OdePhysicsEnvironment;
 import com.golemgame.states.StateManager;
 import com.golemgame.states.camera.EmbeddedCamera;
@@ -157,6 +163,31 @@ public class OdeCamera extends OdePhysicalStructure{
 		embeddedPhysicsCamera.getCameraModel().detachFromParent();//to eliminate references to the machine
 		embeddedPhysicsCamera.getCameraModel().getSpatial().removeFromParent();
 		embeddedPhysicsCamera = null;
+	}
+
+	@Override
+	public void buildMind(BMind mind,
+			Map<OdePhysicalStructure, PhysicsNode> physicalMap,
+			Map<Reference, BComponent> wireMap,
+			final OdePhysicsEnvironment environment) {
+
+		BGenericInput triggerCamera = new BGenericInput(){
+			@Override
+			protected float signalRecieved(float signal,float time) {
+				float t = interpreter.getViewThreshold();
+				if(signal>= t)
+				{
+					environment.setCameraDelegate(embeddedPhysicsCamera);
+				}
+				state = 0;
+				return 0;
+			}			
+		};	
+		WirePortInterpreter inPort = new WirePortInterpreter(interpreter.getInput());
+		wireMap.put(inPort.getID(), triggerCamera);
+		mind.addComponent(triggerCamera);
+
+		super.buildMind(mind, physicalMap, wireMap, environment);
 	}
 
 }

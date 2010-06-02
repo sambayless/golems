@@ -3,6 +3,7 @@ package com.golemgame.properties.fengGUI;
 import org.fenggui.CheckBox;
 import org.fenggui.Container;
 import org.fenggui.FengGUI;
+import org.fenggui.TextEditor;
 import org.fenggui.layout.BorderLayout;
 import org.fenggui.layout.BorderLayoutData;
 import org.fenggui.layout.RowLayout;
@@ -16,11 +17,9 @@ public class CameraTab extends PropertyTabAdapter {
 
 	private CameraInterpreter interpreter;
 	
-	//private TextEditor toothNumber;
-/*	private CheckBox rollLocked;
-	private CheckBox pitchLocked;
-	private CheckBox yawLocked;*/
 	private CheckBox<?> allLocked;
+	private TextEditor triggerValue;
+	
 	public CameraTab() {
 		super(StringConstants.get("TOOLBAR.CAMERA","Camera"));
 		
@@ -31,23 +30,18 @@ public class CameraTab extends PropertyTabAdapter {
 		
 		getTab().setLayoutManager(new BorderLayout());
 
-		Container toothContainer = FengGUI.createContainer(getTab());
-		toothContainer.setLayoutData(BorderLayoutData.NORTH);
-		toothContainer.setLayoutManager(new RowLayout());
+		Container cameraContainer = FengGUI.createContainer(getTab());
+		cameraContainer.setLayoutData(BorderLayoutData.NORTH);
+		cameraContainer.setLayoutManager(new RowLayout(false));
 
-		allLocked = FengGUI.createCheckBox(toothContainer,StringConstants.get("PROPERTIES.CAMERA.LOCK","Lock Camera Orientation"));
-		
-	/*	rollLocked = FengGUI.createCheckBox(toothContainer,"Lock Camera Roll");
-		
-		pitchLocked = FengGUI.createCheckBox(toothContainer,"Lock Camera Pitch");
-	
-		yawLocked = FengGUI.createCheckBox(toothContainer,"Lock Camera Yaw");*/
-		
+		allLocked = FengGUI.createCheckBox(cameraContainer,StringConstants.get("PROPERTIES.CAMERA.LOCK","Lock Camera Orientation"));
+
+		Container viewContainer = new Container();
+		cameraContainer.addWidget(viewContainer);
+		viewContainer.setLayoutManager(new RowLayout(true));
+		FengGUI.createLabel(viewContainer,StringConstants.get("PROPERTIES.CAMERA.TRIGGER","Viewpoint Trigger Threshold")).setExpandable(false);
+		triggerValue = FengGUI.createTextEditor(viewContainer);
 	}
-
-	
-	
-
 
 	@Override
 	public void close(boolean cancel) {
@@ -55,10 +49,8 @@ public class CameraTab extends PropertyTabAdapter {
 		{
 	
 			standardClosingBehaviour(allLocked, CameraInterpreter.LOCK_ALL);
-		/*	standardClosingBehaviour(rollLocked, CameraInterpreter.LOCK_ROLL);
-			standardClosingBehaviour(pitchLocked, CameraInterpreter.LOCK_PITCH);
-			standardClosingBehaviour(yawLocked, CameraInterpreter.LOCK_YAW);
-			*/
+			standardClosingBehaviour(triggerValue,CameraInterpreter.VIEW_THRESHOLD);
+
 			
 			Action<?> apply = super.apply();
 			
@@ -76,13 +68,9 @@ public class CameraTab extends PropertyTabAdapter {
 		this.interpreter.loadDefaults();
 		initializePrototype();
 		associateWithKey(allLocked, CameraInterpreter.LOCK_ALL);
+		associateWithKey(triggerValue, CameraInterpreter.VIEW_THRESHOLD);
 		standardOpeningBehaviour(allLocked, CameraInterpreter.LOCK_ALL);
-	/*	associateWithKey(rollLocked, CameraInterpreter.LOCK_ROLL);
-		associateWithKey(pitchLocked, CameraInterpreter.LOCK_PITCH);
-		associateWithKey(yawLocked, CameraInterpreter.LOCK_YAW);
-	
-		standardOpeningBehaviour(rollLocked, CameraInterpreter.LOCK_ROLL);
-		standardOpeningBehaviour(pitchLocked, CameraInterpreter.LOCK_PITCH);
-		standardOpeningBehaviour(yawLocked, CameraInterpreter.LOCK_YAW);*/
+		standardOpeningBehaviour(triggerValue, CameraInterpreter.VIEW_THRESHOLD);
+		
 	}
 }

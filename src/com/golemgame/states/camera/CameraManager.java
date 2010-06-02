@@ -241,6 +241,10 @@ public class CameraManager {
 
 
 
+	/**
+	 * Set the current camera view point
+	 * @param delegate
+	 */
 	public void setCameraDelegate(CameraDelegate delegate)
 	{
 		if (delegate == default_stand_in_camera)

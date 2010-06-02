@@ -71,7 +71,10 @@ public class PhysicsEnvironment {
 		
 	}
 
-	
+	public void setCameraDelegate(CameraDelegate camera)
+	{
+		
+	}
 
 	
 	public void addEnvironmentListener(EnvironmentListener listener) {

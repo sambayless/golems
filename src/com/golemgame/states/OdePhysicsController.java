@@ -87,7 +87,7 @@ public class OdePhysicsController extends MVCFunctionalPhysicsController {
 					compilationEnvironment.setSoundScene(soundScene);
 				}
 			}
-			
+			compilationEnvironment.setCameraManager(StateManager.getCameraManager());
 /*			compilationEnvironment.setSensorCollisionGroup(machineState.getPhysicsSpace().createCollisionGroup("Sensors"));
 			compilationEnvironment.getSensorCollisionGroup().collidesWith(((OdePhysicsSpace)machineState.getPhysicsSpace()).getDefaultCollisionGroup(), true);
 			compilationEnvironment.getSensorCollisionGroup().collidesWith(((OdePhysicsSpace)machineState.getPhysicsSpace()).getStaticCollisionGroup(), true);
