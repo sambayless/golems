@@ -30,6 +30,7 @@ import com.golemgame.mvc.golems.InputInterpreter;
 import com.golemgame.mvc.golems.ModifierInterpreter;
 import com.golemgame.mvc.golems.OscilloscopeInterpreter;
 import com.golemgame.mvc.golems.PyramidInterpreter;
+import com.golemgame.mvc.golems.RackGearInterpreter;
 import com.golemgame.mvc.golems.RocketInterpreter;
 import com.golemgame.mvc.golems.SphereInterpreter;
 import com.golemgame.mvc.golems.StructureInterpreter;
@@ -1820,6 +1821,24 @@ public class MainToolbar extends Toolbar {
 			}    		
  	});    	
  	container.addWidget(gear); 
+ 	
+ 	
+ 	MainButton rackGear = new MainButton(	getTooltip("TOOLBAR.RACKGEAR","Rack Gear"),squareTexture, specialGroup);
+ 	IconToolTip.setDescription(gear,  getTooltip("TOOLBAR.RACKGEAR.TOOLTIP","Create a linear gear."));
+
+ 	rackGear.addButtonListener(new ButtonAdapter()
+ 	{
+			
+			public void activate() {
+				
+				
+				 preparePhysicalStructure(new RackGearInterpreter());
+					
+			
+				 
+			}    		
+ 	});    	
+ 	container.addWidget(rackGear); 
  	
  	MainButton grapple = new MainButton(	getTooltip("TOOLBAR.FORCE_BEAM","Force Beam"),grappleTexture, specialGroup);
  	IconToolTip.setDescription(grapple,  getTooltip("TOOLBAR.FORCE_BEAM.TOOLTIP","Projects a beam of forces that can pull or push objects."));

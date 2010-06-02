@@ -350,6 +350,7 @@ public class StructuralMachine implements Serializable, Viewable,Actionable,Sust
 		structuralClasses.add(GolemsClassRepository.CYL_CLASS);
 		structuralClasses.add(GolemsClassRepository.DISTANCE_SENSOR_CLASS);
 		structuralClasses.add(GolemsClassRepository.GEAR_CLASS);
+		structuralClasses.add(GolemsClassRepository.RACK_GEAR_CLASS);
 		structuralClasses.add(GolemsClassRepository.HINGE_CLASS);
 		structuralClasses.add(GolemsClassRepository.HYDRAULIC_CLASS);
 		structuralClasses.add(GolemsClassRepository.PYRAMID_CLASS);

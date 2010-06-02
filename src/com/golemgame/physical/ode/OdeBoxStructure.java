@@ -17,7 +17,7 @@ import com.jmex.physics.PhysicsNode;
 
 public class OdeBoxStructure  extends OdePhysicalStructure{
 
-	private BoxInterpreter interpreter;
+	protected BoxInterpreter interpreter;
 	
 	public OdeBoxStructure(PropertyStore store) {
 		super(store);

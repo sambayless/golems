@@ -35,6 +35,7 @@ import com.golemgame.structural.structures.MotorPropertiesImpl;
 import com.golemgame.structural.structures.MultimeterStruct;
 import com.golemgame.structural.structures.OscilloscopeStructure;
 import com.golemgame.structural.structures.PyramidStructure;
+import com.golemgame.structural.structures.RackGearStructure;
 import com.golemgame.structural.structures.RocketStructure;
 import com.golemgame.structural.structures.SphereStructure;
 import com.golemgame.structural.structures.TouchSensor;
@@ -181,6 +182,9 @@ public class DesignViewFactory {
 		}else if (className.equalsIgnoreCase(GolemsClassRepository.CONTACT_CLASS))
 		{
 			return new ContactStructure(store);
+		}else if (className.equalsIgnoreCase(GolemsClassRepository.RACK_GEAR_CLASS))
+		{
+			return new RackGearStructure(store);
 		}
 		
 		

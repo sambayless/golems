@@ -84,6 +84,9 @@ public class OdeViewFactory {
 		}else if (className.equalsIgnoreCase(GolemsClassRepository.CONTACT_CLASS))
 		{
 			return new OdeContactStructure(store);
+		}else if (className.equalsIgnoreCase(GolemsClassRepository.RACK_GEAR_CLASS))
+		{
+			return new OdeRackGearStructure(store);
 		}
 		
 		

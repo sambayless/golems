@@ -46,6 +46,7 @@ public class GolemsClassRepository {
 	public static final String ROCKET_PROPELLANT_CLASS = "Structure.Rocket.Propellant.Properties";
 	public static final String PARTICLE_EFFECTS_REPOSITORY_CLASS = "Effect.Particle.Repository";
 	public static final String GEAR_CLASS = "Structure.Gear";
+	public static final String RACK_GEAR_CLASS = "Structure.RackGear";
 	public static final String FUNCTION_REPOSITORY_CLASS = "Function.Repository";
 	public static final String COLOR_REPOSITORY_CLASS = "Color.Repository";
 	public static final String TUBE_CLASS = "Structure.Tube";
@@ -71,5 +72,6 @@ public class GolemsClassRepository {
 	public static final String KEY_INPUT_DEVICE_CLASS = "Device.Input.Key";
 	public static final String SLIDER_INPUT_DEVICE_CLASS = "Device.Input.Slider";
 	public static final String TEXT_INPUT_DEVICE_CLASS = "Device.Input.Text";
+
 
 }

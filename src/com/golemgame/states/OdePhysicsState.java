@@ -1,7 +1,6 @@
 package com.golemgame.states;
 
 import java.awt.Dimension;
-import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
@@ -42,8 +41,6 @@ import com.golemgame.util.loading.ConcurrentLoadable;
 import com.golemgame.util.loading.Loadable;
 import com.golemgame.util.loading.Loader;
 import com.golemgame.util.pass.PassingGameStateManager;
-import com.golemgame.views.ObservableViewManager.ViewListener;
-import com.golemgame.views.Viewable.ViewMode;
 import com.jme.image.Texture;
 import com.jme.input.MouseInputListener;
 import com.jme.light.PointLight;
@@ -59,6 +56,7 @@ import com.jme.scene.state.MaterialState;
 import com.jme.scene.state.ZBufferState;
 import com.jme.system.DisplaySystem;
 import com.jme.util.TextureManager;
+import com.jmex.physics.PhysicsDebugger;
 import com.simplemonkey.Container;
 import com.simplemonkey.layout.BorderLayout;
 import com.simplemonkey.layout.BorderLayoutData;
@@ -196,7 +194,7 @@ public class OdePhysicsState extends FunctionalPhysicsState  implements Controll
 		super.render(tpf);
 		
 
-	//	PhysicsDebugger.drawPhysics( getPhysicsSpace(), DisplaySystem.getDisplaySystem().getRenderer());
+		PhysicsDebugger.drawPhysics( getPhysicsSpace(), DisplaySystem.getDisplaySystem().getRenderer());
 		if(instruments != null)
 			instruments.render(tpf);
 		renderer.draw(hudNode);

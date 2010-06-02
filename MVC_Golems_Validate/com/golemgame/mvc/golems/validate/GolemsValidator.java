@@ -25,6 +25,7 @@ public final class GolemsValidator extends ValidationFactory{
 	{
 
 		validatorMap.clear();
+		validatorMap.put(GolemsClassRepository.RACK_GEAR_CLASS, new RackGearValidator());
 		validatorMap.put(GolemsClassRepository.CAMERA_CLASS, new CameraValidator());
 		validatorMap.put(GolemsClassRepository.BOX_CLASS, new BoxValidator());
 		validatorMap.put(GolemsClassRepository.CYL_CLASS, new CylinderValidator());

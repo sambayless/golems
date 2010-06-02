@@ -121,14 +121,28 @@ public class DefaultGolemsProperties {
 		multimeter.getVelocitySettings().set(position.getStore());
 		loadStructureDefaults(multimeter.getStore());
 		defaults.put(GolemsClassRepository.GENERAL_SENSOR_CLASS, multimeter.getStore());
+		{
+			GearInterpreter gear = new GearInterpreter();
+			gear.setNumberOfTeeth(6);
+			gear.setToothAngle(FastMath.HALF_PI/3f);
+			gear.setToothHeight(0.1f);
+			gear.setToothWidth(0.1f);
+			loadStructureDefaults(gear.getStore());
+			defaults.put(GolemsClassRepository.GEAR_CLASS, gear.getStore());
+		}
 		
-		GearInterpreter gear = new GearInterpreter();
-		gear.setNumberOfTeeth(6);
-		gear.setToothAngle(FastMath.HALF_PI/3f);
-		gear.setToothHeight(0.1f);
-		gear.setToothWidth(0.1f);
-		loadStructureDefaults(gear.getStore());
-		defaults.put(GolemsClassRepository.GEAR_CLASS, gear.getStore());
+		{
+			BoxInterpreter box = new BoxInterpreter();
+			RackGearInterpreter rackGear = new RackGearInterpreter(box.getStore());
+			rackGear.setNumberOfTeeth(6);
+			rackGear.setToothAngle(FastMath.HALF_PI/3f);
+			rackGear.setToothHeight(0.1f);
+			rackGear.setToothWidth(0.1f);
+			
+			box.setExtent(new Vector3f(0.5f,0.25f,0.5f));
+			loadStructureDefaults(rackGear.getStore());
+			defaults.put(GolemsClassRepository.RACK_GEAR_CLASS, rackGear.getStore());
+		}
 		
 		BoxInterpreter box = new BoxInterpreter();
 		box.setExtent(	new Vector3f(0.5f,0.5f,0.5f));
