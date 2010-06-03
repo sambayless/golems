@@ -7,7 +7,7 @@ RequestExecutionLevel admin
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.55.9
+!define VERSION 0.56.0
 !define COMPANY "Sam Bayless"
 !define URL www.golemgame.com
 

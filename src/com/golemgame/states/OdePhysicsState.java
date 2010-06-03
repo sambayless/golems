@@ -194,7 +194,7 @@ public class OdePhysicsState extends FunctionalPhysicsState  implements Controll
 		super.render(tpf);
 		
 
-		PhysicsDebugger.drawPhysics( getPhysicsSpace(), DisplaySystem.getDisplaySystem().getRenderer());
+	//	PhysicsDebugger.drawPhysics( getPhysicsSpace(), DisplaySystem.getDisplaySystem().getRenderer());
 		if(instruments != null)
 			instruments.render(tpf);
 		renderer.draw(hudNode);

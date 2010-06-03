@@ -248,6 +248,7 @@ public class ActionToolSettings
 		actionSettings.addKeyListener(getSecondaryDeleteKey());
 		actionSettings.addKeyListener(getStaticsKey());
 		actionSettings.addKeyListener(assignGroupKey);
+		actionSettings.addKeyListener(wireModeKey);
 		
 		InputLayer.get().addKeyListener(actionSettings, InputLayer.SETTINGS_KEY_LAYER);
 		
