@@ -29,6 +29,7 @@ import com.golemgame.properties.fengGUI.ParticleEffectDesigner;
 import com.golemgame.properties.fengGUI.PhysicalTab;
 import com.golemgame.properties.fengGUI.PositionTab;
 import com.golemgame.properties.fengGUI.PropertyTabAdapter;
+import com.golemgame.properties.fengGUI.RackGearTab;
 import com.golemgame.properties.fengGUI.RocketEffectDesigner;
 import com.golemgame.properties.fengGUI.RocketTab;
 import com.golemgame.properties.fengGUI.SoundPropertiesTab;
@@ -268,6 +269,8 @@ public class PropertyTabFactory {
 				return new InputDeviceTab();
 			case OUTPUT_DEVICE:
 				return new OutputDeviceTab();
+			case RACK_GEAR:
+				return new RackGearTab();
 
 			default:
 				throw new UnhandledPropertyException(propertyType.toString());

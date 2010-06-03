@@ -16,7 +16,7 @@ public class Property {
 		FUNCTION_APPLIED("Applied Function"),BATTERY("Battery"),MODIFIER("Function"),
 		PHYSICAL("Physical"),MATERIAL("Material"),POSITION("Position"),APPEARANCE("Appearance"),ROCKET("Rocket"),
 		PARTICLE_EFFECTS("Rocket Effects"), ROCKET_EFFECTS("Rocket Effects"),MOTOR("Motor"),
-		HYDRAULICS("Hydraulics"),GEAR("Gear"),
+		HYDRAULICS("Hydraulics"),GEAR("Gear"),RACK_GEAR("Rack Gear"),
 		CAMERA("Camera"), SCALE("Scale"),SCALE_BOX("Box Scale"),SCALE_SPHERE("Sphere Scale"),
 		SCALE_ELLIPSOID("Ellipsoid Scale"),	SCALE_PYRAMID("Pyramid Scale"),	SCALE_CYLINDER("Cylinder Scale"),
 		SCALE_TUBE("Tube Scale"),SCALE_GEAR("Gear Scale"),SCALE_CAPSULE("Capsule Scale"),SCALE_CONE("Cone Scale"),

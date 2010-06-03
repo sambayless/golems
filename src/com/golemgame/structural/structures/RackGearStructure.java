@@ -67,7 +67,7 @@ public class RackGearStructure extends BoxStructure {
 	@Override
 	public Collection<Property> getPropertySet() {
 		 Collection<Property> properties = super.getPropertySet();
-		 properties.add(new Property(Property.PropertyType.GEAR,this.interpreter.getStore()));		 
+		 properties.add(new Property(Property.PropertyType.RACK_GEAR,this.interpreter.getStore()));		 
 		 return properties;
 	}
 

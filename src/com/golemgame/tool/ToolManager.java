@@ -13,8 +13,6 @@ import com.golemgame.settings.ActionSettingsListener;
 import com.golemgame.settings.SettingChangedEvent;
 import com.golemgame.settings.SettingsListener;
 import com.golemgame.states.StateManager;
-import com.golemgame.structural.Structural;
-import com.golemgame.structural.group.StructureGroup;
 import com.golemgame.tool.IActionTool.FailedToSelectException;
 import com.golemgame.tool.action.Action;
 import com.golemgame.tool.action.ActionTypeException;
@@ -28,6 +26,7 @@ import com.golemgame.tool.action.information.ModelInformation;
 import com.golemgame.tool.action.information.SelectionInformation;
 import com.golemgame.tool.action.information.SelectionPriorityInformation;
 import com.golemgame.util.ControlledListener;
+import com.golemgame.util.event.ListenerList;
 import com.golemgame.util.input.InputLayer;
 import com.jme.input.MouseInputListener;
 import com.jme.math.Ray;
@@ -43,12 +42,25 @@ public class ToolManager implements  ControlledListener{
 	private IActionTool currentTool= defaultTool;
 	private IActionTool primaryTool = defaultTool;
 	
+	private ListenerList<SelectionListener> selectionListeners = new ListenerList<SelectionListener>();
 
 
 	private boolean selectionEnabled = true;
 	
+	public void attachListener(SelectionListener listener)
+	{
+		selectionListeners.addListener(listener);
+	}
 	
+	public void removeListener(SelectionListener listener)
+	{
+		selectionListeners.removeListener(listener);
+	}
 	
+	public boolean hasListener(SelectionListener listener)
+	{
+		return selectionListeners.contains(listener);
+	}
 	
 	public ToolManager() {
 		super();
@@ -159,7 +171,7 @@ public class ToolManager implements  ControlledListener{
 	}
 	public void forceDeselect()
 	{
-		
+		this.selectionListeners.clear();
 		
 		if(this.getCurrentTool()!=null)
 			this.getCurrentTool().deselect();
@@ -450,6 +462,11 @@ public class ToolManager implements  ControlledListener{
 				//do nothing - if no selection info is provided, continue 
 			}
 			
+			//Interject with onetime selection listener here
+			
+			if(listenerIntercepts(actionable,selectedModel))
+				return true;
+			
 			if(!allowMultipleSelect)
 			{
 				if (getCurrentTool() != null)
@@ -467,38 +484,7 @@ public class ToolManager implements  ControlledListener{
 			try{
 
 					{
-	
-						/*//deprecated
-						if (ActionToolSettings.getInstance().getAssignedGroupSelectionMode().isValue())
-						{
-							try{
-								//	long time = System.nanoTime();
-									StructureGroup group  =((GroupInformation)	actionable.getAction(Action.GET_GROUP)).getAssignedGroup();
-								//	System.out.println(System.nanoTime()-time);
-								//	time = System.nanoTime();
-									if(group==null)
-									{
-										
-									}else
-									{	
-										for(Structural structure: group.getMembers())
-										{
-											
-											try{
-												getCurrentTool().select(structure, selectedModel,false);
-											}catch(FailedToSelectException e)
-											{
 
-											}
-										}
-									
-									}
-								//	System.out.println(System.nanoTime()-time);
-								}catch(ActionTypeException e)
-								{
-									return false;
-								}
-						}else*/ 
 						
 						boolean deselect = false;
 						if (allowDeselect && ActionToolSettings.getInstance().getMultipleSelect().isValue() && this.getSelectedActionables().contains(actionable))
@@ -564,6 +550,7 @@ public class ToolManager implements  ControlledListener{
 						}else{
 							getCurrentTool().select(actionable, selectedModel,true);
 						}
+						
 						if(!deselect)
 						{
 							this.currentSelectedModel=selectedModel;
@@ -599,6 +586,24 @@ public class ToolManager implements  ControlledListener{
 				
 			}
 		}
+		return false;
+	}
+
+	/**
+	 * If there is an interception listener attached to the tool manager, it gets a chance to prevent a tool from
+	 * selecting an item.
+	 * 
+	 * @param actionable
+	 * @param selectedModel
+	 * @return true if the item should not be selected by the current tool; false for normal behaviour
+	 */
+	private boolean listenerIntercepts(Actionable actionable,
+			Model model) {
+		
+		for(SelectionListener l:selectionListeners)
+			if(l.select(actionable, model))
+				return true;
+		
 		return false;
 	}
 

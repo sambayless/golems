@@ -92,6 +92,12 @@ public class GearTooth extends SpatialModelImpl
 		getTopBox().getLocalRotation().set(from.getTopBox().getLocalRotation());
 	}
 	
+	/**
+	 * Angle is TWICE the angle of each angled edge section.
+	 * @param height
+	 * @param width
+	 * @param angle
+	 */
 	public void rebuild(float height, float width, float angle)
 	{
 		//this is all assumed to be lying on its side - so the y scales for everything should always be 1.

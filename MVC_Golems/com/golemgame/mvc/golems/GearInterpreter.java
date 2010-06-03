@@ -7,8 +7,15 @@ import com.golemgame.mvc.PropertyStore;
 
 public class GearInterpreter extends PhysicalStructureInterpreter {
 	
+	/**
+	 * This is the height from the edge of the cylinder to the top of the center of the gear tooth.
+	 * The height of the gear tooth at the edges is slightly more: this height+deltaH, as calculated in GearStructure.
+	 */
 	public static final String TOOTH_HEIGHT = "Tooth.Height";
 	public static final String TOOTH_WIDTH = "Tooth.Width";
+	/**
+	 * This is TWICE the angle of incidence of each angled edge against the side of the tooth (measured from the top of the tooth)
+	 */
 	public static final String TOOTH_ANGLE = "Tooth.Angle";
 	public static final String TOOTH_NUMBER = "Tooth.Number";
 	public GearInterpreter(PropertyStore store) {

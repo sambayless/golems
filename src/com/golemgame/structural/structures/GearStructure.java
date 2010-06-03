@@ -155,6 +155,10 @@ public class GearStructure extends CylinderStructure {
 		}
 	}
 	
+	/**
+	 * The 'height' of the gear tooth in the property store is the height from the edge of the cylinder to the top of the center of the gear tooth.
+	 * The height of the gear tooth at the edges is slightly more; that difference is calculated by this function
+	 */
 	public static float exactHeight(float height, float width, float angle,
 			float radius) {
 		float tanA = FastMath.tan(angle/2f);
