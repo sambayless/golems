@@ -111,7 +111,7 @@ public class RackGearTab extends PropertyTabAdapter {
 							return true;
 						
 						
-						if(angle>0.0)
+						//if(angle>0.0)
 						{
 							double theta;
 						

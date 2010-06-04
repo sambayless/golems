@@ -31,7 +31,7 @@ public class RackGearStructure extends BoxStructure {
 	
 	private float height;
 	private float width;
-//	private float angle;
+	private float angle;
 	private float curWidth = -1;
 	private float curLength = -1;
 	private Model[] appearanceModels;
@@ -78,7 +78,7 @@ public class RackGearStructure extends BoxStructure {
 		//this is a relatively expensive refresh, so were going to cache as much data about the current state as we can, to
 		//avoid unneeded updates.
 
-		float angle = interpreter.getToothAngle();
+		
 		
 	//	this.toothModel.getLocalTranslation().y = super.getInterpreter().getExtent().y;
 		this.toothModel.getLocalScale().y = super.getInterpreter().getExtent().x*2f;
@@ -96,7 +96,7 @@ public class RackGearStructure extends BoxStructure {
 		{
 			height = interpreter.getToothHeight();
 			width = interpreter.getToothWidth();
-			//angle = interpreter.getToothAngle();
+			angle = interpreter.getToothAngle();
 			curLength = super.getInterpreter().getExtent().x;
 			curWidth = super.getInterpreter().getExtent().z;
 			
@@ -188,19 +188,21 @@ public class RackGearStructure extends BoxStructure {
 	
 	public static float exactHeight(float height, float width, float angle,
 			float radius) {
-		float tanA = FastMath.tan(angle/2f);
+		//for whatever reason, this doesnt work for the rack gear.
+/*		float tanA = FastMath.tan(angle/2f);
 		float tanA2 = tanA*tanA;
 		float w2 = width/2f;
 		
 		float a = (1f- tanA2);
+
 		float b = 2f*(radius-height*tanA2 - (w2)*tanA);
 		float c = -(w2*w2 + 2f*w2*height*tanA);
 		
 		float ans =  quadraticFormula(a,b,c);
-		if (!Float.isNaN(ans))
-			return ans;
-		return approximateHeight(height,width,angle,radius);
-		//return 0;
+		if (!Float.isNaN(ans) && !Float.isInfinite(ans))
+			return ans;*/
+		float approx = approximateHeight(height,width,angle,radius);
+		return approx;
 	}
 	
 	public static float quadraticFormula(float a, float b, float c) {
