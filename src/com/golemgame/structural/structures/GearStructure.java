@@ -87,25 +87,38 @@ public class GearStructure extends CylinderStructure {
 			float width = interpreter.getToothWidth();
 			float angle = interpreter.getToothAngle();
 			
-			
+			float radius = super.getInterpreter().getRadius();
 			
 			float deltaH = 0;
 			if(!(width == 0 && angle == 0 ))
-				deltaH = exactHeight(height,width,angle,super.getInterpreter().getRadius());
+				deltaH = exactHeight(height,width,angle,radius);
 	
-			height += deltaH;
+			float toothHeight = height+ deltaH;
 			
-			float fullWidth = width*2f + (float)Math.tan(angle/2f)*height*2f;
-			
-			
-		//	approximateHeight(height,width,angle,);		
-			int numberOfTeeth;
-			if(width == 0 && angle == 0 )
-			{
-				numberOfTeeth = 0;	//remove all teeth
-			
-			}else
-				numberOfTeeth =(int)Math.floor( 2f*FastMath.PI*super.getInterpreter().getRadius()/fullWidth);//interpreter.getNumberOfTeeth();
+			double numberOfTeeth = 0;
+			//double fullWidth =  width*2.0 + (float)Math.tan(angle/2.0)*height*2.0;
+			{	
+				double R = (float) Math.sqrt( (radius + height)*(radius + height) + width*width/4.0) ;
+				
+				//equation for the line of the gear edge
+				double m = Math.tan(angle/2.0);
+				double b = m*R;//y intersect is slope times BIG R.
+				
+				double xIntersect = quadraticFormulaMinus(m*m+1.0,2.0*m*b,b*b-radius*radius);
+				if(Double.isNaN(xIntersect))
+					xIntersect = 0.0;				
+				double radiansPerToothAngle = Math.abs(Math.acos(Math.abs(xIntersect)/radius));
+				double radiansPerToothWidth = 2.0*Math.asin(width/(2.0*radius));
+
+				double radiansPerToothCur = radiansPerToothAngle*2.0 + radiansPerToothWidth*2.0;
+				 numberOfTeeth =Math.floor( FastMath.TWO_PI/radiansPerToothCur);
+				 
+				 
+					double t =  FastMath.TWO_PI/numberOfTeeth - radiansPerToothAngle*2.0 - radiansPerToothWidth;
+
+					double baseWidth = 2.0*(radius)*Math.sin(t/2f);
+				//	System.out.println(radius + "\t" + baseWidth + "\t" + width + "\t" + numberOfTeeth + "(" +  2.0*Math.PI/radiansPerToothCur + ")");
+			}
 			
 			
 			//create or remove teeth as needed
@@ -129,10 +142,10 @@ public class GearStructure extends CylinderStructure {
 				float radiansPerTooth = FastMath.TWO_PI/((float)numberOfTeeth);
 				
 				GearTooth firstTooth = teeth.get(0);
-				firstTooth.rebuild(height, width, angle);
+				firstTooth.rebuild(toothHeight, width, angle);
 			
 				
-				float radius = super.getInterpreter().getRadius()-deltaH*1.3f;
+				float radiusL = super.getInterpreter().getRadius()-deltaH*1.3f;
 				
 				//evenly disperse the teeth around the circle.
 				
@@ -144,8 +157,8 @@ public class GearStructure extends CylinderStructure {
 					tooth.copyFrom(firstTooth);
 					
 					float curAngle = radiansPerTooth*i;
-					float x = FastMath.sin(curAngle)*radius;//sin and cos mixed up? seems to work...
-					float y = FastMath.cos(curAngle)*radius;
+					float x = FastMath.sin(curAngle)*radiusL;//sin and cos mixed up? seems to work...
+					float y = FastMath.cos(curAngle)*radiusL;
 					tooth.getLocalTranslation().set( x,0,y);
 					
 					tooth.getLocalRotation().fromAngleNormalAxis(curAngle, Vector3f.UNIT_Y);
@@ -170,22 +183,30 @@ public class GearStructure extends CylinderStructure {
 		float b = 2f*(radius-height*tanA2 - (w2)*tanA);
 		float c = -(w2*w2 + 2f*w2*height*tanA);
 		
-		float ans =  quadraticFormula(a,b,c);
+		float ans = (float)  quadraticFormulaPlus(a,b,c);
 		if (!Float.isNaN(ans))
 			return ans;
 		return approximateHeight(height,width,angle,radius);
 		//return 0;
 	}
 	
-	public static float quadraticFormula(float a, float b, float c) {
+	public static double quadraticFormulaPlus(double a, double b, double c) {
 		//positive only, if it exists
-		float det = (b*b)- 4f*a*c;
+		double det = (b*b)- 4.0*a*c;
 		if(det<0)
-			return Float.NaN;
+			return Double.NaN;
 		
-		return (-b + FastMath.sqrt(det))/(2f*a);
+		return (-b + Math.sqrt(det))/(2.0*a);
 	}
 
+	public static double quadraticFormulaMinus(double a, double b, double c) {
+		//positive only, if it exists
+		double det = (b*b)- 4.0*a*c;
+		if(det<0)
+			return Double.NaN;
+		
+		return (-b - Math.sqrt(det))/(2.0*a);
+	}
 
 
 	public static float approximateHeight(float height, float width, float angle,

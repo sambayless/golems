@@ -181,14 +181,14 @@ public class RackGearStructure extends BoxStructure {
 		float b = 2f*(radius-height*tanA2 - (w2)*tanA);
 		float c = -(w2*w2 + 2f*w2*height*tanA);
 		
-		float ans =  quadraticFormula(a,b,c);
+		float ans =  quadraticFormulaPlus(a,b,c);
 		if (!Float.isNaN(ans) && !Float.isInfinite(ans))
 			return ans;*/
 		float approx = approximateHeight(height,width,angle,radius);
 		return approx;
 	}
 	
-	public static float quadraticFormula(float a, float b, float c) {
+	public static float quadraticFormulaPlus(float a, float b, float c) {
 		//positive only, if it exists
 		float det = (b*b)- 4f*a*c;
 		if(det<0)
@@ -197,6 +197,15 @@ public class RackGearStructure extends BoxStructure {
 		return (-b + FastMath.sqrt(det))/(2f*a);
 	}
 
+	
+	public static double quadraticFormulaMinus(double a, double b, double c) {
+		//positive only, if it exists
+		double det = (b*b)- 4.0*a*c;
+		if(det<0)
+			return Double.NaN;
+		
+		return (-b - Math.sqrt(det))/(2.0*a);
+	}
 
 
 	public static float approximateHeight(float height, float width, float angle,

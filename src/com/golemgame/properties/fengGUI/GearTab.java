@@ -164,10 +164,25 @@ public class GearTab extends PropertyTabAdapter {
 						double angle = store.getFloat(RackGearInterpreter.TOOTH_ANGLE);
 					
 						double radius = interpreter.getStore().getFloat(CylinderInterpreter.CYL_RADIUS);
+						double numberOfTeeth = 0;
+						//double fullWidth =  width*2.0 + (float)Math.tan(angle/2.0)*height*2.0;
+						{	
+							double R = (float) Math.sqrt( (radius + height)*(radius + height) + width*width/4.0) ;
+							
+							//equation for the line of the gear edge
+							double m = Math.tan(angle/2.0);
+							double b = m*R;//y intersect is slope times BIG R.
+							
+							double xIntersect = quadraticFormula(m*m+1.0,2.0*m*b,b*b-radius*radius);
+							if(Double.isNaN(xIntersect))
+								xIntersect = 0.0;				
+							double radiansPerToothAngle = Math.abs(Math.acos(Math.abs(xIntersect)/radius));
+							double radiansPerToothWidth = 2.0*Math.asin(width/(2.0*radius));
+	
+							double radiansPerToothCur = radiansPerToothAngle*2.0 + radiansPerToothWidth*2.0;
+							 numberOfTeeth =(int)Math.floor(FastMath.TWO_PI/radiansPerToothCur);
+						}
 						
-						double fullWidth =  width*2.0 + (float)Math.tan(angle/2.0)*height*2.0;
-					
-						double numberOfTeeth =(int)Math.floor( 2.0*Math.PI*radius/fullWidth);//interpreter.getNumberOfTeeth();
 
 						double radiansPerTooth = FastMath.TWO_PI/numberOfTeeth;
 						
@@ -183,14 +198,21 @@ public class GearTab extends PropertyTabAdapter {
 						int its = 0;
 						double dif = 1;
 						double lastGreater = radius;
-						double lastWidth = 0;
+					//	double lastWidth = 0;
 						//do a binary search for the best fit.
 						
 						double smaller = 0;
+						
+						
+						double bestErr = Double.POSITIVE_INFINITY;
+						//double bestRadius =radius;
+						
 						double larger = radius*100.0;
-						double nRadius =( smaller + larger)/2.0;
+						
+						double allowance = FastMath.FLT_EPSILON;
 						while (its++<MAX_ITERATIONS)
-						{							
+						{		
+							double nRadius =( smaller + larger)/2.0;
 							double radiansPerToothWidth = 2.0*Math.asin(width/(2.0*nRadius));
 
 							double R = (float) Math.sqrt( (nRadius + height)*(nRadius + height) + width*width/4.0) ;
@@ -206,24 +228,48 @@ public class GearTab extends PropertyTabAdapter {
 							
 							double radiansPerToothCur = radiansPerToothAngle*2.0 + radiansPerToothWidth*2.0;
 							
+							double newNumberOfTeeth =FastMath.TWO_PI/radiansPerToothCur;//intentionally use floating point for this calc
+							
+							if(newNumberOfTeeth<numberOfTeeth + 0.00001f) //allow a little room for floating point error later
+							{
+								smaller = nRadius;
+								continue;
+							}else if (newNumberOfTeeth>numberOfTeeth + 1.0 - 0.00001f)
+							{
+								larger = nRadius;
+								continue;
+							}
+							newNumberOfTeeth = Math.floor(newNumberOfTeeth);
+							
 							//, now find the unrounded number of teeth that can fit in this new radius, using this radians per tooth
 							 
-							double curDif = radiansPerTooth - radiansPerToothCur;
-						
+							//double curDif = radiansPerTooth - radiansPerToothCur;
+							double localRadiansPerTooth = Math.PI*2.0/newNumberOfTeeth;
 							
-							if(curDif>=0 && curDif<dif)
+							double theta = localRadiansPerTooth - radiansPerToothAngle*2.0 - radiansPerToothWidth;
+
+							double baseWidth = 2.0*(radius)*Math.sin(theta/2f);
+							double err = baseWidth - width;
+							
+							if(Math.abs(err)<bestErr)
 							{
-								lastGreater = nRadius;
-								nRadius = nRadius * 0.9999;
-								dif = curDif;
-								lastWidth = radiansPerToothWidth;
-							}else{
-								System.out.println("Breka");
+								bestErr = Math.abs(err);
+								lastGreater = nRadius; //this is a catch, because the function doesnt decrease monotonically it seems.
+							}
+							if(err> allowance)
+							{
+								larger = nRadius;
+							}else if (err<-allowance)
+							{
+								smaller = nRadius;
+							}else
+							{
 								break;
 							}
+				
 							
 						}
-						System.out.println(its + "\t" + MAX_ITERATIONS);
+					//	System.out.println(its + "\t" + MAX_ITERATIONS);
 						double R = (float) Math.sqrt( (lastGreater + height)*(lastGreater + height) + width*width/4.0) ;
 						
 						//equation for the line of the gear edge
@@ -237,11 +283,18 @@ public class GearTab extends PropertyTabAdapter {
 
 						double radiansPerToothWidth  = 2.0*Math.asin(width/(2.0*lastGreater));; //=2.0*Math.abs( Math.atan(width/(2.0*lastGreater)) );
 					//	double lastDif =  radiansPerTooth -radiansPerToothWidth*2.0;
-						double theta = radiansPerTooth - radiansPerToothAngle*2.0 - radiansPerToothWidth;
+						double radiansPerToothCur = radiansPerToothAngle*2.0 + radiansPerToothWidth*2.0;
+						
+						double newNumberOfTeeth =(int)Math.floor(FastMath.TWO_PI/radiansPerToothCur);
+						
+						double localRadiansPerTooth = Math.PI*2.0/newNumberOfTeeth;
+						double theta = localRadiansPerTooth - radiansPerToothAngle*2.0 - radiansPerToothWidth;
 
 						double baseWidth = 2.0*(radius)*Math.sin(theta/2f);
 						double err = baseWidth - width;
-						System.out.println(dif  + "\t" + err);
+						
+					
+					//	System.out.println(lastGreater + "\t" + err + "\t" + newNumberOfTeeth);
 						newRadius =(float) lastGreater;
 						
 						//double radiansPerToothWidth =2.0*Math.abs( Math.atan(width/(2.0*newRadius)) );

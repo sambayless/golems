@@ -38,23 +38,35 @@ public class OdeGearStructure extends OdeCylinderStructure{
 		float width = interpreter.getToothWidth();
 		float angle = interpreter.getToothAngle();
 	//	int numberOfTeeth = interpreter.getNumberOfTeeth();
-		
+		float radius = super.getInterpreter().getRadius();
 		float deltaH = 0;
 		if(!(width == 0 && angle == 0 ))
-			deltaH = GearStructure.exactHeight(height,width,angle,super.getInterpreter().getRadius());
+			deltaH = GearStructure.exactHeight(height,width,angle,radius);
 
-		height += deltaH;
-		float fullWidth = width*2f + (float)Math.tan(angle/2f)*height*2f;
 		
 		
-		int numberOfTeeth;
-		if(width == 0 && angle == 0 )
-		{
-			numberOfTeeth = 0;	//remove all teeth
-		
-		}else
-			numberOfTeeth =(int)Math.floor( 2f*FastMath.PI*super.getInterpreter().getRadius()/fullWidth);//interpreter.getNumberOfTeeth();
-		
+		float totalHeight = height + deltaH;
+	//	float fullWidth = width*2f + (float)Math.tan(angle/2f)*totalHeight*2f;
+		double numberOfTeeth = 0;
+		//double fullWidth =  width*2.0 + (float)Math.tan(angle/2.0)*height*2.0;
+		{	
+			double R = (float) Math.sqrt( (radius + height)*(radius + height) + width*width/4.0) ;
+			
+			//equation for the line of the gear edge
+			double m = Math.tan(angle/2.0);
+			double b = m*R;//y intersect is slope times BIG R.
+			
+			double xIntersect = quadraticFormulaMinus(m*m+1.0,2.0*m*b,b*b-radius*radius);
+			if(Double.isNaN(xIntersect))
+				xIntersect = 0.0;				
+			double radiansPerToothAngle = Math.abs(Math.acos(Math.abs(xIntersect)/radius));
+			double radiansPerToothWidth = 2.0*Math.asin(width/(2.0*radius));
+
+			double radiansPerToothCur = radiansPerToothAngle*2.0 + radiansPerToothWidth*2.0;
+			 numberOfTeeth =Math.floor( FastMath.TWO_PI/radiansPerToothCur);
+
+			//	System.out.println(radius + "\t" + baseWidth + "\t" + width + "\t" + numberOfTeeth + "(" +  2.0*Math.PI/radiansPerToothCur + ")");
+		}
 			
 		
 		
@@ -91,11 +103,11 @@ public class OdeGearStructure extends OdeCylinderStructure{
 			float radiansPerTooth = FastMath.TWO_PI/((float)numberOfTeeth);
 			
 			GearTooth firstTooth = collidableTeeth.get(0);
-			firstTooth.rebuild(height, width, angle);
+			firstTooth.rebuild(totalHeight, width, angle);
 		
 	
 			
-			float radius = super.getInterpreter().getRadius()-deltaH*1.3f;
+			float radiusL = super.getInterpreter().getRadius()-deltaH*1.3f;
 			
 			//evenly disperse the teeth around the circle.
 			
@@ -107,8 +119,8 @@ public class OdeGearStructure extends OdeCylinderStructure{
 				tooth.copyFrom(firstTooth);
 				
 				float curAngle = radiansPerTooth*((float)i);
-				float x = FastMath.sin(curAngle)*radius;
-				float y = FastMath.cos(curAngle)*radius;
+				float x = FastMath.sin(curAngle)*radiusL;
+				float y = FastMath.cos(curAngle)*radiusL;
 				tooth.getLocalTranslation().set( x,0,y);
 				
 			
@@ -122,6 +134,15 @@ public class OdeGearStructure extends OdeCylinderStructure{
 		}			
 	}
 
+
+	public static double quadraticFormulaMinus(double a, double b, double c) {
+		//positive only, if it exists
+		double det = (b*b)- 4.0*a*c;
+		if(det<0)
+			return Double.NaN;
+		
+		return (-b - Math.sqrt(det))/(2.0*a);
+	}
 
 
 	@Override

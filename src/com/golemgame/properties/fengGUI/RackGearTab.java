@@ -115,15 +115,28 @@ public class RackGearTab extends PropertyTabAdapter {
 						{
 							double theta;
 						
-							double fullWidth = width*2.0 + Math.tan(angle/2.0)*height*2.0;
-							double numberOfTeeth;
-							if(width == 0 && angle == 0 )
-							{
-								numberOfTeeth = 0;	//remove all teeth
-								return true;//nothing to do here
-							}else
-								numberOfTeeth =(int)Math.floor( 2f*FastMath.PI*radius/fullWidth);//interpreter.getNumberOfTeeth();
+							double numberOfTeeth = 0;
+							//double fullWidth =  width*2.0 + (float)Math.tan(angle/2.0)*height*2.0;
+							{	
+								double R = (float) Math.sqrt( (radius + height)*(radius + height) + width*width/4.0) ;
+								
+								//equation for the line of the gear edge
+								double m = Math.tan(angle/2.0);
+								double b = m*R;//y intersect is slope times BIG R.
+								
+								double xIntersect = quadraticFormula(m*m+1.0,2.0*m*b,b*b-radius*radius);
+								if(Double.isNaN(xIntersect))
+									xIntersect = 0.0;				
+								double radiansPerToothAngle = Math.abs(Math.acos(Math.abs(xIntersect)/radius));
+								double radiansPerToothWidth = 2.0*Math.asin(width/(2.0*radius));
+		
+								double radiansPerToothCur = radiansPerToothAngle*2.0 + radiansPerToothWidth*2.0;
+								 numberOfTeeth =(int)Math.floor( 2.0*Math.PI/radiansPerToothCur);
+								 
+						
+							}
 							
+			
 							//float deltaH = GearStructure.exactHeight(height,width,angle,radius);
 							
 							/**
