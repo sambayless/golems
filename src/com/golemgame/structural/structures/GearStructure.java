@@ -26,10 +26,10 @@ public class GearStructure extends CylinderStructure {
 	
 	private List<GearTooth> teeth = new ArrayList<GearTooth>();
 	
-	private float height;
+/*	private float height;
 	private float width;
 	private float angle;
-	private float curRadius = -1;
+	private float curRadius = -1;*/
 	private Model[] appearanceModels;
 	@Override
 	public Model[] getAppearanceModels() {
@@ -75,17 +75,17 @@ public class GearStructure extends CylinderStructure {
 
 		this.toothModel.getLocalScale().y = super.getInterpreter().getHeight();
 		toothModel.updateWorldData();
-		boolean needsChange = false;
+		//boolean needsChange = false;
 		
-		needsChange = (height != interpreter.getToothHeight()) ||  (width != interpreter.getToothWidth()) 
-		||  (angle != interpreter.getToothAngle()) ||  (teeth.size() != interpreter.getNumberOfTeeth())
+	/*	needsChange = (height != interpreter.getToothHeight()) ||  (width != interpreter.getToothWidth()) 
+		||  (angle != interpreter.getToothAngle())// ||  (teeth.size() != interpreter.getNumberOfTeeth())
 		|| (curRadius != super.getInterpreter().getRadius());
 		
-		if(needsChange)
+		if(needsChange)*/
 		{
-			height = interpreter.getToothHeight();
-			width = interpreter.getToothWidth();
-			angle = interpreter.getToothAngle();
+			float height = interpreter.getToothHeight();
+			float width = interpreter.getToothWidth();
+			float angle = interpreter.getToothAngle();
 			
 			
 			
@@ -94,6 +94,7 @@ public class GearStructure extends CylinderStructure {
 				deltaH = exactHeight(height,width,angle,super.getInterpreter().getRadius());
 	
 			height += deltaH;
+			
 			float fullWidth = width*2f + (float)Math.tan(angle/2f)*height*2f;
 			
 			

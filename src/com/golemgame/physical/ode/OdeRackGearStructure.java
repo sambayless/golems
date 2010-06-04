@@ -40,9 +40,9 @@ public class OdeRackGearStructure extends OdeBoxStructure{
 	//	int numberOfTeeth = interpreter.getNumberOfTeeth();
 		
 		float deltaH = 0;
-		if(!(width == 0 && angle == 0 ))
+	/*	if(!(width == 0 && angle == 0 ))
 			deltaH = GearStructure.exactHeight(height,width,angle,super.interpreter.getExtent().y);
-
+*/
 		height += deltaH;
 		float fullWidth = width*2f + (float)Math.tan(angle/2f)*height*2f;
 		
@@ -113,8 +113,8 @@ public class OdeRackGearStructure extends OdeBoxStructure{
 				tooth.setHasWidth(width>0f);
 				tooth.copyFrom(firstTooth);
 				
-				
-				tooth.getLocalTranslation().set( super.interpreter.getExtent().getY(),0,x - curWidth + (fullWidth-width)/2f);
+				float pos = x - curWidth + (fullWidth-width)/2f;
+				tooth.getLocalTranslation().set( super.interpreter.getExtent().getY(),0,pos);
 				x+= spacing;
 				tooth.getLocalRotation().fromAngleNormalAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
 				

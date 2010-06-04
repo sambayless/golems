@@ -129,19 +129,8 @@ public class RackGearTab extends PropertyTabAdapter {
 							/**
 							 * R is the radial distance from the center of the cylinder to the edge of the tooth (NOT the center).
 							 */
-							double R = (float) Math.sqrt( (radius + height)*(radius + height) + width*width/4f) ;
+							double R = (float) Math.sqrt( (radius + height)*(radius + height) + width*width/4.0) ;
 													
-							//we need to find the intersection between the (angled) side of the gear and
-							//the cylinder to find out the arc that is subtended by that section.
-							//formula adapted from http://mathworld.wolfram.com/Circle-LineIntersection.html
-		/*					float dx = R;
-							float dy = (float) Math.tan(angle)*R;
-							float dr = (float) Math.sqrt(dx*dx + dy*dy);
-							float D = (float) (-R *  Math.tan(angle)*R);
-							
-							float intersectionX = (float)( D*dy*dx*Math.sqrt(radius*radius*dr*dr - D*D)) / (dr*dr);
-							float intersectionY = -D*dx*Math.abs(dy)*Math.sqrt(radius*radius*dr*dr - D*D)/(dr*dr);*/
-							
 							//equation for the line of the gear edge
 							double m = Math.tan(angle/2.0);
 							double b = m*R;//y intersect is slope times BIG R.
@@ -162,7 +151,7 @@ public class RackGearTab extends PropertyTabAdapter {
 							double radiansPerTooth = FastMath.TWO_PI/((double)numberOfTeeth);
 							
 							//Radians per tooth width at BASE of tooth
-							double radiansPerToothWidth =2.0*Math.abs( Math.atan(width/(2.0*radius)) );
+							double radiansPerToothWidth =2.0*Math.abs( Math.asin(width/(2.0*radius)) );
 							
 						//	float radiansPerToothAngle =  (float)(2.0* Math.asin(width/(R*2f)));
 							
@@ -171,7 +160,7 @@ public class RackGearTab extends PropertyTabAdapter {
 							//ok, so theta should be the width of a tooth
 							
 							//ok, so the width of the base of our tooth (including angled edges) should be 2*R*sin(theta/2)
-							double baseWidth = 2.0*(radius)*Math.tan(theta/2f);
+							double baseWidth = 2.0*(radius)*Math.sin(theta/2f);
 							//double baseAngleWidth = Math.tan(angle/2.0)*newToothHeight;
 							
 						//	double newWidth = baseWidth-2.0*baseAngleWidth;

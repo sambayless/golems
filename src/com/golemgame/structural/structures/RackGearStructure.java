@@ -86,13 +86,13 @@ public class RackGearStructure extends BoxStructure {
 		toothModel.updateWorldData();
 		boolean needsChange = false;
 		
-		needsChange = (height != interpreter.getToothHeight()) ||  (width != interpreter.getToothWidth()) 
-		||  (angle != interpreter.getToothAngle())
-		||  (teeth.size() != interpreter.getNumberOfTeeth())
+	//	needsChange = (height != interpreter.getToothHeight()) ||  (width != interpreter.getToothWidth()) 
+		/*||  (angle != interpreter.getToothAngle())
+	//	||  (teeth.size() != interpreter.getNumberOfTeeth())
 		|| (curLength != super.getInterpreter().getExtent().x)
-		|| (curWidth != super.getInterpreter().getExtent().z);
+		|| (curWidth != super.getInterpreter().getExtent().z);*/
 		
-		if(needsChange)
+	//	if(needsChange)
 		{
 			height = interpreter.getToothHeight();
 			width = interpreter.getToothWidth();
@@ -102,16 +102,15 @@ public class RackGearStructure extends BoxStructure {
 			
 			
 			float deltaH = 0;
-			if(!(width == 0 && angle == 0 ))
-				deltaH = exactHeight(height,width,angle, super.getInterpreter().getExtent().y);
 	
-			height += deltaH;
-			float fullWidth = width*2f  + (float)Math.tan(angle/2f)*height*2f;
-			
+			//System.out.println(deltaH);
+			float localHeight = height + deltaH;
+			float fullWidth = width*2f  + (float)Math.tan(angle/2f)*localHeight*2f;
+		//	System.out.println(fullWidth + "\t" + width + "\t" + angle + "\t" + localHeight);
 			
 		//	approximateHeight(height,width,angle,);		
 			int numberOfTeeth;
-			if(width == 0 || height == 0 )
+			if(width == 0 || localHeight == 0 )
 			{
 				numberOfTeeth = 0;	//remove all teeth
 			
@@ -143,7 +142,7 @@ public class RackGearStructure extends BoxStructure {
 				//float radiansPerTooth = FastMath.TWO_PI/((float)numberOfTeeth);
 				
 				GearTooth firstTooth = teeth.get(0);
-				firstTooth.rebuild(height, width, angle);
+				firstTooth.rebuild(localHeight, width, angle);
 			
 				//disperse the teeth along the length, starting from the left.
 				float spacing = fullWidth;// numberOfTeeth>1? curWidth*2f/((float)(numberOfTeeth-1)):0f;
@@ -155,33 +154,17 @@ public class RackGearStructure extends BoxStructure {
 					tooth.setHasWidth(width>0f);
 					tooth.copyFrom(firstTooth);
 
-					tooth.getLocalTranslation().set( super.getInterpreter().getExtent().getY(), 0,x - curWidth + (fullWidth-width)/2f);
+					float pos = x - curWidth + (fullWidth-width)/2f;
+				/*	if(i ==0)
+						System.out.println(pos + "\t" + x + "\t" + curWidth + "\t" + fullWidth + "\t" + width);*/
+					tooth.getLocalTranslation().set( super.getInterpreter().getExtent().getY(), 0,pos);
 					x+= spacing;
 					tooth.getLocalRotation().fromAngleNormalAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
 					
 					tooth.updateWorldData();
 				}
 				
-			/*	float radius = super.getInterpreter().getRadius()-deltaH*1.3f;
-				
-				//evenly disperse the teeth around the circle.
-				
-				for (int i = 0; i < teeth.size();i++)
-				{
-					GearTooth tooth = teeth.get(i);
-					tooth.setHasSlopes(angle>0f);
-					tooth.setHasWidth(width>0f);
-					tooth.copyFrom(firstTooth);
-					
-					float curAngle = radiansPerTooth*i;
-					float x = FastMath.sin(curAngle)*radius;//sin and cos mixed up? seems to work...
-					float y = FastMath.cos(curAngle)*radius;
-					tooth.getLocalTranslation().set( x,0,y);
-					
-					tooth.getLocalRotation().fromAngleNormalAxis(curAngle, Vector3f.UNIT_Y);
-					
-					tooth.updateWorldData();
-				}*/
+		
 			}			
 		}
 	}
