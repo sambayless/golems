@@ -1,6 +1,7 @@
 package com.golemgame.properties.fengGUI;
 
 import org.fenggui.Button;
+import org.fenggui.CheckBox;
 import org.fenggui.Container;
 import org.fenggui.FengGUI;
 import org.fenggui.TextEditor;
@@ -26,7 +27,6 @@ import com.golemgame.tool.action.UndoManager;
 import com.golemgame.tool.action.information.PropertyStoreInformation;
 import com.jme.math.FastMath;
 import com.jme.math.Quaternion;
-import com.jme.math.Vector3f;
 
 public class GearTab extends PropertyTabAdapter {
 
@@ -41,7 +41,7 @@ public class GearTab extends PropertyTabAdapter {
 	private TextEditor toothAngle;
 	private TextEditor toothWidth;
 	private Button match;
-	
+//	private CheckBox<?> rackGear;
 	private float newRadius=-1f;
 	private Quaternion newRotation=null;
 	
@@ -83,7 +83,8 @@ public class GearTab extends PropertyTabAdapter {
 			}
 			
 		});
-
+	//	rackGear = FengGUI.createCheckBox(toothContainer,"Make this gear a rack gear");
+		
 	}
 
 	
@@ -363,6 +364,11 @@ public class GearTab extends PropertyTabAdapter {
 				super.setValueAltered(CylinderInterpreter.LOCALROTATION, true);
 			}
 			
+		/*	if(super.isAltered(rackGear))
+			{
+				interpreter.getStore().setProperty(key, value)
+			}*/
+			
 			standardClosingBehaviour(toothHeight, GearInterpreter.TOOTH_HEIGHT);
 			standardClosingBehaviour(toothWidth, GearInterpreter.TOOTH_WIDTH);
 			
@@ -387,7 +393,7 @@ public class GearTab extends PropertyTabAdapter {
 		this.interpreter.loadDefaults();
 		tempInterpreter.loadDefaults();
 		initializePrototype();
-		
+			
 		super.associateWithKey(toothAngle, GearInterpreter.TOOTH_ANGLE);
 		super.associateWithKey(toothWidth, GearInterpreter.TOOTH_WIDTH);
 		super.associateWithKey(toothHeight, GearInterpreter.TOOTH_HEIGHT);
@@ -396,6 +402,7 @@ public class GearTab extends PropertyTabAdapter {
 		super.standardOpeningBehaviour(toothWidth, GearInterpreter.TOOTH_WIDTH);
 		super.standardOpeningBehaviour(toothHeight, GearInterpreter.TOOTH_HEIGHT);
 	
+		//super.setUnaltered(rackGear);
 	
 	}
 }

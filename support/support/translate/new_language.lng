@@ -479,6 +479,10 @@ GOLEMS{
         GEAR~
 
         GEAR.TOOLTIP~
+        
+        RACK_GEAR~
+        
+        RACK_GEAR.TOOLTIP~
 
         FORCE_BEAM~
 

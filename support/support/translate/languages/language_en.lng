@@ -110,3 +110,761 @@ VARIANT~
 #Golems Translations
 #(All translations are defaults)
 
+GOLEMS{
+
+	GOLEMS~
+
+	VERSION~
+
+	MAIN_MENU~
+
+	MAIN_MENU{
+
+		OK~
+
+		CANCEL~
+
+		NO~
+
+		YES~
+
+		MAIN~
+
+		FILE_MENU{
+
+			NEW~
+
+			SAVE~
+
+			LOAD~
+
+			IMPORT~
+
+			RECORD~
+
+			EXIT~
+
+		}
+
+		SETTINGS~
+
+		DISPLAY~
+
+		DISPLAY{
+
+			QUALITY~
+
+			QUALITY_LOW~
+
+			QUALITY_NORMAL~
+
+			SETTINGS~
+
+			QUALITY_HIGH~
+
+			RESOLUTION~
+
+			FULL_SCREEN~
+
+			FREQ~
+
+			COLOR_DEPTH~
+
+			FPS~
+
+			VSYNC~
+
+			TOOLTIPS~
+
+			SHOW_TOOLTIPS~
+
+		}
+
+		KEYBOARD~
+
+		KEYBOARD{
+
+			SHORTCUTS~
+
+			CTRL_POINTS~
+
+			ROTATE~
+
+			XY_PLANE~
+
+			YZ_PLANE~
+
+			GRID_SNAP~
+
+			AXIS_LOCK~
+
+			STATICS~
+
+			SHOW_LAYERS~
+
+			ISLAND_SELECT~
+
+			MULTI_SELECT~
+
+			PROPERTIES~
+
+			COPY~
+
+			DEL~
+
+			FOCUS~
+
+			ZOOM~
+
+			NEXT_CAM~
+
+			PREV_CAM~
+
+			DEF_CAM~
+
+			MENU~
+
+			SCREEN_SHOT~
+
+		}
+
+		RECORDING~
+
+		RECORDING{
+
+			FORMAT~
+
+			COMPRESSION~
+
+			QUALITY~
+
+			FPS~
+
+			BEGIN~
+
+			STOP~
+
+			SIZE~
+
+			LENGTH~
+
+			TIME~
+
+			PAUSE~
+
+			MEMORY~
+
+			BEGIN~
+
+			RESUME~
+
+		}
+
+		MACHINE~
+
+		MACHINE{
+
+			NAME~
+
+			DESCRIPTION~
+
+		}
+
+		ENVIRONMENT~
+
+		ENVIRONMENT{
+
+			SPEED~
+
+			SPEED_NORMAL~
+
+			SPEED_PAUSED~
+
+			SPEED_HALF~
+
+			SPEED_DOUBLE~
+
+			SPEED_UNLIMITED~
+
+			GRAVITY~
+
+			GRID_SPACING~
+
+			LOCK~
+
+			UNITS~
+
+			ROTATION~
+
+			ANGLES~
+
+			BACKGROUND~
+
+			COLOR~
+
+			CLOUDS~
+
+			SERENE~
+
+			SUNSET~
+
+			STARS~
+
+			SHOW_GRID~
+
+		}
+
+		EXIT~
+
+		EXIT{
+
+			CHECK~
+
+		}
+
+	}
+
+	STATUSBAR{
+
+		ENGAGE~
+
+		LAYERS~
+
+		SENSORS~
+
+		AXIS~
+
+		SNAP~
+
+		STATIC~
+
+		LAYERS{
+
+			NEW~
+
+			COPY~
+
+			SELECT~
+
+			MOVE~
+
+			DELETE~
+
+			GROUND~
+
+			LOCK~
+
+			HIDE~
+
+		}
+
+	}
+
+	TOOLBAR{
+
+		SHOW_TOOLBAR~
+
+		MENU~
+
+		AUTOCLOSE~
+
+		HIDE~
+
+		MENU.TOOLTIP~
+
+		SELECT~
+
+		SELECT.TOOLTIP~
+
+		ISLAND~
+
+		ISLAND.TOOLTIP~
+
+		ROTATE~
+
+		ROTATE.TOOLTIP~
+
+		STRETCH~
+
+		STRETCH.TOOLTIP~
+
+		WIRE_MODE~
+
+		WIRE_MODE.TOOLTIP~
+
+		BOX~
+
+		BOX.TOOLTIP~
+
+		SPHERE~
+
+		SPHERE.TOOLTIP~
+
+		CYLINDER~
+
+		CYLINDER.TOOLTIP~
+
+		TUBE~
+
+		TUBE.TOOLTIP~
+
+		PYRAMID~
+
+		PYRAMID.TOOLTIP~
+
+		CONE~
+
+		CONE.TOOLTIP~
+
+		ELLIPSOID~
+
+		ELLIPSOID.TOOLTIP~
+
+		CAPSULE~
+
+		CAPSULE.TOOLTIP~
+
+		AXLE~
+
+		AXLE.TOOLTIP~
+
+		HINGE~
+
+		HINGE.TOOLTIP~
+
+		HYDRAULIC~
+
+		HYDRAULIC.TOOLTIP~
+
+		BALL_SOCKET~
+
+		BALL_SOCKET.TOOLTIP~
+
+		BATTERY~
+
+		BATTERY.TOOLTIP~
+
+		FUNCTION~
+
+		FUNCTION.TOOLTIP~
+
+		INPUT~
+
+		INPUT.TOOLTIP~
+
+		OSCILLOSCOPE~
+
+		OSCILLOSCOPE.TOOLTIP~
+
+		TOUCH~
+
+		TOUCH.TOOLTIP~
+
+		DISTANCE~
+
+		DISTANCE.TOOLTIP~
+
+		MULTIMETER~
+
+		MULTIMETER.TOOLTIP~
+
+		CONTACT~
+
+		CONTACT.TOOLTIP~
+
+		ROCKET~
+
+		ROCKET.TOOLTIP~
+
+		GEAR~
+
+		GEAR.TOOLTIP~
+
+		RACK_GEAR~
+
+		RACK_GEAR.TOOLTIP~
+
+		FORCE_BEAM~
+
+		FORCE_BEAM.TOOLTIP~
+
+		CAMERA~
+
+		CAMERA.TOOLTIP~
+
+	}
+
+	PROPERTIES~
+
+	PROPERTIES{
+
+		MATTER~
+
+		MATTER{
+
+			DENSITY~
+
+			MATERIAL~
+
+			DEFAULT~
+
+			IRON~
+
+			WOOD~
+
+			CONCRETE~
+
+			GRANITE~
+
+			GLASS~
+
+			PLASTIC~
+
+			RUBBER~
+
+			ICE~
+
+			HELIUM~
+
+			STATIC_DESCRIPTION~
+
+			STICKY_DESCRIPTION~
+
+			POSITION~
+
+			ROTATION~
+
+			SIZE~
+
+			RADIUS~
+
+			HEIGHT~
+
+			WIDTH~
+
+			LENGTH~
+
+			RADIUS_INNER~
+
+			ARC~
+
+			INPUT~
+
+		}
+
+		APPEARANCE~
+
+		APPEARANCE{
+
+			PRIMARY~
+
+			HIGHLIGHT~
+
+			SHOW_TEXT~
+
+			NONE~
+
+			CAMO~
+
+			CHECKERS~
+
+			METAL_GALV~
+
+			RIVETS~
+
+			SPOTS~
+
+			STAR~
+
+			STARS~
+
+			STEEL_BOX~
+
+			STRIPES~
+
+			TREADPLATE~
+
+			CHOOSER~
+
+			HUE~
+
+			SATURATION~
+
+			LUMINOSITY~
+
+			RED~
+
+			GREEN~
+
+			BLUE~
+
+			ALPHA~
+
+		}
+
+		MOTOR~
+
+		MOTOR{
+
+			BEARING~
+
+			RADIUS_LEFT~
+
+			RADIS_RIGHT~
+
+			LENGTH_LEFT~
+
+			LENGTH_RIGHT~
+
+			ANGLE_LEFT~
+
+			ANGLE_RIGHT~
+
+			DISTANCE~
+
+			MIN_DISTANCE~
+
+			MAX_DISTANCE~
+
+			MIN_SEP~
+
+			MAX_SEP~
+
+			JOINT_UNIVERSAL~
+
+			UNIVERSAL_JOINT_DESCRIPTION~
+
+			JOINT_LENGTH~
+
+			JOINT_RADIUS~
+
+			BALL_RADIUS~
+
+			MOTOR_DESCRIPTION_INPUT~
+
+			MOTOR_DESCRIPTION_OUTPUT~
+
+			FORCE~
+
+			VELOCITY~
+
+			ACCELERATION~
+
+			MAX_VEL~
+
+			MAX_FORCE~
+
+			SPRING~
+
+			SPRING_DESCRIPTION~
+
+			SPRING_CONSTANT~
+
+			SPRING_FRICTION~
+
+		}
+
+		SENSOR~
+
+		SENSOR{
+
+			IGNORE_ATTACHED~
+
+			IGNORE_JOINTS~
+
+			IGNORE_NON_STATIC~
+
+			IGNORE_STATIC~
+
+		}
+
+		BATTERY~
+
+		BATTERY{
+
+		}
+
+		ROCKET~
+
+		ROCKET{
+
+			MAX_FORCE~
+
+			EFFECTS~
+
+			EFFECT_ORIGINAL~
+
+			EFFECT_MAGIC~
+
+			EFFECT_NOVA~
+
+			EFFECT_PLASMA~
+
+			EFFECT_RINGS~
+
+			EFFECT_ROCKET~
+
+			EFFECT_SAT_V~
+
+			EFFECT_SMOKE~
+
+			EFFECT_SPARK~
+
+			EFFECT_SPUTTER~
+
+			EFFECT_NAME~
+
+			LUMINESCENT~
+
+			ANGLE~
+
+			LIFESPAN~
+
+			SIZE~
+
+			PARTICLE_NUM~
+
+			VELOCITY~
+
+			SAVE~
+
+			ENABLE~
+
+		}
+
+		FORCE_BEAM{
+
+			MAX_FORCE~
+
+			BEAM_LENGTH~
+
+			SHOW_BEAM~
+
+			LUMINOUS_BEAM~
+
+			COLOR_PUSH~
+
+			COLOR_PULL~
+
+		}
+
+		GEAR{
+
+			TOOTH_WIDTH~
+
+			TOOTH_HEGIHT~
+
+			TOOTH_ANGLE~
+
+		}
+
+		MULTIMETER{
+
+			ALTITUDE~
+
+			MAX_HEIGHT~
+
+			MIN_HEIGHT~
+
+			ORIENTATION~
+
+			POSITION~
+
+			RELATIVE~
+
+			MAX_X_RANGE~
+
+			MIN_X_RANGE~
+
+			VELOCITY~
+
+			ACCELERATION~
+
+		}
+
+		CAMERA{
+
+			LOCK~
+
+			TRIGGER~
+
+		}
+
+		INPUT{
+
+			DEVICE_NAME~
+
+			TYPE~
+
+			SLIDER~
+
+			TEXT~
+
+			KEY_EVENT_TYPE~
+
+			HOLD_DOWN~
+
+			TOGGLE~
+
+			KEY~
+
+			UNKNOWN~
+
+			OUTPUT_NEGATIVE_DESCRIPTION~
+
+		}
+
+		FUNCTION{
+
+			FUN_UNNAMED~
+
+			FUN_LINE~
+
+			FUN_ZERO~
+
+			FUN_PARABOLA~
+
+			FUN_CUBIC~
+
+			FUN_SINE~
+
+			FUN_SQRT~
+
+			FUN_COS~
+
+			FUN_DERIVATIVE~
+
+			FUNCTION_NAME~
+
+			OPTIONS_BATTERY~
+
+			OPTIONS_MODIFIER~
+
+			SWITCH~
+
+			THRESHOLD_DESCRIPTION~
+
+			SWITCH_THRESHOLD~
+
+			THRESHOLD_DESCRIPTION_2~
+
+			THRESHOLD_DESCRIPTION_3~
+
+			SWITCH_ACTION~
+
+			TURN_ON~
+
+			INVERT~
+
+			HOLD~
+
+			MULT~
+
+			EXAMPLE~
+
+		}
+
+	}
+
+}
+

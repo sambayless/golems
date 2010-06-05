@@ -110,6 +110,378 @@ VARIANT~
 #Golems Translations
 GOLEMS{
 
+PROPERTIES~
+
+PROPERTIES{
+
+	MATTER~
+
+	MATTER{
+
+		DENSITY~
+
+		MATERIAL~
+
+		DEFAULT~
+
+		IRON~
+
+		WOOD~
+
+		CONCRETE~
+
+		GRANITE~
+
+		GLASS~
+
+		PLASTIC~
+
+		RUBBER~
+
+		ICE~
+
+		HELIUM~
+
+		STATIC_DESCRIPTION~
+
+		STICKY_DESCRIPTION~
+
+		POSITION~
+
+		ROTATION~
+
+		SIZE~
+
+		RADIUS~
+
+		HEIGHT~
+
+		WIDTH~
+
+		LENGTH~
+
+		RADIUS_INNER~
+
+		ARC~
+
+		INPUT~
+
+	}
+
+	APPEARANCE~
+
+	APPEARANCE{
+
+		PRIMARY~
+
+		HIGHLIGHT~
+
+		SHOW_TEXT~
+
+		NONE~
+
+		CAMO~
+
+		CHECKERS~
+
+		METAL_GALV~
+
+		RIVETS~
+
+		SPOTS~
+
+		STAR~
+
+		STARS~
+
+		STEEL_BOX~
+
+		STRIPES~
+
+		TREADPLATE~
+
+		CHOOSER~
+
+		HUE~
+
+		SATURATION~
+
+		LUMINOSITY~
+
+		RED~
+
+		GREEN~
+
+		BLUE~
+
+		ALPHA~
+
+	}
+
+	MOTOR~
+
+	MOTOR{
+
+		BEARING~
+
+		RADIUS_LEFT~
+
+		RADIS_RIGHT~
+
+		LENGTH_LEFT~
+
+		LENGTH_RIGHT~
+
+		ANGLE_LEFT~
+
+		ANGLE_RIGHT~
+
+		DISTANCE~
+
+		MIN_DISTANCE~
+
+		MAX_DISTANCE~
+
+		MIN_SEP~
+
+		MAX_SEP~
+
+		JOINT_UNIVERSAL~
+
+		UNIVERSAL_JOINT_DESCRIPTION~
+
+		JOINT_LENGTH~
+
+		JOINT_RADIUS~
+
+		BALL_RADIUS~
+
+		MOTOR_DESCRIPTION_INPUT~
+
+		MOTOR_DESCRIPTION_OUTPUT~
+
+		FORCE~
+
+		VELOCITY~
+
+		ACCELERATION~
+
+		MAX_VEL~
+
+		MAX_FORCE~
+
+		SPRING~
+
+		SPRING_DESCRIPTION~
+
+		SPRING_CONSTANT~
+
+		SPRING_FRICTION~
+
+	}
+
+	SENSOR~
+
+	SENSOR{
+
+		IGNORE_ATTACHED~
+
+		IGNORE_JOINTS~
+
+		IGNORE_NON_STATIC~
+
+		IGNORE_STATIC~
+
+	}
+
+	BATTERY~
+
+	BATTERY{
+
+	}
+
+	ROCKET~
+
+	ROCKET{
+
+		MAX_FORCE~
+
+		EFFECTS~
+
+		EFFECT_ORIGINAL~
+
+		EFFECT_MAGIC~
+
+		EFFECT_NOVA~
+
+		EFFECT_PLASMA~
+
+		EFFECT_RINGS~
+
+		EFFECT_ROCKET~
+
+		EFFECT_SAT_V~
+
+		EFFECT_SMOKE~
+
+		EFFECT_SPARK~
+
+		EFFECT_SPUTTER~
+
+		EFFECT_NAME~
+
+		LUMINESCENT~
+
+		ANGLE~
+
+		LIFESPAN~
+
+		SIZE~
+
+		PARTICLE_NUM~
+
+		VELOCITY~
+
+		SAVE~
+
+		ENABLE~
+
+	}
+
+	FORCE_BEAM{
+
+		MAX_FORCE~
+
+		BEAM_LENGTH~
+
+		SHOW_BEAM~
+
+		LUMINOUS_BEAM~
+
+		COLOR_PUSH~
+
+		COLOR_PULL~
+
+	}
+
+	GEAR{
+
+		TOOTH_WIDTH~
+
+		TOOTH_HEGIHT~
+
+		TOOTH_ANGLE~
+
+	}
+
+	MULTIMETER{
+
+		ALTITUDE~
+
+		MAX_HEIGHT~
+
+		MIN_HEIGHT~
+
+		ORIENTATION~
+
+		POSITION~
+
+		RELATIVE~
+
+		MAX_X_RANGE~
+
+		MIN_X_RANGE~
+
+		VELOCITY~
+
+		ACCELERATION~
+
+	}
+
+	CAMERA{
+
+		LOCK~
+
+		TRIGGER~
+
+	}
+
+	INPUT{
+
+		DEVICE_NAME~
+
+		TYPE~
+
+		SLIDER~
+
+		TEXT~
+
+		KEY_EVENT_TYPE~
+
+		HOLD_DOWN~
+
+		TOGGLE~
+
+		KEY~
+
+		UNKNOWN~
+
+		OUTPUT_NEGATIVE_DESCRIPTION~
+
+	}
+
+	FUNCTION{
+
+		FUN_UNNAMED~
+
+		FUN_LINE~
+
+		FUN_ZERO~
+
+		FUN_PARABOLA~
+
+		FUN_CUBIC~
+
+		FUN_SINE~
+
+		FUN_SQRT~
+
+		FUN_COS~
+
+		FUN_DERIVATIVE~
+
+		FUNCTION_NAME~
+
+		OPTIONS_BATTERY~
+
+		OPTIONS_MODIFIER~
+
+		SWITCH~
+
+		THRESHOLD_DESCRIPTION~
+
+		SWITCH_THRESHOLD~
+
+		THRESHOLD_DESCRIPTION_2~
+
+		THRESHOLD_DESCRIPTION_3~
+
+		SWITCH_ACTION~
+
+		TURN_ON~
+
+		INVERT~
+
+		HOLD~
+
+		MULT~
+
+		EXAMPLE~
+
+	}
+
+}
+
     GOLEMS~
 
     VERSION~ 
@@ -118,6 +490,8 @@ GOLEMS{
 
     MAIN_MENU{
 
+MAIN~
+
         OK~Ok
 
         CANCEL~Annuler
@@ -125,6 +499,378 @@ GOLEMS{
         YES~Oui
 
         NO~Non
+PROPERTIES~
+
+PROPERTIES{
+
+	MATTER~
+
+	MATTER{
+
+		DENSITY~
+
+		MATERIAL~
+
+		DEFAULT~
+
+		IRON~
+
+		WOOD~
+
+		CONCRETE~
+
+		GRANITE~
+
+		GLASS~
+
+		PLASTIC~
+
+		RUBBER~
+
+		ICE~
+
+		HELIUM~
+
+		STATIC_DESCRIPTION~
+
+		STICKY_DESCRIPTION~
+
+		POSITION~
+
+		ROTATION~
+
+		SIZE~
+
+		RADIUS~
+
+		HEIGHT~
+
+		WIDTH~
+
+		LENGTH~
+
+		RADIUS_INNER~
+
+		ARC~
+
+		INPUT~
+
+	}
+
+	APPEARANCE~
+
+	APPEARANCE{
+
+		PRIMARY~
+
+		HIGHLIGHT~
+
+		SHOW_TEXT~
+
+		NONE~
+
+		CAMO~
+
+		CHECKERS~
+
+		METAL_GALV~
+
+		RIVETS~
+
+		SPOTS~
+
+		STAR~
+
+		STARS~
+
+		STEEL_BOX~
+
+		STRIPES~
+
+		TREADPLATE~
+
+		CHOOSER~
+
+		HUE~
+
+		SATURATION~
+
+		LUMINOSITY~
+
+		RED~
+
+		GREEN~
+
+		BLUE~
+
+		ALPHA~
+
+	}
+
+	MOTOR~
+
+	MOTOR{
+
+		BEARING~
+
+		RADIUS_LEFT~
+
+		RADIS_RIGHT~
+
+		LENGTH_LEFT~
+
+		LENGTH_RIGHT~
+
+		ANGLE_LEFT~
+
+		ANGLE_RIGHT~
+
+		DISTANCE~
+
+		MIN_DISTANCE~
+
+		MAX_DISTANCE~
+
+		MIN_SEP~
+
+		MAX_SEP~
+
+		JOINT_UNIVERSAL~
+
+		UNIVERSAL_JOINT_DESCRIPTION~
+
+		JOINT_LENGTH~
+
+		JOINT_RADIUS~
+
+		BALL_RADIUS~
+
+		MOTOR_DESCRIPTION_INPUT~
+
+		MOTOR_DESCRIPTION_OUTPUT~
+
+		FORCE~
+
+		VELOCITY~
+
+		ACCELERATION~
+
+		MAX_VEL~
+
+		MAX_FORCE~
+
+		SPRING~
+
+		SPRING_DESCRIPTION~
+
+		SPRING_CONSTANT~
+
+		SPRING_FRICTION~
+
+	}
+
+	SENSOR~
+
+	SENSOR{
+
+		IGNORE_ATTACHED~
+
+		IGNORE_JOINTS~
+
+		IGNORE_NON_STATIC~
+
+		IGNORE_STATIC~
+
+	}
+
+	BATTERY~
+
+	BATTERY{
+
+	}
+
+	ROCKET~
+
+	ROCKET{
+
+		MAX_FORCE~
+
+		EFFECTS~
+
+		EFFECT_ORIGINAL~
+
+		EFFECT_MAGIC~
+
+		EFFECT_NOVA~
+
+		EFFECT_PLASMA~
+
+		EFFECT_RINGS~
+
+		EFFECT_ROCKET~
+
+		EFFECT_SAT_V~
+
+		EFFECT_SMOKE~
+
+		EFFECT_SPARK~
+
+		EFFECT_SPUTTER~
+
+		EFFECT_NAME~
+
+		LUMINESCENT~
+
+		ANGLE~
+
+		LIFESPAN~
+
+		SIZE~
+
+		PARTICLE_NUM~
+
+		VELOCITY~
+
+		SAVE~
+
+		ENABLE~
+
+	}
+
+	FORCE_BEAM{
+
+		MAX_FORCE~
+
+		BEAM_LENGTH~
+
+		SHOW_BEAM~
+
+		LUMINOUS_BEAM~
+
+		COLOR_PUSH~
+
+		COLOR_PULL~
+
+	}
+
+	GEAR{
+
+		TOOTH_WIDTH~
+
+		TOOTH_HEGIHT~
+
+		TOOTH_ANGLE~
+
+	}
+
+	MULTIMETER{
+
+		ALTITUDE~
+
+		MAX_HEIGHT~
+
+		MIN_HEIGHT~
+
+		ORIENTATION~
+
+		POSITION~
+
+		RELATIVE~
+
+		MAX_X_RANGE~
+
+		MIN_X_RANGE~
+
+		VELOCITY~
+
+		ACCELERATION~
+
+	}
+
+	CAMERA{
+
+		LOCK~
+
+		TRIGGER~
+
+	}
+
+	INPUT{
+
+		DEVICE_NAME~
+
+		TYPE~
+
+		SLIDER~
+
+		TEXT~
+
+		KEY_EVENT_TYPE~
+
+		HOLD_DOWN~
+
+		TOGGLE~
+
+		KEY~
+
+		UNKNOWN~
+
+		OUTPUT_NEGATIVE_DESCRIPTION~
+
+	}
+
+	FUNCTION{
+
+		FUN_UNNAMED~
+
+		FUN_LINE~
+
+		FUN_ZERO~
+
+		FUN_PARABOLA~
+
+		FUN_CUBIC~
+
+		FUN_SINE~
+
+		FUN_SQRT~
+
+		FUN_COS~
+
+		FUN_DERIVATIVE~
+
+		FUNCTION_NAME~
+
+		OPTIONS_BATTERY~
+
+		OPTIONS_MODIFIER~
+
+		SWITCH~
+
+		THRESHOLD_DESCRIPTION~
+
+		SWITCH_THRESHOLD~
+
+		THRESHOLD_DESCRIPTION_2~
+
+		THRESHOLD_DESCRIPTION_3~
+
+		SWITCH_ACTION~
+
+		TURN_ON~
+
+		INVERT~
+
+		HOLD~
+
+		MULT~
+
+		EXAMPLE~
+
+	}
+
+}
+
             
         FILE_MENU{
 
@@ -146,6 +892,8 @@ GOLEMS{
         DISPLAY~Image
 
         DISPLAY{
+
+SETTINGS~
 
             QUALITY~Qualitée de l'image
 
@@ -225,6 +973,20 @@ GOLEMS{
 
         RECORDING{
 
+COMPRESSION~
+
+SIZE~
+
+LENGTH~
+
+TIME~
+
+PAUSE~
+
+MEMORY~
+
+RESUME~
+
             FORMAT~Format de la video
 
             QUALITY~Compression et qualitée (1% a 100%)
@@ -250,6 +1012,8 @@ GOLEMS{
         ENVIRONMENT~Environnement
 
         ENVIRONMENT{
+
+SPEED_NORMAL~
 
             SPEED~Vitesse
 
@@ -339,6 +1103,18 @@ GOLEMS{
 
     TOOLBAR{
 
+MENU~
+
+AUTOCLOSE~
+
+HIDE~
+
+MENU.TOOLTIP~
+
+RACK_GEAR~
+
+RACK_GEAR.TOOLTIP~
+
         SHOW_TOOLBAR~
 
         SELECT~Selection
@@ -419,7 +1195,7 @@ GEAR.TOOLTIP~Créer un engrenage
 FORCE_BEAM.TOOLTIP~Les laser vous permet d'appliquer une force sur les objets que le laser croise, La sortir (dans le mode fils) vous permet de "voir" a quelle distance est située l'objet.
             
         CAMERA~
-.TOOLTIP~Les s vous permette de voir votre création de la ou vous l'avez placée.Appuyer sur $NEXT_ pour passer d'un  a l'autre.
+        CAMERA.TOOLTIP~Les s vous permette de voir votre création de la ou vous l'avez placée.Appuyer sur $NEXT_ pour passer d'un  a l'autre.
 
         }
 

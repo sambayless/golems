@@ -6,7 +6,7 @@ import com.jme.image.Texture;
 public class ToolTipData {
 	
 	private Texture icon;
-	private String message = "TESTESTTEST\ntestmore test\n\ntest";
+	private String message = " ";
 	private Texture background;
 	private String title = new String();
 

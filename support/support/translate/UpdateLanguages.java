@@ -49,8 +49,7 @@ public class UpdateLanguages {
 			
 		    for(File f:langs.listFiles())
 		    {
-		    	if(!f.getName().equalsIgnoreCase("newlang.lng"))
-		    		continue;
+	
 		    	if(f.getName().endsWith(".lng"))
 		    	{
 			    	//Translator translate = new Translator(input);

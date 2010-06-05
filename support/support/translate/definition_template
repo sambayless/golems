@@ -354,7 +354,10 @@ GOLEMS{
         ROCKET.TOOLTIP~A rocket will output a force proportional to its signal. (Wire a battery to the rocket to create a signal). You can adjust the maximum force in its properties menu.
         
        GEAR~ Gear
-        GEAR.TOOLTIP~Create a gear
+        GEAR.TOOLTIP~Create a gear.
+       
+        RACK_GEAR~ Rack Gear
+        RACK_GEAR.TOOLTIP~Create a linear gear.
                
        FORCE_BEAM~ Force Beam
          FORCE_BEAM.TOOLTIP~A force beam that either grapples or pushes. Outputs how close the beam is to the object it hits.

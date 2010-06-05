@@ -363,6 +363,10 @@ GOLEMS{
 
     TOOLBAR{
 
+RACK_GEAR~
+
+RACK_GEAR.TOOLTIP~
+
         SHOW_TOOLBAR~
 
         MENU~
@@ -563,7 +567,7 @@ GOLEMS{
 
             RADIUS_INNER~Promień wewnętrzny
 
-            ARC~Łuk
+            ARC~�?uk
 
             INPUT~
 
@@ -624,7 +628,7 @@ GOLEMS{
 
         MOTOR{
 
-            BEARING~Łożysko
+            BEARING~�?ożysko
 
             RADIUS_LEFT~Lewy promień
 
@@ -810,6 +814,8 @@ GOLEMS{
         }
 
         CAMERA{
+
+TRIGGER~
 
             LOCK~Zapobiegaj obracaniu kamery
 

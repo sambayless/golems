@@ -953,6 +953,7 @@ public class MainToolbar extends Toolbar {
 	Texture hydraulicTexture =loadTexture("buttons/joints/Hydraulic.png");
 	
 	Texture gearTexture =loadTexture("buttons/special/Gear.png");
+	Texture rackGearTexture =loadTexture("buttons/special/RackGear.png");
 	Texture rocketTexture =loadTexture("buttons/special/Rocket.png");
 	Texture sourceTexture =loadTexture("buttons/functionals/Battery.png");
 	Texture diffTexture = loadTexture("buttons/functionals/Slope.png");
@@ -1823,8 +1824,8 @@ public class MainToolbar extends Toolbar {
  	container.addWidget(gear); 
  	
  	
- 	MainButton rackGear = new MainButton(	getTooltip("TOOLBAR.RACKGEAR","Rack Gear"),squareTexture, specialGroup);
- 	IconToolTip.setDescription(gear,  getTooltip("TOOLBAR.RACKGEAR.TOOLTIP","Create a linear gear."));
+ 	MainButton rackGear = new MainButton(	getTooltip("TOOLBAR.RACK_GEAR","Rack Gear"),rackGearTexture, specialGroup);
+ 	IconToolTip.setDescription(rackGear,  getTooltip("TOOLBAR.RACK_GEAR.TOOLTIP","Create a linear gear."));
 
  	rackGear.addButtonListener(new ButtonAdapter()
  	{

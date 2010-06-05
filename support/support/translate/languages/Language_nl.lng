@@ -362,6 +362,10 @@ GOLEMS{
 
     TOOLBAR{
 
+RACK_GEAR~
+
+RACK_GEAR.TOOLTIP~
+
         SHOW_TOOLBAR~
 
         MENU~
@@ -797,6 +801,8 @@ GOLEMS{
         }
 
         CAMERA{
+
+TRIGGER~
 
             LOCK~
 
