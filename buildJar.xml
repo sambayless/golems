@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project basedir="." default="build" name="robotGame">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../Program Files/eclipse3.3/eclipse"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="distribution.userclasspath">
+        <pathelement location="lib/jinput.jar"/>
+        <pathelement location="lib/jogg-0.0.7.jar"/>
+        <pathelement location="lib/jorbis-0.0.15.jar"/>
+        <pathelement location="lib/junit-4.1.jar"/>
+        <pathelement location="lib/lwjgl.jar"/>
+        <pathelement location="lib/lwjgl_util_applet.jar"/>
+        <pathelement location="lib/odejava-jni.jar"/>
+    </path>
+    <path id="robotGame.classpath">
+        <pathelement location="bin"/>
+        <path refid="distribution.userclasspath"/>
+        <pathelement location="jme.jar"/>
+        <pathelement location="jme-audio.jar"/>
+        <pathelement location="jme-awt.jar"/>
+        <pathelement location="jme-collada.jar"/>
+        <pathelement location="jme-editors.jar"/>
+        <pathelement location="jme-effects.jar"/>
+        <pathelement location="jme-font.jar"/>
+        <pathelement location="jme-gamestates.jar"/>
+        <pathelement location="jme-model.jar"/>
+        <pathelement location="jme-physics.jar"/>
+        <pathelement location="jme-scene.jar"/>
+        <pathelement location="jme-terrain.jar"/>
+        <pathelement location="jmetest.jar"/>
+        <pathelement location="jmetest-data-cursor.jar"/>
+        <pathelement location="jmetest-data-images.jar"/>
+        <pathelement location="jmetest-data-model.jar"/>
+        <pathelement location="jmetest-data-skybox1.jar"/>
+        <pathelement location="jmetest-data-sound.jar"/>
+        <pathelement location="jmetest-data-texture.jar"/>
+        <pathelement location="jme-xml.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src" excludes="**/*.launch, **/*.java"/>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="robotGame.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="ConstructorDriver (1)">
+        <java classname="constructor.ConstructorDriver" failonerror="true" fork="yes">
+            <classpath refid="robotGame.classpath"/>
+        </java>
+    </target>
+	<target name="MakeJars">
+        <jar jarfile="robotGame.jar" basedir="bin">
+            <manifest>
+                <attribute name="Class-Path" value="jme.jar jme-awt.jar jme-audio.jar jme-collada.jar jme-editors.jar jme-effects.jar jme-font.jar jme-gamestates.jar jme-model.jar jme-scene.jar jme-terrain.jar jme-xml.jar jme-physics.jar joode.jar lib/lwjgl.jar lib/jinput.jar lib/odejava-jni.jar"/>
+            	<attribute name="Main-Class" value="constructor.ConstructorDriver"/>
+           </manifest>
+        </jar>
+	</target>
+</project>
