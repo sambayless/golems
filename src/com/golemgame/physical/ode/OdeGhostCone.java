@@ -12,7 +12,7 @@ import com.golemgame.mvc.PropertyStore;
 import com.golemgame.mvc.golems.GhostConeInterpreter;
 import com.golemgame.physical.PhysicsComponent;
 import com.golemgame.physical.ode.compile.OdePhysicsEnvironment;
-import com.golemgame.states.physics.PhysicsSpatialMonitor;
+import com.golemgame.states.physics.ode.PhysicsSpatialMonitor;
 import com.jme.math.Vector3f;
 import com.jme.scene.TriMesh;
 import com.jmex.physics.PhysicsCollisionGeometry;

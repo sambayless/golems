@@ -1,17 +1,18 @@
-package com.golemgame.states;
+package com.golemgame.states.physics.ode;
 
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.golemgame.functional.component.BSpace;
 import com.golemgame.functional.component.BUpdateCallback;
+import com.golemgame.states.PhysicsTimeout;
 import com.golemgame.states.physics.PhysicsMonitoredMultithreadedGameState;
 import com.jme.system.DisplaySystem;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.PhysicsUpdateCallback;
 
 
-public class FunctionalPhysicsState extends PhysicsMonitoredMultithreadedGameState {
+public class FunctionalPhysicsState extends OdePhysicsMonitoredMultithreadedGameState {
 	static final long serialVersionUID =1;
 	protected BSpace bSpace;
 	protected DisplaySystem display;

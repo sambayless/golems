@@ -3,7 +3,7 @@ package com.golemgame.mvc.golems;
 
 public final class Golems {
 	
-	public final static String version = "0.56.0";
+	public final static String version = "0.56.1";
 
 	public static String getVersion() {
 		return version;

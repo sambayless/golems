@@ -1,4 +1,4 @@
-package com.golemgame.states;
+package com.golemgame.states.physics.ode;
 
 import java.util.HashMap;
 import java.util.Map;

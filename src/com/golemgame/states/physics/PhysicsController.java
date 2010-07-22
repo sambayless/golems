@@ -176,7 +176,7 @@ public class PhysicsController {
 			}finally{
 				StateManager.getGame().unlock();
 			}*/
-			physicsState.reportPhysicsStatus();
+			//physicsState.reportPhysicsStatus();
 			physicsState.clear();
 		
 			

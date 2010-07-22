@@ -40,11 +40,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.odejava.Body;
-import org.odejava.collision.JavaCollision;
 
 import com.golemgame.constructor.UpdateManager;
 import com.golemgame.constructor.UpdateManager.Stream;
@@ -54,11 +51,11 @@ import com.golemgame.states.StateManager;
 import com.golemgame.util.ManualExecutorService;
 import com.jme.scene.Node;
 import com.jme.system.DisplaySystem;
-import com.jme.util.NanoTimer;
 import com.jme.util.Timer;
 import com.jmex.game.state.BasicGameState;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.impl.ode.OdePhysicsSpace;
+
 
 
 /**
@@ -67,7 +64,7 @@ import com.jmex.physics.impl.ode.OdePhysicsSpace;
  * @author Matthew D. Hicks
  * @author Sam Bayless
  */
-public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
+public abstract class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 
 	private PhysicsRunnable physicsRunnable;
 	
@@ -87,7 +84,7 @@ public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 	 * This node should be the parent for all physics objects.
 	 * It will be updated in the physics thread.
 	 */
-	private final ThreadGuardingNode physicsRoot;
+	private ThreadGuardingNode physicsRoot;
 	
 	private ManualExecutorService physicsExecutor = new ManualExecutorService();
 	
@@ -139,18 +136,10 @@ public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 		this.physicsRunnable.setEnabled(false);
 		shutdown();
 		
-		this.physicsRunnable.physics.delete();
-		
-		if (this.physicsRunnable.physics instanceof OdePhysicsSpace)
-		{
-			OdePhysicsSpace odePhysics = (OdePhysicsSpace) physicsRunnable.physics;
-			odePhysics.getWorld().delete();
-			
-		}
-		
+
 		physicsRoot.removeFromParent();
 		
-		physicsRunnable.physics= null;
+	
 		
 		//physicsRoot = null;
 		
@@ -160,14 +149,24 @@ public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 		
 	}
 	
-	public PhysicsMonitoredMultithreadedGameState(String name) {
+/*	public PhysicsMonitoredMultithreadedGameState(String name) {
 		this(name, 30);
-	}
+	}*/
 	
 	public PhysicsMonitoredMultithreadedGameState(String name, int desiredUpdatesPerSecond) {
 		super(name);
-		physicsRunnable = new PhysicsRunnable(desiredUpdatesPerSecond);
-	//	physicsRunnable.setEnabled(false);
+
+		//DynamicPhysicsNodeImpl.PHYSICSLOCK = this.physicsRunnable.updateLock;
+	}
+	
+	/**
+	 * Must be called by subclasses in the constructor.
+	 * @param physics
+	 */
+	protected void setPhysics(PhysicsRunnable physicsRunnable)
+	{
+		this.physicsRunnable = physicsRunnable;
+		
 		physicsMonitor = new PhysicsMonitor(0.01);
 		
 		physicsThread = new Thread(null, physicsRunnable, "Physics Thread",MemoryManager.getPhysicsMemory()*MemoryManager.MEGABYTE);//4*32MB = 128 MB
@@ -178,14 +177,8 @@ public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 		monitorThread = new Thread(null, physicsMonitor, "Physics Monitoring Thread");
 		monitorThread.setDaemon(true);
 		monitorThread.start();
-	
-		//DynamicPhysicsNodeImpl.PHYSICSLOCK = this.physicsRunnable.updateLock;
 	}
-	
-	public PhysicsSpace getPhysicsSpace() {
-		return this.physicsRunnable.getPhysics();
-	}
-	
+
 	public boolean inPhysicsThread()
 	{
 		return Thread.currentThread()==physicsThread;
@@ -255,20 +248,20 @@ public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 		return physicsRunnable.isEnabled();
 	}
 	
-	public void reportPhysicsStatus()
+/*	public void reportPhysicsStatus()
 	{
-		/*List<Body>  bodies =((OdePhysicsSpace) physicsRunnable.physics).getWorld().getBodies();
+		List<Body>  bodies =((OdePhysicsSpace) physicsRunnable.physics).getWorld().getBodies();
 		
 		String report = "World Status: number of bodies=" + bodies.size() + ", ";
 		for (Body body:bodies)
 		{
 			report += "\t" + body + "(" + body.getGeoms()+ ")";
 		}
-		StateManager.getLogger().log(Level.INFO, report);*/
+		StateManager.getLogger().log(Level.INFO, report);
 		
 	}
-	
-	public int countPhysicsBodies()
+	*/
+/*	public int countPhysicsBodies()
 	{
 		
 		List<Body>  bodies =((OdePhysicsSpace) physicsRunnable.physics).getWorld().getBodies();
@@ -277,7 +270,7 @@ public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 		else 
 			return bodies.size();
 	}
-	
+	*/
 	
 	public void render(float tpf) {
 		int lockReleases = 0;
@@ -458,138 +451,28 @@ public class PhysicsMonitoredMultithreadedGameState extends BasicGameState {
 	protected ReentrantLock getUpdateLock() {
 		return this.physicsRunnable.updateLock;
 	}
-	private class PhysicsRunnable implements Runnable {
-		private PhysicsSpace physics;
-		private long preferredTicksPerFrame;
-		private volatile boolean enabled;
-		private boolean keepAlive;
-		private Timer timer;
-		private boolean limitUpdates;
-		private ReentrantLock updateLock;
+	
+	
 
-		private long desiredUpdatesPerSecond;
-		private Condition enabledCondition;
-		private Condition timePauseCondition;
+	public abstract class PhysicsRunnable implements Runnable{
+
+		protected long preferredTicksPerFrame;
+		protected volatile boolean enabled;
+		protected boolean keepAlive;
+		protected Timer timer;
+		protected boolean limitUpdates;
+		protected ReentrantLock updateLock;
+
+		protected long desiredUpdatesPerSecond;
+		protected Condition enabledCondition;
+		protected Condition timePauseCondition;
 		
-		private volatile boolean paused = false;;
+		protected volatile boolean paused = false;;
 		
 		public boolean isPaused() {
 			return paused;
 		}
-
-		public PhysicsRunnable(int desiredUpdatesPerSecond) {
-			
-			physics = PhysicsSpace.create();
-	/*		((OdePhysicsSpace) physics).setSceneUpdateLock(new SceneUpdateLock()
-			{
-
-				public void lock() {
-				//	StateManager.getGame().lock();
-					
-				}
-
-				public void unlock() {
-				//	StateManager.getGame().unlock();
-				}
-				
-			});*/
-			physics.update(0.01f);
-			enabled = false;
-			keepAlive = true;
-			this.desiredUpdatesPerSecond = desiredUpdatesPerSecond;
-			updateLock = new ReentrantLock(true); // Make our lock be fair (first come, first serve)
-		
-			enabledCondition = updateLock.newCondition();
-			timePauseCondition = updateLock.newCondition();
-			timer = new NanoTimer();
-			if (desiredUpdatesPerSecond == -1) {
-				limitUpdates = false;
-			} else {
-				preferredTicksPerFrame = Math.round((float)timer.getResolution() / (float)desiredUpdatesPerSecond);
-				limitUpdates = true;
-			}
-			physics.setAutoRestThreshold(0.05f);//for unknown reasons, sometimes this seems to freeze?
-		
-			((OdePhysicsSpace) physics).setMaxStepContactsPerNearcallback(1024*16);//default is 4096
-			((OdePhysicsSpace) physics).setInteraction(1);
-			((OdePhysicsSpace) physics).setStepSize(0.01f);
-		//((OdePhysicsSpace) physics).setInteraction(300);
-			//System.out.println(((OdePhysicsSpace) physics).getCFM());
-			//((OdePhysicsSpace) physics).setCFM(0.0002f);
-			//((OdePhysicsSpace) physics).setERP(0.05f);
-			
-		//	((OdePhysicsSpace) physics).getWorld().setMaxCorrectionVelocity(100f);
-		//	((OdePhysicsSpace) physics).getWorld().setErrorReductionParameter(0.5f);
-			//((OdePhysicsSpace) physics).setStepFunction(OdePhysicsSpace.SF_STEP_SIMULATION);
-			((OdePhysicsSpace) physics).setERP(0.75f);
-			((OdePhysicsSpace) physics).setCFM(0.00001f);
-			((OdePhysicsSpace) physics).setUpdateRate(-1);//the physics runnable handles timing issues, dont let the physics space do so.
-		
-			/*
-			 * > I have an ERP of 1.0 and CFM of 0.1. When I change their value that
-> doesn't work correctly.
-> I use dWorldStep my time step is 0.001.
-
-Usually erp should be close to one but not one (I use value around 0.75,
-0.8)
-CFM should be a really small value (I use from 1e-10 to 1e-6).
-
-Remi
-
-- Hide quoted text -
-- Show quoted text -
-> Maybe that could come from another way, but I tried to find it in the
-> ode's documentation without success.
-
-> On 29 juil, 13:40, "Daniel K. O." <danielko.lis...@gmail.com> wrote:
-
->> Tyke91 escreveu:
-
->>> How could I make my joint stronger? Like this it could support the
->>> weight of my arm.
-
->> * Increase ERP, reduce CFM.
->> * dWorldStep instead dWorldQuickStep.
->> * Smaller time steps.
-
->> --
->> Daniel K. O.
->> "The only way to succeed is to build success yourself"
-
-
-    Reply to author    Forward  
-		
-		
-		
-You must Sign in before you can post messages.
-To post a message you must first join this group.
-Please update your nickname on the subscription settings page before posting.
-You do not have the permission required to post.
 	
-		
-Daniel K. O.   	
-View profile
-Tyke91 escreveu: > I have an ERP of 1.0 and CFM of 0.1. The manual says ERP should be in the 0.1 to 0.8 range; I believe values higher than 0.8 hardly help, and might generate instabilities. CFM is very high, so I think this is what is causing the non-rigidity. The default is 0.00001 for single precision (which give pretty rigid joints), so you might try values smaller than that. > When I change their value that > doesn't work correctly. What do you mean by "doesn't work correctly"? Does the simulation crash? -- Daniel K. O. "The only way to succeed is to build success yourself"
-	 More options Jul 29, 7:35 am
-From: "Daniel K. O." <danielko.lis...@gmail.com>
-Date: Tue, 29 Jul 2008 11:35:45 -0300
-Local: Tues, Jul 29 2008 7:35 am
-Subject: [ode-users] Re: Hinge Issue
-Reply to author | Forward | Print | Individual message | Show original | Report this message | Find messages by this author
-Tyke91 escreveu:
-
-> I have an ERP of 1.0 and CFM of 0.1.
-
-The manual says ERP should be in the 0.1 to 0.8 range; I believe values
-higher than 0.8 hardly help, and might generate instabilities.
-
-CFM is very high, so I think this is what is causing the non-rigidity.
-The default is 0.00001 for single precision (which give pretty rigid
-joints), so you might try values smaller than that. 
-			 */
-		
-		}
-		
 		public void setDesiredUpdatesPerSecond(long updates) {
 			updateLock.lock();
 			try{
@@ -612,10 +495,6 @@ joints), so you might try values smaller than that.
 			}
 		}
 
-		public PhysicsSpace getPhysics() {
-			return physics;
-		}
-		
 		public synchronized void setEnabled(boolean enabled) 
 		{//only one thread can change enabled at a time
 			
@@ -671,7 +550,7 @@ joints), so you might try values smaller than that.
 							enabledCondition.await();//put the thread to sleep if it is not enabled	
 					}catch(InterruptedException e)
 					{
-						Logger.getLogger( PhysicsSpace.LOGGER_NAME ).log(Level.SEVERE, "Interrupted while disabled",e);
+						//Logger.getLogger( PhysicsSpace.LOGGER_NAME ).log(Level.SEVERE, "Interrupted while disabled",e);
 					}
 					if(!keepAlive)
 						break;
@@ -685,7 +564,7 @@ joints), so you might try values smaller than that.
 						}
 					}catch(InterruptedException e)
 					{
-						Logger.getLogger( PhysicsSpace.LOGGER_NAME ).log(Level.SEVERE, "Interrupted while disabled",e);
+						//Logger.getLogger( PhysicsSpace.LOGGER_NAME ).log(Level.SEVERE, "Interrupted while disabled",e);
 					}
 					
 					physicsExecutor.manualExecuteUntil(50);
@@ -709,8 +588,8 @@ joints), so you might try values smaller than that.
 								try {
 									Thread.sleep(sleepTime);
 								} catch (InterruptedException exc) {
-									Logger.getLogger( PhysicsSpace.LOGGER_NAME ).log(Level.SEVERE, "Interrupted while sleeping in fixed-framerate",
-													exc);
+								/*	Logger.getLogger( PhysicsSpace.LOGGER_NAME ).log(Level.SEVERE, "Interrupted while sleeping in fixed-framerate",
+													exc);*/
 								}
 								frameDurationTicks = timer.getTime() - frameStartTick;
 							}
@@ -755,6 +634,8 @@ joints), so you might try values smaller than that.
 			
 		}
 		
+		protected abstract void updatePhysics(float tpf);
+		
 		public void update(float tpf) {
 			if (!enabled) return;
 			// Open the lock up for any work that needs to be done
@@ -777,7 +658,8 @@ joints), so you might try values smaller than that.
 			
 			UpdateManager.getInstance().update(tpf, Stream.PHYISCS_UPDATE);
 			try{
-			physics.update(0.02f);
+				updatePhysics(0.02f);
+				//physics.update(0.02f);
 			}finally{
 			//	StateManager.getGame().unlock();
 			}
@@ -839,12 +721,7 @@ joints), so you might try values smaller than that.
 		
 		
 		}
-		
-		public Node getPhysicsRoot()
-		{
-			return physicsRoot;
-		}
-
+	
 		public long getDesiredUpdatesPerSecond() {
 			return desiredUpdatesPerSecond;
 		}
@@ -1112,12 +989,6 @@ joints), so you might try values smaller than that.
 	 * Clear and reset physics - but don't destroy this physics state.
 	 */
 	public void clear() {
-		lock();
-		try{
-			if(this.getPhysicsSpace()!=null)
-				this.getPhysicsSpace().delete();
-		}finally{
-			unlock();
-		}
+		//do nothing by default
 	}
 }

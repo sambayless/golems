@@ -1,4 +1,4 @@
-package com.golemgame.states.physics;
+package com.golemgame.states.physics.ode;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;

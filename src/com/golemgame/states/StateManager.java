@@ -32,6 +32,7 @@ import com.golemgame.mvc.golems.ImageInterpreter.ImageCompression;
 import com.golemgame.states.camera.CameraManager;
 import com.golemgame.states.construct.ConstructionManager;
 import com.golemgame.states.machine.MachineSpaceManager;
+import com.golemgame.states.physics.ode.OdePhysicsState;
 import com.golemgame.states.record.RecordingManager;
 import com.golemgame.tool.ToolManager;
 import com.golemgame.tool.ToolPool;

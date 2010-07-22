@@ -1,4 +1,4 @@
-package com.golemgame.states;
+package com.golemgame.states.physics.ode;
 
 import java.awt.Dimension;
 import java.util.concurrent.Callable;
@@ -22,9 +22,15 @@ import com.golemgame.physical.ode.sound.OdeSoundManager;
 import com.golemgame.properties.fengGUI.MessageBox;
 import com.golemgame.settings.SettingChangedEvent;
 import com.golemgame.settings.SettingsListener;
+import com.golemgame.states.Controllable;
+import com.golemgame.states.GUILayer;
+import com.golemgame.states.GeneralSettings;
+import com.golemgame.states.ShutdownManagerState;
+import com.golemgame.states.StateEventDispatch;
+import com.golemgame.states.StateListener;
+import com.golemgame.states.StateManager;
 import com.golemgame.states.physics.IllegalTransitionException;
 import com.golemgame.states.physics.PhysicsMonitorListener;
-import com.golemgame.states.physics.PhysicsSpatialMonitor;
 import com.golemgame.toolbar.ButtonAdapter;
 import com.golemgame.toolbar.StandardToolbar;
 import com.golemgame.toolbar.main.MainToolbar;

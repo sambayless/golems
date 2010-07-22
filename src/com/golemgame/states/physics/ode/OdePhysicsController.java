@@ -1,4 +1,4 @@
-package com.golemgame.states;
+package com.golemgame.states.physics.ode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,10 +19,11 @@ import com.golemgame.physical.ode.compile.OdePhysicsEnvironment;
 import com.golemgame.physical.ode.sound.OdeSoundManager;
 import com.golemgame.settings.SettingChangedEvent;
 import com.golemgame.settings.SettingsListener;
+import com.golemgame.states.GeneralSettings;
+import com.golemgame.states.StateManager;
 import com.golemgame.states.camera.CameraDelegate;
 import com.golemgame.states.camera.OrderedCameraList;
 import com.golemgame.states.physics.IllegalTransitionException;
-import com.golemgame.states.physics.PhysicsSpatialMonitor;
 import com.golemgame.util.input.InputLayer;
 import com.golemgame.util.loading.ProgressObserver;
 import com.jmex.physics.CollisionGroup;
