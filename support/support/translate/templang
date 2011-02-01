@@ -1,185 +1,369 @@
-Golems:
-Version:
+Version: גרסה
 
 
-Main Menu: Huvudmeny
-New Machine: Ny Maskin
-Save Machine: Spara Maskin
-Load Machine: Ladda Maskin
-Import Machine: Importera Maskin
-Record Video: Spela in video
-Exit Program: Avsluta Golems
-OK: OK
-Cancel: Avbryt
+Main Menu: תפריט ראשי
+New Machine: מכונה חדשה
+Save Machine: שמור מכונה
+Load Machine: טען מכונה
+Import Machine: ייבא מכונה
+Record Video: צלם וידאו
+Exit Program: יציאה
+OK: אישור
+Cancel: ביטול
 
 
-Settings: Inställningar
-Display: Visning
-Display Quality: Visningskvalité
-Low: Låg
-Normal (medium): Normal (mellan)
-High: Hög
-Resolution: Upplösning
-Full Screen: Fullskärm
-Frequency: Frekvens
-Colour Depth: Färgdjup
-Frame Rate: Bilder per sekund
-Use VSync: Använd VSync
-Tooltips: Verktygstips
-Show Tooltips: Visa Verktygstips
+Settings: הגדרות
+Display: תצוגה
+Display Quality: איכות תצוגה
+Low: נמוכה
+Normal (medium): רגילה)בינונית)
+High: גבוהה
+Resolution: רזולוציה
+Full Screen: מסך מלא
+Frequency: תדירות
+Colour Depth: עומק צבע
+Frame Rate: פריימים לשניה
+Use VSync: השתמש בVsync
+Tooltips: -
+Show Tooltips: הראה Tooltips
 
-Keyboard: Tangentbord
-Keyboard Shortcuts: Snabbtangenter
-Control Points: Visa förstoringsklot
-Rotate: Rotera
-XY-Plane: XY-Plan
-YZ-Plane: YZ-Plan
-Snap: Följ rutnätet
-Axis-Lock: Axel-Lås
-Statics Selectable: Låsta objekt valbara
-Show Layers: Visa Lager-inställningar
-Select Grouped Objects: Markera Ihopsatta Objekt
-Select Multiple Objects: Markera Flera Objekt
-Show Object Properties: Visa Egenskaper för Objekt
-Copy: Kopiera
-Delete: Ta bort
-Focus: Fokusera på markerat objekt
-Zoom: Zooma
-Next Camera: Nästa Kamera
-Previous Camera: Föregående Kamera
-Default Camera: Standardkamera
-Menu: Meny
-Screen Shot: Skärmdump
+Keybard: מקלדת
+Keyboard Shortcuts: קיצורי מקלדת
+Control Points: נקודות שליטה
+Rotate: סובב
+XY-Plane: מישור-XY
+YZ-Plane: מישור-YZ
+Snap: -
+Axis-Lock: נעילת-ציר (Probably shouldn't use it tho, sounds weird)
+Statics Selectable: בחירת נייחים
+Show Layers: הצג שכבות
+Select Grouped Objects: בחר קבוצת חפצים
+Select Multiple Objects: בחר חפצים מרובים
+Show Object Properties: הצג תכונות חפץ
+Copy: העתק
+Delete: מחק
+Focus: פוקוס
+Zoom: זום
+Next Camera: מצלמה הבאה
+Previous Camera: מצלמה הקודמת
+Default Camera: מצלמת ברירת-מחדל
+Menu: תפריט
+Screen Shot: -
 
-Recording Options: Inselningsinställningar
-Video Format: Video Format
-Compression Quality (1% to 100%): Kvalité på inspelningen (1% till 100%):
-Frames per second: Bilder per sekund
-Begin Recording: Starta Inspelning
-
-
-Machine: Maskin
-Name: Namn
+Recording Options: אפשרויות צילום
+Video Format: פורמט וידאו
+Compression Quality (1% to 100%):
+Frames per second: פריימים לשנייה
+Begin Recording: התחל להקליט
 
 
-Environment: Miljö/Omgivning
-Speed: Hastighet
-(Paused): (Pausad)
-Half: Halva
-Double: Dubla
-(Unlimited): (Max)
-Gravity in each direction (x,y,z): Gravitation från alla axlar (x,y,z)
-Grid spacing: Inställningar för rutnätet
-Lock: Lås
-Units (x,y,z): En rutas storlek (x,y,z)
-Rotation: Rotation
-Angles to snap to: Grader att låsa till (grader):
-Background: Bakgrund
-Colour: En färg
-Clouds: Moln
-Serene: Vattenmiljö
-Sunset: Solnedgång
-Stars: Stjärnor
-Show grid in design mode: Visa bakgrunds-rutnät i byggläge
+Machine: מכונה
+Name: שם
 
 
-Exit: Avsluta
-Are you sure you want to exit?: Vill du verkligen avsluta?
-Yes: Ja
-No: Nej
+Environment: סביבה
+Speed: מהירות
+(Paused): נעצר
+Half: חצי
+Double: כפולה
+(Unlimited): בלתי מוגבלת
+Gravity in each direction (x,y,z): כוח משיכה בכל כיוון)x,y,z)
+Grid Spacing: מרווח רשת
+Lock: נעל
+Units (x,y,z): יחידות (x,y,z)
+Rotation: סיבוב
+Angles to snap to (degrees): זווית קפיצה (מעלות)
+Background: רקע
+Colour/Color: צבע
+Clouds: עננים
+Serene: רגוע
+Sunset: שקיעה
+Stars: כוכבים
+Show grid in design mode: הצג רשת במצב תכנון
 
 
-Engage physics!: Starta maskinen!
-Layers: Lager
-Sensors: Sensorer
-Axis: Axlar
-Snap: Lås till rutnätet
-Static: Markera låsta objekt
+Exit: יציאה
+Are you sure you want to exit?: האם את\ה בטוח שברצונך לצאת?
+Yes: כן
+No: לא
 
 
-Select: Välj
-Click and hold an object to select it. While selected, press enter to change its properties. To change the plane of movement, hold down Z or X: Klicka för att markera ett objekt. När objektet ör markerat, tryck enter för att öpnna objektets egenskaper. Du kan även dra och flytta på objekt i sidleds, vill du flytta det i annan riktning, håll nere Z eller X
+Engage physics!: הפעל סימולציה
+Layers: שכבות
+Sensors: חיישנים
+Axis: ציר
+Snap: קפיצה
+Static: נייח
 
-Island Select: Massval
-Select connected things all at once. You can also select multiple things by holding down Control (Left): Markera alla objekt som sitter ihop med det objektet du klickar på. Du kan också välja flera objekt genom att hålla nere Control (Vänstra CTRL)
 
-Rotate: Rotera
-Select something, then click and drag around it to rotate. To change the axis of rotation, hold down Z or X. You can also rotate something by holding Shift (left): Markera något, och dra runt objektet för att rotera det. För att rotera runt en annan axel, håll nere Z eller X. Du kan också rotera genom att hålla nere SHIFT (Vänstra SHIFT):
+Select: בחר
+Click and hold an object to select it. While selected, press enter to change its properties. To change the plane of movement, hold down Z or X: לחץ והחזק חפץ כדי לבחור אותו. כאשר הוא נבחר, לחץ enter כדי לשנות את תכונותיו. כדי לשנות את מישור התנועה, לחץ על Z או X.
 
-Stretch: Förstora
-Select something, then drag one of the white control spheres to change its shape. You can also stretch something by holding down Alt (left): Markera något, dra sedan i ett av de vita kloten för att förstora objektet. Du kan också förstora genom att hålla nere ALT (Vänstra ALT)
+Island Select: בחירת אי
+Select connected things all at once. You can also select multiple things by holding down Control (Left): בחר חפצים מחוברים ביחד. ניתן לבחור חפצים מרובים גם על ידי לחיצה על Control (שמאלי)
 
-Show Wires: Visa kopplingsläge
-Wire mode lets you see the wires connecting different parts of your machine, as well as functional components like batteries. Components that can be connected with wires have green or yellow ports: Kopplingsläge visar och låter dig koppla ihop saker med "kablar", t.ex batteri med motorer. Objekt som kan kopplas ihop med något har gula eller gröna utgångar visade i kopplingsläget:
+Rotate: סבב
+Select something, then click and drag around it to rotate. To change the axis of rotation, hold down Z or X. You can also rotate something by holding Shift (left): בחר חפץ ואז לחץ ומשוך מסביבו כדי לסובב. כדי לשנות את ציר הסיבוב, לחץ על Z או X. ניתן לסובב חפץ גם על ידי לחיצה על Shift (שמאלי)
 
-Box: Kub
-Create a box: Skapa en kub
+Stretch: מתח
+Select something, then drag one of the white control spheres to change its shape. You can also stretch something by holding down Alt (left): בחר חפץ ואז משוך אחד מכדורי השליטה הלבנים כדי לשנות את צורת החפץ. ניתן למתוח חפץ גם על ידי לחיצה על Alt (שמאלי)
 
-Sphere: Klot
-Create a sphere: Skapa ett klot
+Show Wires: הצג חוטים
+Wire mode lets you see the wires connecting different parts of your machine, as well as functional components like batteries. Components that can be connected with wires have green or yellow ports: מצב חיווט מאפשר לך לראות את החוטים שמחברים חלקים שונים במכונתך, וגם חלקים פעילים כמו בטריות. לחלקים שניתן לחבר עם חוטים יש כניסות\יציאות ירוקות או צהובות.
 
-Cylinder: Cylinder
-Create a cylinder: Skapa en cylinder
+Box: קופסה
+Create a box: צור קופסה
 
-Tube: Rör
-Create a tube: Skapa en tube
+Sphere: כדור
+Create a sphere: צור כדור
 
-Pyramid: Pyramid
-Create a square-based pyramid: Skapa en kvadratbaserad pyramid
+Cylinder: גליל
+Create a cylinder: צור גליל
 
-Cone: Kon
-Create a cone: Skapa en kon
+Tube: צינור
+Create a tube: צור צינור
 
-Ellipsoid: Ellipsoid
-Create an ellipsoid (a sphere that you can stretch along each axis): Skapa en ellipsoid (Ett klot som du kan töja åt alla håll)
+Pyramid: פירמידה
+Create a square-base pyramid: צור פירמידה עם בסיס מרובע
 
-Capsule: Kapsel
-Create a capsule (a cylinder capped with half-spheres): Skapa en kapsel
+Cone: קונוס
+Create a cone: צור קונוס
 
-Axle: Axel
-The two ends of an axle are free to rotate around each other along their main axis. An axle will act as a motor if it is wired to a battery or other signal: De två ändarna av en axel kan rotera fritt runt varandra. En axel kan bli motor när den ansluts till ett batteri eller en annan signal
+Ellipsoid: אליפסויד
+Create an ellipsoid (a sphere that you can stretch along each axis): צור אליפסויד (כדור שניתן למתוח בכל ציר)
 
-Hinge: Gångjärn
-The two ends of a hinge can rotate around each other along the axis that runs perpendicular to their main axis. A hinge can be powered if it is wired to a battery or other signal: De två ändarna av ett gångjärn kan rotera runt axeln som går vinkelrätt mot dess huvudaxel. Ett gångjärn kan driva om det kopplas till ett batteri eller en annan signal
+Capsule: קפסולה
+Create a capsule (a cylinder capped with half-spheres): צור קפסולה (גליל שקצותיו הם חצי כדור)
 
-Hydraulic: Hydraulcylinder
-The two ends of a hydraulic can move closer or farther apart, up to limits that you can set in its properties. A hydraulic can be powered if it is wired to a battery or other signal: De två ändarna av en hydrualcylinder kan röra sig närmare eller längre ifrån varandra, längden ställer du in i hydrualcylinderns egenskaper. En hydrualcylinder kan driva om den kopplas till ett batteri eller en annan signal
+Axle: ציר
+The two ends of an axle are free to rotate around each other along their main axis. An axle will act as a motor if it is wired to a battery or other signal: שני צדדי הציר ניתנים לסיבוב סביב עצמם על הציר המרכזי. ציר ישמש כמנוע כאשר הוא מחווט לבטרייה או לאות אחר.
 
-Ball and Socket: Kulled
-The two ends of a ball and socket are free to rotate about each other on all three axes: De två ändarna i en kulled kan rotera fritt runt varandra
+Hinge: מפרק
+The two ends of a hinge can rotate around each other along the axis that runs perpendicular to their main axis. A hinge can be powered if it is wired to a battery or other signal: שני צדדי המפרק ניתנים לסיבוב סביב עצמם על הציר האנכי לציר המרכזי שלהם. מפרק יכול להיות מונע כאשר הוא מחווט לבטרייה או לאות אחר.
 
-Battery: Batteri
-Batteries are functional components. In wire view, you can click and drag on the top port to create a wire that can power motors. In the properties window, you can set batteries to output a signal that changes over time: Batterier är funktionella komponenter. I kopplingsläget, kan du dra, från den översta utgången, en kabel till t.ex en motor. I batteriets egenskaper, kan du ställa in att batteriet ska ändra ut-signal efter en tid
+Hydraulic: בוכנה
+The two ends of a hydraulic can move closer or farther apart, up to limits that you can set in its properties. A hydraulic can be powered if it is wired to a battery or other signal: שני קצוות הבוכנה יכולים לנוע קרוב או הרחק אחד מהשני, עד למגבלות שניתן להציב בתכונות הבוכנה. בוכנה יכולה להיות מונעת כאשר היא מחווטת לבטרייה או לאות אחר.
 
-Function: Funktion
-Takes a signal and changes it according to a function you can design in the properties window. By connecting a wire to the top input port, you can turn the function on and off, or have it remember its current signal: Tar emot en signal och använder den enligt dina inställningar i egenskaperna för funktionen. Genom att koppla något till den översta porten kan du få funkionen att starta/stänga av, eller få den att komma ihåg sin nuvarande signal
+Ball and Socket: כדור ושקע
+The two ends of a ball and socket are free to rotate about each other on all three axes: שני צדדי הכדור והשקע ניתנים לסיבוב סביב עצמם בכל שלושת הצירים.
 
-Input: Indata
-When your machine is running, this allows the user to control a signal with key presses or visual controls: När din maskin är igång, låter dessa inställningar användaren att kontrollera din maskin med tangentbordet, musen, eller med synliga reglage:
+Battery: בטרייה
+Batteries are functional components. In wire view, you can click and drag on the top port to create a wire that can power motors. In the properties window, you can set batteries to output a signal that changes over time: בטריות הן חלקים פעילים. בתצוגת חוטים, ניתן ללחוץ ולמשוך את היציאה העליונה כדי ליצור חוט שיכול להניע מנועים. בחלון התכונות, את\ה יכול להגדיר שהבטריות יעבירה אות שמשתנה לאורך זמן
 
-Oscilloscope: Oscilloskop
-When your machine is running, oscilloscopes will graph the signal they receive: När din maskin är igång, visar oscilloskopen signalerna de får in
+Function: פונקציה
+Takes a signal and changes it according to a function you can design in the properties window. By connecting a wire to the top input port, you can turn the function on and off, or have it remember its current signal: פונקציה לוקחת אות ומשנה אותו לפי פונקציה שאת\ה מתכנן בחלון התכונות. ניתן להפעיל או להפסיק את הפונקיה, או לזכור את האות הנוכחי, על ידי חיבור חוט לכניסה העליונה.
 
-Touch sensor: Trycksensor
-A touch sensor is a box that outputs a signal when it contacts an object: En trycksensor skickar ut signaler när den rör ett annat objekt
+Input: קלט
+When your machine is running, this allows the user to control a signal with key presses or visual controls: הקלט מאפשר למשתמש לשלוט על אות עם לחיצת מקש או שלטים ויזואליים כאשר המכונה פועלת.
 
-Distance Sensor: Distanssensor
-A distance sensor detects when any object enters its 'view'. Select the sensor to see its view shape. You can move, stretch, and rotate the view shape or you can choose a different view shape in the properties window: En distanssensor skickar ut en signal när något kommer i dess 'sikte'. Öppna sensorns egenskaper för att kunna ändra dess form. Du kan flytta, förstora eller rotera sensorns sikte, eller så kan du välja en annan for för siktet i sensorns egenskaper:
+Oscilloscope: אוסילוסקופ
+When your machine is running, oscilloscopes will graph the signal they receive: אוסילוסקופים ימפו את האות שהם מקבלים כאשר המכונה פועלת.
 
-Multimeter: Multimeter
-A box that can detect its position, rotation, velocity, or acceleration: En kub som kan upptäcka dess position, hastighet, rotation, eller acceleration
+Touch sensor: חיישן מגע
+A touch sensor is a box that outputs a signal when it contacts an object: חיישן מגע הוא קופסא ששולחת אות כאשר היא נוגעת בחפץ.
 
-Contact: Kontakt
-Contacts are like electrical conductors. If they touch, then signals will pass through them: Kontakter är som elektriska ledare. Om de möts, så kommer signaler att gå genom dem
+Distance sensor: חיישן מרחק
+A distance sensor detects when any object enters its 'view'. Select the sensor to see its view shape. You can move, stretch, and rotate the view shape or you can choose a different view shape in the properties window: חיישן מרחק מזהה אם חפץ נכנס לשדה הראייה שלו. בחר חיישן כדי לראות את צורת שדה הראייה. את\ה יכול להזיז, למתוח, ולסובב את שדה הראייה או שאת\ה יכול לשנות את הצורה בחלון התכונות.
 
-Rocket: Raket
-A rocket will output a force proportional to its signal. (Wire a battery to the rocket to create a signal). You can adjust the maximum force in its properties menu: En raket kommer att driva enligt den signal som den tar emot. (Koppla ett batteri till raketen för att skapa en signal till den). Du kan ändra raketens styrka i raketens egenskaper
+Multimeter: מולטימטר
+A box that can detect its position, rotation, velocity, or acceleration: קופסא שיכולה לזהות את המיקום, הסיבוב, המהירות, או התאוצה שלה.
 
-Gear: Kugghjul
-Create a gear: Skapa ett kugghjul
+Contact: מגע
+Contacts are like electrical conductors. If they touch, then signals will pass through them: מגעים הם מוליכים חשמליים. אות יעבור בינהם אם הם נוגעים.
 
-Force Beam: Kraftstråle
-A force beam that either grapples or pushes. Outputs how close the beam is to the object it reaches: En kraftståle antingen drar till sig eller knuffar iväg andra objekt. Ut-signalen är hur nära objektet som strålen rör är
+Rocket: רקטה
+A rocket will output a force proportional to its signal. (Wire a battery to the rocket to create a signal). You can adjust the maximum force in its properties menu: טיל יפעיל כוח יחסית לאות שהוא מקבל. (חווט בטרייה אל הטיל כדי ליצור אות). את\ה יכול לשנות את הכוח המקסימלי בחלון התכונות.
 
-Camera: Kamera
-Cameras let you see the world from their view. Press Page Up to switch your current camera. Cameras are only visible in wire mode: Kameror låter användaren se världen genom dem. Tryck på PageUp för att växla kamera. Kameror syns endast i kopplingsläget
+Gear: גלגל שיניים
+Create a gear: צור גלגל שיניים
+
+Force Beam: קרן כוח
+A force beam that either grapples or pushes. Outputs how close the beam is to the object it reaches: קרן כוח שיכולה למשוך או לדחוף. שולחת אות לפי כמה החפץ שהיא פוגעת קרוב אל הקרן.
+
+Camera: מצלמה
+Cameras let you see the world from their view. Press Page Up to switch your current camera. Cameras are only visible in wire mode: מצלמות מאפשרות לך לראות את העולם מהמבט שלהן. לחן Page UP כדי להחליף את המצלמה העכשווית שלך.ניתן לראות מצלמות רק במצב חיווט.
+
+-------------------Update 04 September 2009---------------------
+
+Properties: תכונות
+
+Matter: חומר
+
+Density: צפיפות
+Material: חומר
+Default: ברירת מחדל
+Iron: ברזל
+Wood: עץ
+Concrete: בטון
+Granite: גרניט
+Glass: זכוכית
+Plastic:: פלסטיק
+Rubber: גומי
+Ice: קרח
+Helium: הליום
+
+Make this object static (it won't react to physics, but other objects can still crash into it): הפוך חפץ זה לנייח(הוא לא יושפע מפיסיקה, אבל חפצים אחרים יכולים להתנגש בו)
+Make this object sticky: הפוך חפץ זה לדביק
+Position: מיקום
+Rotation: סיבוב
+Size: גודל
+Radius: רדיוס
+Height: גובה
+Width: רוחב
+Length: אורך
+Inner Radius: רדיוס פנימי
+Arc: קשת
+
+
+Appearance: מראה
+Primary: ראשי
+Highlight: הדגשה
+Show Text: הצג טקסט
+None: ללא
+Camouflage: הסוואה
+Checkers: שח
+Galvanized metal: מתכת מגולוונת
+Rivets: מסמרים
+Spots: נקודות
+Star: כוכב
+Steel Box: קופסת פלדה
+Stripes: פסים
+Treadplate: -
+
+Color Chooser: בוחר צבע
+Hue: גוון
+Saturation (sat): ריווי
+Luminosity (lum): בהירות
+Red: אדום
+Green: ירוק
+Blue: כחול
+Alpha: אלפה
+
+
+Motor: מנוע
+Ball Bearing: מיסב כדורי
+Left Radius: רדיוס שמאלי
+Right Radius: רדיוס ימני
+Left Length: אורך שמאלי
+Right Length: אורך ימני
+Left Angle: זווית שמאלית
+Right Angle: זווית ימנית
+Distance: מרחק
+Min Distance: מרחק מינימאלי
+Max Distance: מרחק מקסימלי
+Universal Joint (A universal joint constrains rotation on the 3rd axis): מפרק אוניברסאלי (מפרק אוניברסלי מעביר סיבוב על הציר השלישי)
+Joint Length: אורך מפרק
+Joint Radius: רדיוס מפרק
+Ball Radius: רדיוס כדור
+This motor should interpret input as: המנוע יפרש אות כניסה כ-
+This motor should interpret output as: המנוע יפרש אות יציאה כ-
+Force: כוח
+Velocity: מהירות
+Acceleration: תאוצה
+Maximum velocity: מהירות מקסימאלית
+Maximum force: כוח מקסימאלי
+Spring: קפיץ
+Treat as spring: התייחס כקפיץ
+Spring Constant: קבוע הקביץ
+Spring Friction: חיכוך הקפיץ
+
+Sensor: חיישן
+Ignore Attached Objects (not including joints): התעלם מחפצים מחוברים(לא כולל מפרקים וצירים)
+Ignore Attached Objects (Including joints): התעלם מחפצים מחוברים(כולל מפרקים וצירים)
+Ignore Non-Static Objects: התעלם מחפצים לא נייחים
+Ignore Static Objects: התעלם מחפצים נייחים
+
+(Rocket) (טיל)
+Maximum Force (Newtons): כוח מקסימאלי(ניוטון)
+Effects: אפקטים
+(Original Effect): (אפקט אורגינאלי)
+Magic: קסם
+Nova: נובה
+Plasma: פלסמה
+Rings: טבעות
+Rocket: טיל
+Saturn V: -
+Smoke: עשן
+Spark: ניצוץ
+Sputter: -
+Name: שם
+Luminescent Trail: שביל פולט אור
+Min, Max Angle: זווית מינימאלית, מקסימאלית
+Min, Max Lifespan (milliseconds): תוכלת חיים מינימאלית, מקסימאלית(מילי שניות)
+Initial, Final Size: גודל התחלתי, סופי
+Number of Particles: מספר חלקיקים
+Initial Velocity: מהירות התחלתית
+Safe Effect: שמור אפקט
+Enable Effects: אפשר אפקט
+
+(Force Beam) (קרן כוח)
+Max Grapple/Push Force: כוח משיכה\דחיפה מקסימאלי
+Beam Length: אורך הקרן
+Show Beam: הראה קרן
+Luminous Beam: קרן מאירה
+Push Colour: צבע דחיפה
+Pull Colour: צבע משיכה
+
+(Gear) (גלגל שיניים)
+Tooth Width: רוחב שן
+Tooth Height: גוב שן
+Tooth Angle: זווית שן
+
+(Multimeter) (מולטימטר)
+Altitude: גובה
+Maximum Height: גובה מקסימאלי
+Minimum Height: גובה מינימאלי
+Orientation: אוריאנטציה
+Position: מיקום
+Report values relative to the orientation of the component: דווח נתונים יחסית לאוראנטציה של החפץ
+Maximum X Range: טווח X מאקסימאלי
+Minimum X Range: טווח X מינימאלי
+Velocity: מהירות
+Acceleration: תאוצה
+
+(Camera) (מצלמה)
+Lock Camera Orientation: נעל אוריאנטצית המצלמה
+
+Input: קלט
+Input Device Name: שם הקלט
+Input Type: סוג קלט
+Slider: מחוון
+Text: טקסט
+Key Event Type: סוג מקרה בלחיצה
+Hold Down: השאר לחוץ
+Toggle: החלפה
+Key: כפתור
+(Unknown key): (כפתור לא ידוע)
+Output -1 when unpressed (0 otherwise): שלח -1 כאשר לא לחוץ (אחרת 0)
+
+(Function) (פונקציה)
+Unnamed: ללא שם
+Line: קו
+Zero: אפס
+Parabolic: פרבולית
+Cubic: ריבועית
+Sine: סינוס
+Cosine: קוסינוס
+(Slope): (שיפוע)
+Function Name: שם הפונקציה
+Battery Options: אפשרויות בטרייה
+Modifier Options: אפשרויות מגדיר
+Battery Switch: מתג הבטרייה
+Set the minimum signal needed to activate the switch: הגדר את האות המינימאלי להפעלת המתג
+Switch Threshold: סף המתג
+Input must be (__>__) the threshold to activate: קלט צריך להיות (__<__) מהסף כדי להפעיל
+Switch Action: פעולת המתג
+Turn Off/On: הפעל\הפסק
+Invert Signal: הפוך אות
+Hold Value: החזק נתון
+Multiply Value: כפול נתון
+Example: If Threshold is 0.5, and the operation is >=, and the action is 'Off/On', then the function will output 0 unless the switch receives an input of 0.5 or greater: לדוגמא: אם הסף הוא 0.5, הפעולה היא >=, ופעולת המתג היא 'הפעל\הפסק', הפונקציה תשלח 0 אלא אם המתג מקבל קלט של 0.5 או יותר
+
+New Layer: שכבה חדשה
+Copy Layer: העתק שכבה
+Select Layer: בחר שכבה
+Move to Layer: עבור לשכבה
+Delete Layer: מחק שכבה
+Ground: אדמה
+Lock: נעל
+Hide: החבא

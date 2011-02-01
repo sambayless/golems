@@ -1,0 +1,891 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~ru
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+
+
+GOLEMS{
+
+    GOLEMS~
+
+    VERSION~Версия
+
+    MAIN_MENU~Главное Меню
+
+    MAIN_MENU{
+
+        OK~OK
+
+        CANCEL~Отмена
+
+        NO~Нет
+
+        YES~Да
+
+        MAIN~
+
+        FILE_MENU{
+
+            NEW~Новый Механизм
+
+            SAVE~Сохранить Механизм
+
+            LOAD~Загрузить Механизм
+
+            IMPORT~Импортировать Механизм
+
+            RECORD~Записать Видео
+
+            EXIT~Выход
+
+        }
+
+        SETTINGS~ Настройки
+
+        DISPLAY~Экран
+
+        DISPLAY{
+
+            QUALITY~Качество Изображения
+
+            QUALITY_LOW~ Низко
+
+            QUALITY_NORMAL~ Средне
+
+            SETTINGS~ Настройки
+
+            QUALITY_HIGH~Высоко
+
+            RESOLUTION~ Разрешение
+
+            FULL_SCREEN~ Полный Экран
+
+            FREQ~ Частота
+
+            COLOR_DEPTH~ Глубина Цвета
+
+            FPS~Скорость Кадров
+
+            VSYNC~ Использовать VSync
+
+            TOOLTIPS~ Подсказки
+
+            SHOW_TOOLTIPS~Показывать Подсказки
+
+        }
+
+        KEYBOARD~Клавиатура
+
+        KEYBOARD{
+
+            SHORTCUTS~ Назначение Клавиш
+
+            CTRL_POINTS~Изменить Размер
+
+            ROTATE~Повернуть
+
+            XY_PLANE~ Плоскость XY
+
+            YZ_PLANE~ Плоскость YZ
+
+            GRID_SNAP~Привязать
+
+            AXIS_LOCK~Заблокировать Оси
+
+            STATICS~ Сделать Статичным
+
+            SHOW_LAYERS~Показать Слои
+
+            ISLAND_SELECT~Выбрать Группу Объектов
+
+            MULTI_SELECT~Выбрать Несколько Объектов
+
+            PROPERTIES~Показать Свойства Объекта
+
+            COPY~Копировать
+
+            DEL~Удалить
+
+            FOCUS~Сфокусироваться
+
+            ZOOM~ Приближение
+
+            NEXT_CAM~Следующая Камера
+
+            PREV_CAM~ Предыдущая Камера
+
+            DEF_CAM~Стандартная Камера
+
+            MENU~Меню
+
+            SCREEN_SHOT~ Сделать Скриншот
+            
+
+        }
+
+        RECORDING~ Опции Записи
+
+        RECORDING{
+
+            FORMAT~Формат Видео
+
+            COMPRESSION~Качество Сжатия
+
+            QUALITY~ (от 1% до 100%)
+
+            FPS~Кадров В Секунду
+
+            BEGIN~ Начать Запись
+
+            STOP~
+
+            SIZE~
+
+            LENGTH~
+
+            TIME~
+
+            PAUSE~
+
+            MEMORY~
+
+            BEGIN~
+
+            RESUME~
+
+        }
+
+        MACHINE~Механизм
+
+        MACHINE{
+
+            NAME~Название
+
+            DESCRIPTION~
+
+        }
+
+        ENVIRONMENT~Окружение
+
+        ENVIRONMENT{
+
+            SPEED~Скорость
+
+            SPEED_NORMAL~
+
+            SPEED_PAUSED~(Остановлено)
+
+            SPEED_HALF~ Половина
+
+            SPEED_DOUBLE~Двойная
+
+            SPEED_UNLIMITED~(Неограничена)
+
+            GRAVITY~ Гравитация По Осям (X,Y,Z)
+
+            GRID_SPACING~Шаг Сетки
+
+            LOCK~Заблокировать
+
+            UNITS~ Оси (X,Y,Z)
+
+            ROTATION~Вращение
+
+            ANGLES~ Угол Привязки (Градусы)
+
+            BACKGROUND~Заставка
+
+            COLOR~Цвет
+
+            CLOUDS~Облака
+
+            SERENE~Пейзаж
+
+            SUNSET~Закат
+
+            STARS~Звезды
+
+            SHOW_GRID~Показывать Сетку В Режиме Разработки
+
+        }
+
+        EXIT~Выход
+
+        EXIT{
+
+            CHECK~ Вы Уверены, Что Хотите Выйти?
+
+        }
+
+    }
+
+    STATUSBAR{
+
+        ENGAGE~Задействовать Физику!
+
+        LAYERS~Слои
+
+        SENSORS~Сенсоры
+
+        AXIS~ Оси
+
+        SNAP~ Привязать
+
+        STATIC~Статический
+
+        LAYERS{
+
+            NEW~ Новый Слой
+
+            COPY~Копировать Слой
+
+            SELECT~ Выбрать Слой
+
+            MOVE~ Переключиться На Слой
+
+            DELETE~Удалить Слой
+
+            GROUND~Основа
+
+            LOCK~Заблокировать
+
+            HIDE~Скрыть
+
+        }
+
+
+    }
+
+    TOOLBAR{
+
+        SHOW_TOOLBAR~
+
+        MENU~
+
+        AUTOCLOSE~
+
+        HIDE~
+
+        MENU.TOOLTIP~
+
+        SELECT~Выбрать
+
+        SELECT.TOOLTIP~Нажми И Удерживай Объект Для Выбора. После Выбора Нажми ENTER Для Изменения Свойств Объекта. Для Изменения Плоскости Движения, Удерживай $Z_AXIS_KEY или $X_AXIS_KEY
+        
+        ISLAND~Выбор Группы
+
+        ISLAND.TOOLTIP~ Выбор Всех Соединенных Объектов. Также Можно Выбрать Несколько Объектов, Удерживая Левый $MULTI_SELECT_KEY
+
+        ROTATE~Повернуть
+
+        ROTATE.TOOLTIP~ Выбери Объект, Затем Нажми И Тяни Для Поворота. Чтобы Изменить Плоскость Вращения, Удерживай $Z_AXIS_KEY или $X_AXIS_KEY. Также Можно Вращать Объекты, Удерживая Левый $ROTATE_KEY
+        
+
+        STRETCH~ Изменить Размер
+
+        STRETCH.TOOLTIP~ Выбери Объект, Затем Тяни Одну Из Белых Сфер, Для Изменения Формы Объекта. Также Можно Изменить Размер Объекта, Удерживая Левый $STRETCH_KEY
+        
+
+        WIRE_MODE~ Показать Электронику
+
+        WIRE_MODE.TOOLTIP~Режим Электроники Позволяет Видеть Провода, Соединяющие Различные Части Твоего Механизма И Такие Элементы, Как Батарейки. У Элементов, Которые Можно Присоединить С Помощью Проводов Есть Зеленые Или Желтые Контакты
+        
+
+        BOX~Куб
+
+        BOX.TOOLTIP~ Создать Куб
+
+        SPHERE~Сфера
+
+        SPHERE.TOOLTIP~Создать Сферу
+
+        CYLINDER~ Цилиндр
+
+        CYLINDER.TOOLTIP~ Создать Цилиндр
+
+        TUBE~Труба
+
+        TUBE.TOOLTIP~Создать Трубу
+
+        PYRAMID~Пирамида
+
+        PYRAMID.TOOLTIP~ Пирамиду С Квадратным Основанием
+
+        CONE~Конус
+
+        CONE.TOOLTIP~Создать Конус
+
+        ELLIPSOID~Элипс
+
+        ELLIPSOID.TOOLTIP~ Создать Элипс (Сферу, Которую Можно Растянуть Во Всех Направлениях)
+        
+        CAPSULE~ Капсула
+
+        CAPSULE.TOOLTIP~Создать Капсулу (Цилиндр Из Соединенных Полу-Сфер)
+
+        AXLE~ Двигатель
+
+        AXLE.TOOLTIP~ Две Части Двигателя Вращаются По Одной Оси. Двигатель Приводится В Действие С Помощью Батарейки, Или Другого Сигнала
+        
+        HINGE~Петля
+
+        HINGE.TOOLTIP~  Две Части Петли Вращаются По одной Оси На 180 Градусов. Петля Приводится В действие С Помощью Батарейки, Или Другого Сигнала
+          
+            
+        HYDRAULIC~Гидравлика
+
+        HYDRAULIC.TOOLTIP~Две Части Этого Объекта Могут Сближаться Или Отдаляться Друг От Друга На Растояние, Устанавливаемое В Настройках Объекта. Гидравлика Приводится В действие С Помощью Батарейки, Или Другого Сигнала
+        
+
+        BALL_SOCKET~Шарнир
+
+        BALL_SOCKET.TOOLTIP~ Две Части Шарнира Свободно Вращаются По Всем Осям
+
+        BATTERY~Батарейка
+
+        BATTERY.TOOLTIP~Батарейка Это Электронный Компонент. В Режиме Электроники Можно Протянуть Провод От Батарейки К Двигателю, Или Другому Объекту.
+        
+
+        FUNCTION~ Функция
+
+        FUNCTION.TOOLTIP~ Получает Сигнал, И Изменяет Его В Соответствии С Функцией, Установленной В Настройках Объекта. Присоединив Провод К Верхнему Контакту, Можно Включать Или Выключать Функцию Или Сохранить Текущий Сигнал
+        
+
+        INPUT~Кнопка
+
+        INPUT.TOOLTIP~Когда Механизм Запущен, Кнопка Позволяет Контролировать Сигнал, С Помощью Клавиатуры Или Мышки
+        
+
+        OSCILLOSCOPE~Осциллоскоп
+
+        OSCILLOSCOPE.TOOLTIP~Когда Механизм Запущен, Осциллоскоп Показывает Сигнал, Который Получает
+        
+
+        TOUCH~Сенсор Контакта
+
+        TOUCH.TOOLTIP~Сенсор Контакта, Это Куб, Который Отправляет Сигнал, Когда Объект Касается Сенсора
+        
+
+        DISTANCE~Сенсор Присутствия
+
+        DISTANCE.TOOLTIP~Сенсор Присутствия Оюнаруживаетлюбые Объекты В Его "Зоне Обнаружения". Выбери Сенсор, Для Изменения Его Формы. Можно Двигать, Изменять Форму И Поворачивать "Зону Обнаружения" Или Выбрать Другую Форму В Свойствах Объекта
+        
+
+        MULTIMETER~Мультиметр
+
+        MULTIMETER.TOOLTIP~ Куб, Который Умеет Определять Свое Положение, Вращение, Скорость, или Ускорение
+        
+
+        CONTACT~Контакт
+
+        CONTACT.TOOLTIP~Контакты Это Электронные Проводники. Когда Они Соприкасаются, Через Них Может Проходить Сигнал
+
+        ROCKET~Ракета
+
+        ROCKET.TOOLTIP~ Ракета Летит Со Скоростью, Зависимой От Входного Сигнала (Присоедени Батарейку, Для Создания Сигнала). Можно Изменить Максимальную Скорость Ракеты В настройках Объекта
+        
+
+        GEAR~ Шестеренка
+
+        GEAR.TOOLTIP~Создать Шестеренку
+        
+        RACK_GEAR~ 
+        
+        RACK_GEAR.TOOLTIP~
+
+        FORCE_BEAM~Лазер
+
+        FORCE_BEAM.TOOLTIP~ Лазер, Который Может Притягивать И Отталкивать.
+        
+
+        CAMERA~Камера
+
+        CAMERA.TOOLTIP~ Камера Позволяет Видеть Происходящее Со Своего Ракурса. Нажми $NEXT_CAMERA Для Выбора Следующей Камера. Камеры Видны Только В Режиме Электроники.
+        
+
+    }
+
+    PROPERTIES~Свойства
+
+    PROPERTIES{
+
+        MATTER~Вещество
+
+        MATTER{
+
+            DENSITY~Плотность
+
+            MATERIAL~Материал
+
+            DEFAULT~Стандартный
+
+            IRON~Железо
+
+            WOOD~Дерево
+
+            CONCRETE~Бетон
+
+            GRANITE~Гранит
+
+            GLASS~Стекло
+
+            PLASTIC~Пластик
+
+            RUBBER~Резина
+
+            ICE~Лед
+
+            HELIUM~Гелий
+
+            STATIC_DESCRIPTION~ Сделать Объект Статичным (Он Не Будет Подчинятся Законам Физики, Но Другие Объекты Могут Врезаться В Этот Объект)
+            
+
+            STICKY_DESCRIPTION~Сделать Объект Липким
+
+            POSITION~Позиция
+
+            ROTATION~Поворот
+
+            SIZE~Размер
+
+            RADIUS~Радиус
+
+            HEIGHT~Высота
+
+            WIDTH~Ширина
+
+            LENGTH~Длина
+
+            RADIUS_INNER~Внутренний Радиус
+
+            ARC~ Дуга
+
+            INPUT~
+
+        }
+
+        APPEARANCE~Внешний Вид
+
+        APPEARANCE{
+
+            PRIMARY~Основной
+
+            HIGHLIGHT~Дополнительный
+
+            SHOW_TEXT~Показать Текст
+
+            NONE~Нет
+
+            CAMO~Камуфляж
+
+            CHECKERS~Шашки
+
+            METAL_GALV~Гальванизированный Метал
+
+            RIVETS~Болты
+
+            SPOTS~Пятна
+
+            STAR~Звезды
+
+            STARS~
+            
+            STEEL_BOX~Стальная Коробка
+            
+
+            STRIPES~Полосы
+
+            TREADPLATE~Рельефный Метал
+
+            CHOOSER~Выбор Цвета   
+
+            HUE~Оттенок
+
+            SATURATION~Контраст
+
+            LUMINOSITY~Яркость
+
+            RED~Красный
+
+            GREEN~Зеленый
+
+            BLUE~Синий
+
+            ALPHA~Альфа
+
+        }
+
+        MOTOR~Двигатель
+
+        MOTOR{
+
+            BEARING~ Двойной Двигатель
+
+            RADIUS_LEFT~Левый Радиус
+
+            RADIS_RIGHT~ Правый Радиус
+
+            LENGTH_LEFT~ Левая Длина
+
+            LENGTH_RIGHT~ Правая Длина
+
+            ANGLE_LEFT~Левый Угол
+
+            ANGLE_RIGHT~Правый Угол
+
+            DISTANCE~Расстояние
+
+            MIN_DISTANCE~Мин Расстояние
+
+            MAX_DISTANCE~Макс Расстояние
+
+            MIN_SEP~
+            
+
+            MAX_SEP~
+
+            JOINT_UNIVERSAL~
+
+            UNIVERSAL_JOINT_DESCRIPTION~Универсальное Соединение (Позволяет Вращаться По 3-ей Оси)
+
+            JOINT_LENGTH~ Длина Соединения
+
+            JOINT_RADIUS~Радиус Соединения
+
+            BALL_RADIUS~Радиус Шараs
+
+            MOTOR_DESCRIPTION_INPUT~Этот Двигатель Должен Воспринимать Входной Сигнал Как
+
+            MOTOR_DESCRIPTION_OUTPUT~Этот Двигатель Должен Воспринимать Выходной Сигнал Как
+
+            FORCE~Мощность
+
+            VELOCITY~Скорость
+
+            ACCELERATION~Ускорение
+
+            MAX_VEL~ Макс Скорость
+
+            MAX_FORCE~Макс Мощность
+
+            SPRING~Пружина
+
+            SPRING_DESCRIPTION~Сделать Пружиной
+
+            SPRING_CONSTANT~Константа Упругости
+
+            SPRING_FRICTION~Трение Пружины
+
+        }
+
+        SENSOR~Сенсор
+
+        SENSOR{
+
+            IGNORE_ATTACHED~ Игнорироввать Прикрепленные Объекты (Исключая Соединения)
+
+            IGNORE_JOINTS~Игнорироввать Прикрепленные Объекты (Включая Соединения)
+
+            IGNORE_NON_STATIC~Игнорироввать Прикрепленные Объекты (Включая Соединения)
+
+            IGNORE_STATIC~ Игнорировать Статичные Объекты
+
+        }
+
+        BATTERY~
+
+        BATTERY{
+
+        }
+
+        ROCKET~
+
+        ROCKET{
+
+            MAX_FORCE~ Макс Мощьность (Ньютоны)
+
+            EFFECTS~Эффекты
+
+            EFFECT_ORIGINAL~ Стандартный Эффект
+
+            EFFECT_MAGIC~Магия
+
+            EFFECT_NOVA~Нова
+
+            EFFECT_PLASMA~Плазма
+
+            EFFECT_RINGS~Кольца
+
+            EFFECT_ROCKET~Ракета
+
+            EFFECT_SAT_V~Сатурн V
+
+            EFFECT_SMOKE~Дым
+
+            EFFECT_SPARK~Вспышка
+
+            EFFECT_SPUTTER~Выхлоп
+
+            EFFECT_NAME~Название
+
+            LUMINESCENT~ Люминисцентная Дорожка
+
+            ANGLE~Мин, Макс Угол
+
+            LIFESPAN~Мин, Макс Время
+
+            SIZE~Начальный, Конечный Размер
+
+            PARTICLE_NUM~Количество Частиц
+
+            VELOCITY~Начальная Скорость
+
+            SAVE~Сохранить Эффект
+
+            ENABLE~ Использовать Эффекты
+
+        }
+
+        FORCE_BEAM{
+
+            MAX_FORCE~ Макс Сила Притягивания/Отталкивания
+
+            BEAM_LENGTH~ Длина Луча
+
+            SHOW_BEAM~Показывать Луч
+
+            LUMINOUS_BEAM~Полу-Прозрачный Луч
+
+            COLOR_PUSH~ Цвет Отталкивания
+
+            COLOR_PULL~ Цвет Притягивания
+
+        }
+
+        GEAR{
+
+            TOOTH_WIDTH~Ширина Зубьев
+
+            TOOTH_HEGIHT~ Высота Зубьев
+
+            TOOTH_ANGLE~Угол Зубьев
+
+        }
+
+        MULTIMETER{
+
+            ALTITUDE~Высота
+
+            MAX_HEIGHT~Макс Высота
+
+            MIN_HEIGHT~ Мин Высота
+
+            ORIENTATION~Направление
+
+            POSITION~Позиция
+
+            RELATIVE~Отправлять Значения Относительно Позиции Компонента
+
+            MAX_X_RANGE~Макс Диапазон X
+
+            MIN_X_RANGE~Мин Диапазон X
+
+            VELOCITY~Скорость
+
+            ACCELERATION~Ускорение
+
+        }
+
+        CAMERA{
+
+            LOCK~Закрепить Направление Камеры
+
+			TRIGGER~
+        }
+
+        INPUT{
+
+            DEVICE_NAME~ Имя Вводящего Устройства
+
+            TYPE~Тип Ввода
+
+            SLIDER~Слайдер
+
+            TEXT~Текст
+
+            KEY_EVENT_TYPE~Тип Нажатия
+
+            HOLD_DOWN~Удерживание
+
+            TOGGLE~Одиночное Нажатие
+
+            KEY~Клавиша
+
+            UNKNOWN~(Неизвестная Клавиша)
+
+            OUTPUT_NEGATIVE_DESCRIPTION~ Выводить -1 Когда Неактивно (Иначе 0)
+
+        }
+
+        FUNCTION{
+
+            FUN_UNNAMED~Без Имени
+
+            FUN_LINE~Прямая
+
+            FUN_ZERO~Ноль
+
+            FUN_PARABOLA~Парабола
+
+            FUN_CUBIC~Кубическая
+
+            FUN_SINE~Синусидная
+
+            FUN_SQRT~
+
+            FUN_COS~Косинусидная
+
+            FUN_DERIVATIVE~Диагональная
+
+            FUNCTION_NAME~Имя Функции
+
+            OPTIONS_BATTERY~Опции Батарейки
+
+            OPTIONS_MODIFIER~ Опции Модификатора
+
+            SWITCH~Переключатель Батареки
+
+            THRESHOLD_DESCRIPTION~Установить Мин Сигнал, Необходимый Для Активации Переключателя
+            
+
+            SWITCH_THRESHOLD~ Порог Переключателя
+
+            THRESHOLD_DESCRIPTION_2~Ввод Должен Быть
+
+            THRESHOLD_DESCRIPTION_3~Порога Для Активации
+
+            SWITCH_ACTION~ Действие Переключателя
+
+            TURN_ON~Вкл/Выкл
+
+            INVERT~: Инверсия Сигнала
+
+            HOLD~Удерживать Значение
+
+            MULT~ Умножить Значение
+
+            EXAMPLE~ Пример: Если Порог - 0,5 Оператор - >=, И Действие - Вкл/Выкл, То Функция Будет Выводить 0, Пока Переключатель Не Получит Сигнал 0,5 Или Больше
+            
+
+        }
+
+    }
+
+}
+

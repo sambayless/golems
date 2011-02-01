@@ -212,10 +212,10 @@
 
 		<copyfile dest="${dist}/All/lib/LICENSE" src="LICENSE" />
 
-		<copyfile dest="${dist}/Linux/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
-		<copyfile dest="${dist}/Mac/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
-		<copyfile dest="${dist}/Windows/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
-		<copyfile dest="${dist}/All/Golems-COPYRIGHT.txt" src="Golems-COPYRIGHT.txt" />
+		<copyfile dest="${dist}/Linux/COPYING" src="COPYING" />
+		<copyfile dest="${dist}/Mac/COPYING" src="COPYING" />
+		<copyfile dest="${dist}/Windows/COPYING" src="COPYING" />
+		<copyfile dest="${dist}/All/COPYING" src="COPYING" />
 
 
 

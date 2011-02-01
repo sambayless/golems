@@ -1,0 +1,987 @@
+#Golems Translation File Format
+#Copyright 2009, Sam Bayless
+#
+#Instructions (ENGLISH)~ This file contains a nested list of items in Golems that need translation
+#Each item has a permanent name, called a KEY, that Golems knows to call, written in all capitals, and followed by a tilde, such as
+#
+#CAMERA~
+#
+#This part does not need to be translated - dont change it.
+#Next to each of these items is a tilde ("~") followed by a translation in the target language
+#For example, the English translation would be:
+#
+#CAMERA~ Camera
+#
+#or French:
+#
+#CAMERA~ Appareil photo
+#
+#or Italian:
+#
+#CAMERA~ Fotocamera
+#
+#There are also some lines that look like this:
+#
+#MAIN_MENU{
+# ...
+# ...
+# ...
+#}
+#
+#These are organizational elements that help divide the file into sections related to a certain
+#topic, such as the file menu or the appearance menu or the toolbar, etc.
+#The part in all caps does not need to be translated, but it will contain entries that
+#do need translation.
+#
+#
+#Lines beginning with the pound symbol ('#') are ignored - they are for comments about the file.
+#You may write notes on your translation in the file by adding Comment lines.
+#
+#Translations may contain any character, including new lines, except for tilde ("~"), open and close curly braces ("{" and "}") and pound ("#") 
+#Leading and trailing spaces and new lines on translations are ignored; a translation line may NOT end with a pound or a comment ("#"). 
+#
+#
+#Future versions of Golems may add new or remove old KEYS - that is ok, you can leave the old ones in, and they will just
+#be ignored (plus, that way if we go back to using old keys in the future, we will still have the translation).
+#
+#
+
+
+#Translation Details
+
+#The language code. Some examples
+#
+# en - English
+# zh - Chinese
+# ja - Japanese
+# ko - Korean
+# de - German
+# fr - French
+# es - Spanish
+# ar - Arabic
+# ru - Russian
+# el - Greek
+# it - Italian
+# eo - Esperanto
+# sa - Sanskrit
+#
+#The full list can be found here :http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+#
+
+LANGUAGE~iw
+
+
+
+#The country code. If your translation targets a specific country as well as a language 
+#(For example, American English, as opposed to British English, or Canadian French as opposed to French French)
+#Then you should specify the country code here. If you do not target a specific country, 
+#leave this blank. If you target multiple countries, you can include several country codes
+#separated by commas (",").
+#For example COUNTRY~ GB, CA
+#
+#The full list of country codes can be found here: http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html
+#
+#Some examples:
+# United States - US
+# Canada - CA
+# China - CN
+# Ireland - IE
+# Germany - DE
+# France - FR
+# United Kingdom - GB
+# Russia - RU
+# Italy - IT
+#
+
+COUNTRY~
+
+
+
+#The Variant code. If there are multiple ways to translate to the same language for the same
+#country (for example, Traditional and Simplified Chinese), fill in the variant code here
+#For example:
+#VARIANT~Simple
+#or
+#VARIANT~Traditional
+
+VARIANT~ 
+
+
+#Golems Translations
+
+
+GOLEMS{
+
+    GOLEMS~
+
+    VERSION~גרסה
+
+    MAIN_MENU~תפריט ראשי
+
+    MAIN_MENU{
+
+        OK~אישור
+
+        CANCEL~ביטול
+
+        NO~לא
+
+        YES~כן
+
+        MAIN~
+
+        FILE_MENU{
+
+            NEW~ מכונה חדשה
+            
+
+            SAVE~ שמור מכונה
+            
+
+            LOAD~ טען מכונה
+            
+
+            IMPORT~ ייבא מכונה
+            
+
+            RECORD~ צלם וידאו
+            
+
+            EXIT~יציאה
+            
+
+        }
+
+        SETTINGS~הגדרות
+
+        DISPLAY~תצוגה
+
+        DISPLAY{
+
+            QUALITY~איכות תצוגה
+
+            QUALITY_LOW~נמוכה
+
+            QUALITY_NORMAL~רגילה)בינונית)
+
+            SETTINGS~הגדרות
+
+            QUALITY_HIGH~גבוהה
+
+            RESOLUTION~רזולוציה
+
+            FULL_SCREEN~מסך מלא
+
+            FREQ~תדירות
+
+            COLOR_DEPTH~עומק צבע
+
+            FPS~ פריימים לשניה
+
+            VSYNC~השתמש בVsync
+
+            TOOLTIPS~ Tooltips
+
+            SHOW_TOOLTIPS~הראה Tooltips
+
+        }
+
+        KEYBOARD~מקלדת
+
+        KEYBOARD{
+
+            SHORTCUTS~קיצורי מקלדת
+
+            CTRL_POINTS~נקודות שליטה
+
+            ROTATE~סובב
+
+            XY_PLANE~מישור-XY
+
+            YZ_PLANE~מישור-YZ
+
+            GRID_SNAP~
+
+            AXIS_LOCK~
+
+            STATICS~בחירת נייחים
+
+            SHOW_LAYERS~הצג שכבות
+
+            ISLAND_SELECT~בחר קבוצת חפצים
+
+            MULTI_SELECT~בחר חפצים מרובים
+
+            PROPERTIES~הצג תכונות חפץ
+
+            COPY~העתק
+
+            DEL~מחק
+
+            FOCUS~פוקוס
+
+            ZOOM~מצלמה הבאה
+
+            NEXT_CAM~מצלמה הקודמת
+
+            PREV_CAM~
+
+            DEF_CAM~מצלמת ברירת-מחדל
+
+            MENU~תפריט
+
+            SCREEN_SHOT~
+
+        }
+
+        RECORDING~אפשרויות צילום
+
+        RECORDING{
+
+            FORMAT~פורמט וידאו
+
+            COMPRESSION~
+
+            QUALITY~
+
+            FPS~פריימים לשנייה
+
+            BEGIN~התחל להקליט
+
+            STOP~
+
+            SIZE~
+
+            LENGTH~
+
+            TIME~
+
+            PAUSE~
+
+            MEMORY~
+
+            BEGIN~
+
+            RESUME~
+
+        }
+
+        MACHINE~מכונה
+
+        MACHINE{
+
+            NAME~שם
+
+            DESCRIPTION~
+
+        }
+
+        ENVIRONMENT~סביבה
+
+        ENVIRONMENT{
+
+            SPEED~מהירות
+
+            SPEED_NORMAL~
+
+            SPEED_PAUSED~נעצר
+
+            SPEED_HALF~חצי
+
+            SPEED_DOUBLE~כפולה
+
+            SPEED_UNLIMITED~בלתי מוגבלת
+
+            GRAVITY~
+
+            GRID_SPACING~מרווח רשת
+
+            LOCK~נעל
+
+            UNITS~יחידות (x,y,z)
+
+            ROTATION~סיבוב
+
+            ANGLES~
+
+            BACKGROUND~רקע
+
+            COLOR~צבע
+
+            CLOUDS~עננים
+
+            SERENE~רגוע
+
+            SUNSET~שקיעה
+
+            STARS~כוכבים
+
+            SHOW_GRID~הצג רשת במצב תכנון
+
+        }
+
+        EXIT~יציאה
+
+        EXIT{
+
+            CHECK~האם את\ה בטוח שברצונך לצאת?
+
+        }
+
+    }
+
+    STATUSBAR{
+
+        ENGAGE~הפעל סימולציה
+
+        LAYERS~שכבות
+
+        SENSORS~חיישנים
+
+        AXIS~ציר
+
+        SNAP~קפיצה
+
+        STATIC~נייח
+
+        LAYERS{
+
+            NEW~ שכבה חדשה
+            
+
+            COPY~ העתק שכבה
+            
+
+            SELECT~ בחר שכבה
+            
+
+            MOVE~ עבור לשכבה
+            
+
+            DELETE~ מחק שכבה
+            
+
+            GROUND~ אדמה
+            
+
+            LOCK~ נעל
+            
+
+            HIDE~ החבא
+            
+
+        }
+
+    }
+
+    TOOLBAR{
+
+        SHOW_TOOLBAR~
+
+        MENU~
+
+        AUTOCLOSE~
+
+        HIDE~
+
+        MENU.TOOLTIP~
+
+        SELECT~בחר
+
+        SELECT.TOOLTIP~ enter כדי לשנות את תכונותיו. כדי לשנות את מישור התנועה, לחץ על $Z_AXIS_KEY או $X_AXIS_KEY.
+        
+        ISLAND~בחירת אי
+
+        ISLAND.TOOLTIP~ בחר חפצים מחוברים ביחד. ניתן לבחור חפצים מרובים גם על ידי לחיצה על  $MULTI_SELECT_KEY (שמאלי)
+        
+        ROTATE~סבב
+
+        ROTATE.TOOLTIP~ בחר חפץ ואז לחץ ומשוך מסביבו כדי לסובב. כדי לשנות את ציר הסיבוב, לחץ על Z או X. ניתן לסובב חפץ גם על ידי לחיצה על Shift (שמאלי)
+        
+
+        STRETCH~מתח
+
+        STRETCH.TOOLTIP~ בחר חפץ ואז משוך אחד מכדורי השליטה הלבנים כדי לשנות את צורת החפץ. ניתן למתוח חפץ גם על ידי לחיצה על Alt (שמאלי)
+        
+
+        WIRE_MODE~הצג חוטים
+
+        WIRE_MODE.TOOLTIP~מצב חיווט מאפשר לך לראות את החוטים שמחברים חלקים שונים במכונתך, וגם חלקים פעילים כמו בטריות. לחלקים שניתן לחבר עם חוטים יש כניסות\יציאות ירוקות או צהובות.
+        
+
+        BOX~קופסה
+
+        BOX.TOOLTIP~ צור קופסה
+        
+
+        SPHERE~כדור
+
+        SPHERE.TOOLTIP~ צור כדור
+        
+
+        CYLINDER~גליל
+
+        CYLINDER.TOOLTIP~ צור גליל
+        
+
+        TUBE~צינור
+
+        TUBE.TOOLTIP~ צור צינור
+        
+
+        PYRAMID~פירמידה
+
+        PYRAMID.TOOLTIP~צור פירמידה עם בסיס מרובע
+        
+
+        CONE~קונוס
+
+        CONE.TOOLTIP~ צור קונוס
+        
+
+        ELLIPSOID~אליפסויד
+
+        ELLIPSOID.TOOLTIP~ צור אליפסויד (כדור שניתן למתוח בכל ציר)
+        
+
+        CAPSULE~קפסולה
+
+        CAPSULE.TOOLTIP~ צור קפסולה (גליל שקצותיו הם חצי כדור)
+        
+
+        AXLE~ציר
+
+        AXLE.TOOLTIP~ שני צדדי הציר ניתנים לסיבוב סביב עצמם על הציר המרכזי. ציר ישמש כמנוע כאשר הוא מחווט לבטרייה או לאות אחר.
+        
+
+        HINGE~מפרק
+
+        HINGE.TOOLTIP~ שני צדדי המפרק ניתנים לסיבוב סביב עצמם על הציר האנכי לציר המרכזי שלהם. מפרק יכול להיות מונע כאשר הוא מחווט לבטרייה או לאות אחר.
+        
+
+        HYDRAULIC~בוכנה
+
+        HYDRAULIC.TOOLTIP~שני קצוות הבוכנה יכולים לנוע קרוב או הרחק אחד מהשני, עד למגבלות שניתן להציב בתכונות הבוכנה. בוכנה יכולה להיות מונעת כאשר היא מחווטת לבטרייה או לאות אחר.
+        
+
+        BALL_SOCKET~כדור ושקע
+
+        BALL_SOCKET.TOOLTIP~ שני צדדי הכדור והשקע ניתנים לסיבוב סביב עצמם בכל שלושת הצירים.
+        
+
+        BATTERY~בטרייה
+
+        BATTERY.TOOLTIP~בטריות הן חלקים פעילים. בתצוגת חוטים, ניתן ללחוץ ולמשוך את היציאה העליונה כדי ליצור חוט שיכול להניע מנועים. בחלון התכונות, את\ה יכול להגדיר שהבטריות יעבירה אות שמשתנה לאורך זמן
+        
+        
+
+        FUNCTION~פונקציה
+
+        FUNCTION.TOOLTIP~פונקציה לוקחת אות ומשנה אותו לפי פונקציה שאת\ה מתכנן בחלון התכונות. ניתן להפעיל או להפסיק את הפונקיה, או לזכור את האות הנוכחי, על ידי חיבור חוט לכניסה העליונה.
+        
+
+        INPUT~קלט
+
+        INPUT.TOOLTIP~ הקלט מאפשר למשתמש לשלוט על אות עם לחיצת מקש או שלטים ויזואליים כאשר המכונה פועלת.
+        
+
+        OSCILLOSCOPE~אוסילוסקופ
+
+        OSCILLOSCOPE.TOOLTIP~ אוסילוסקופים ימפו את האות שהם מקבלים כאשר המכונה פועלת.
+        
+
+        TOUCH~חיישן מגע
+
+        TOUCH.TOOLTIP~חיישן מגע הוא קופסא ששולחת אות כאשר היא נוגעת בחפץ.
+        
+
+        DISTANCE~חיישן מרחק
+
+        DISTANCE.TOOLTIP~ חיישן מרחק מזהה אם חפץ נכנס לשדה הראייה שלו. בחר חיישן כדי לראות את צורת שדה הראייה. את\ה יכול להזיז, למתוח, ולסובב את שדה הראייה או שאת\ה יכול לשנות את הצורה בחלון התכונות.
+        
+
+        MULTIMETER~מולטימטר
+
+        MULTIMETER.TOOLTIP~קופסא שיכולה לזהות את המיקום, הסיבוב, המהירות, או התאוצה שלה.
+        
+
+        CONTACT~מגע
+
+        CONTACT.TOOLTIP~ מגעים הם מוליכים חשמליים. אות יעבור בינהם אם הם נוגעים.
+        
+
+        ROCKET~רקטה
+
+        ROCKET.TOOLTIP~ טיל יפעיל כוח יחסית לאות שהוא מקבל. (חווט בטרייה אל הטיל כדי ליצור אות). את\ה יכול לשנות את הכוח המקסימלי בחלון התכונות.
+        
+
+        GEAR~גלגל שיניים
+
+        GEAR.TOOLTIP~ צור גלגל שיניים
+        
+        
+        RACK_GEAR~
+        
+        RACK_GEAR.TOOLTIP~
+
+        FORCE_BEAM~קרן כוח
+
+        FORCE_BEAM.TOOLTIP~ קרן כוח שיכולה למשוך או לדחוף. שולחת אות לפי כמה החפץ שהיא פוגעת קרוב אל הקרן.
+        
+
+        CAMERA~מצלמה
+
+        CAMERA.TOOLTIP~ מצלמות מאפשרות לך לראות את העולם מהמבט שלהן. לחן Page UP כדי להחליף את המצלמה העכשווית שלך.ניתן לראות מצלמות רק במצב חיווט.
+        
+
+    }
+
+    PROPERTIES~תכונות
+
+    PROPERTIES{
+
+        MATTER~חומר
+
+        MATTER{
+
+            DENSITY~צפיפות
+
+            MATERIAL~חומר
+
+            DEFAULT~ברירת מחדל
+            
+
+            IRON~ברזל
+
+            WOOD~עץ
+
+            CONCRETE~בטון
+
+            GRANITE~גרניט
+
+            GLASS~זכוכית
+
+            PLASTIC~פלסטיק
+
+            RUBBER~גומי
+
+            ICE~קרח
+
+            HELIUM~הליום
+
+            STATIC_DESCRIPTION~ הפוך חפץ זה לנייח(הוא לא יושפע מפיסיקה, אבל חפצים אחרים יכולים להתנגש בו)
+            
+
+            STICKY_DESCRIPTION~הפוך חפץ זה לדביק
+            
+
+            POSITION~מיקום
+
+            ROTATION~סיבוב
+
+            SIZE~גודל
+
+            RADIUS~רדיוס
+
+            HEIGHT~גובה
+
+            WIDTH~רוחב
+
+            LENGTH~אורך
+
+            RADIUS_INNER~רדיוס פנימי
+
+            ARC~קשת
+
+            INPUT~
+
+        }
+
+        APPEARANCE~מראה
+
+        APPEARANCE{
+
+            PRIMARY~ראשי
+
+            HIGHLIGHT~הדגשה
+
+            SHOW_TEXT~הצג טקסט
+
+            NONE~ללא
+
+            CAMO~הסוואה
+
+            CHECKERS~שח
+
+            METAL_GALV~מתכת מגולוונת
+
+            RIVETS~מסמרים
+
+            SPOTS~נקודות
+
+            STAR~כוכב
+
+            STARS~
+
+            STEEL_BOX~קופסת פלדה
+
+            STRIPES~פסים
+
+            TREADPLATE~
+
+            CHOOSER~בוחר צבע
+
+            HUE~גוון
+
+            SATURATION~ריווי
+
+            LUMINOSITY~בהירות
+
+            RED~אדום
+
+            GREEN~ירוק
+
+            BLUE~כחול
+
+            ALPHA~אלפה
+
+        }
+
+        MOTOR~מנוע
+
+        MOTOR{
+
+            BEARING~מיסב כדורי
+
+            RADIUS_LEFT~רדיוס שמאלי
+
+            RADIS_RIGHT~רדיוס ימני
+
+            LENGTH_LEFT~אורך שמאלי
+
+            LENGTH_RIGHT~אורך ימני
+
+            ANGLE_LEFT~זווית שמאלית
+
+            ANGLE_RIGHT~זווית ימנית
+
+            DISTANCE~מרחק
+
+            MIN_DISTANCE~מרחק מינימאלי
+
+            MAX_DISTANCE~מרחק מקסימלי
+
+            MIN_SEP~
+
+            MAX_SEP~
+
+            JOINT_UNIVERSAL~
+
+            UNIVERSAL_JOINT_DESCRIPTION~ מפרק אוניברסאלי) מפרק אוניברסלי מעביר סיבוב על הציר השלישי)
+
+            JOINT_LENGTH~אורך מפרק
+            
+
+            JOINT_RADIUS~ רדיוס מפרק
+            
+
+            BALL_RADIUS~ רדיוס כדור
+            
+
+            MOTOR_DESCRIPTION_INPUT~ המנוע יפרש אות כניסה כ-
+            
+
+            MOTOR_DESCRIPTION_OUTPUT~ המנוע יפרש אות יציאה כ-
+            
+
+            FORCE~כוח
+            
+
+            VELOCITY~מהירות
+            
+
+            ACCELERATION~ תאוצה
+            
+
+            MAX_VEL~ מהירות מקסימאלית
+            
+
+            MAX_FORCE~ כוח מקסימאלי
+            
+
+            SPRING~ קפיץ
+            
+
+            SPRING_DESCRIPTION~ התייחס כקפיץ
+            
+
+            SPRING_CONSTANT~ קבוע הקביץ
+            
+
+            SPRING_FRICTION~ חיכוך הקפיץ
+            
+
+        }
+
+        SENSOR~חיישן
+
+        SENSOR{
+
+            IGNORE_ATTACHED~ התעלם מחפצים מחוברים(לא כולל מפרקים וצירים)
+            
+
+            IGNORE_JOINTS~ התעלם מחפצים מחוברים(כולל מפרקים וצירים)
+            
+
+            IGNORE_NON_STATIC~ התעלם מחפצים לא נייחים
+            
+
+            IGNORE_STATIC~ התעלם מחפצים נייחים
+            
+
+        }
+
+        BATTERY~
+
+        BATTERY{
+
+        }
+
+        ROCKET~טיל
+
+        ROCKET{
+
+            MAX_FORCE~ כוח מקסימאלי(ניוטון)
+            
+
+            EFFECTS~אפקטים
+
+            EFFECT_ORIGINAL~(אפקט אורגינאלי)
+            
+
+            EFFECT_MAGIC~קסם
+
+            EFFECT_NOVA~נובה
+
+            EFFECT_PLASMA~פלסמה
+
+            EFFECT_RINGS~טבעות
+
+            EFFECT_ROCKET~טיל
+
+            EFFECT_SAT_V~
+
+            EFFECT_SMOKE~עשן
+
+            EFFECT_SPARK~ניצוץ
+
+            EFFECT_SPUTTER~
+
+            EFFECT_NAME~שם
+
+            LUMINESCENT~שביל פולט אור
+
+            ANGLE~זווית מינימאלית, מקסימאלית
+
+            LIFESPAN~תוכלת חיים מינימאלית, מקסימאלית(מילי שניות)
+            
+
+            SIZE~גודל התחלתי, סופי
+            
+
+            PARTICLE_NUM~ מספר חלקיקים
+            
+
+            VELOCITY~ מהירות התחלתית
+            
+
+            SAVE~ שמור אפקט
+            
+
+            ENABLE~ אפשר אפקט
+            
+
+        }
+
+        FORCE_BEAM{
+
+            MAX_FORCE~ כוח משיכה\דחיפה מקסימאלי
+            
+
+            BEAM_LENGTH~ אורך הקרן
+            
+
+            SHOW_BEAM~הראה קרן
+            
+
+            LUMINOUS_BEAM~ קרן מאירה
+            
+
+            COLOR_PUSH~ צבע דחיפה
+            
+
+            COLOR_PULL~ צבע משיכה
+            
+
+        }
+
+        GEAR{
+
+            TOOTH_WIDTH~רוחב שן
+            
+
+            TOOTH_HEGIHT~ גוב שן
+            
+
+            TOOTH_ANGLE~זווית שן
+
+        }
+
+        MULTIMETER{
+
+            ALTITUDE~גובה
+
+            MAX_HEIGHT~גובה מקסימאלי
+
+            MIN_HEIGHT~גובה מינימאלי
+
+            ORIENTATION~ אוריאנטציה
+            
+
+            POSITION~ מיקום
+            
+
+            RELATIVE~ דווח נתונים יחסית לאוראנטציה של החפץ
+            
+
+            MAX_X_RANGE~ טווח X מאקסימאלי
+            
+
+            MIN_X_RANGE~טווח X מינימאלי
+            
+
+            VELOCITY~ מהירות
+            
+
+            ACCELERATION~ תאוצה
+            
+
+        }
+
+        CAMERA{
+
+            LOCK~ נעל אוריאנטצית המצלמה
+            
+
+			TRIGGER~
+        }
+
+        INPUT{
+
+            DEVICE_NAME~ שם הקלט
+
+
+            TYPE~ סוג קלט
+            
+
+            SLIDER~ מחוון
+            
+
+            TEXT~ טקסט
+            
+
+            KEY_EVENT_TYPE~ סוג מקרה בלחיצה
+            
+
+            HOLD_DOWN~השאר לחוץ
+            
+
+            TOGGLE~ החלפה
+            
+
+            KEY~ כפתור
+            
+
+            UNKNOWN~(כפתור לא ידוע)
+            
+
+            OUTPUT_NEGATIVE_DESCRIPTION~שלח -1 כאשר לא לחוץ (אחרת 0)
+            
+
+        }
+
+        FUNCTION{
+
+            FUN_UNNAMED~ ללא שם
+            
+
+            FUN_LINE~ קו
+            
+
+            FUN_ZERO~ אפס
+            
+
+            FUN_PARABOLA~ פרבולית
+            
+
+            FUN_CUBIC~ ריבועית
+            
+
+            FUN_SINE~ סינוס
+            
+
+            FUN_SQRT~
+
+            FUN_COS~ קוסינוס
+            
+
+            FUN_DERIVATIVE~ (שיפוע)
+            
+
+            FUNCTION_NAME~ שם הפונקציה
+            
+
+            OPTIONS_BATTERY~ אפשרויות בטרייה
+            
+
+            OPTIONS_MODIFIER~ אפשרויות מגדיר
+            
+
+            SWITCH~ מתג הבטרייה
+            
+
+            THRESHOLD_DESCRIPTION~ הגדר את האות המינימאלי להפעלת המתג
+            
+
+            SWITCH_THRESHOLD~ סף המתג
+            
+
+            THRESHOLD_DESCRIPTION_2~ the threshold to activate:   מהסף כדי להפעיל
+            
+
+            THRESHOLD_DESCRIPTION_3~קלט צריך להיות
+
+            SWITCH_ACTION~ פעולת המתג
+            
+
+            TURN_ON~ הפעל\הפסק
+            
+
+            INVERT~ הפוך אות
+            
+
+            HOLD~ החזק נתון
+            
+
+            MULT~ כפול נתון
+            
+
+            EXAMPLE~לדוגמא: אם הסף הוא 0.5, הפעולה היא >=, ופעולת המתג היא 'הפעל\הפסק', הפונקציה תשלח 0 אלא אם המתג מקבל קלט של 0.5 או יותר
+            
+
+        }
+
+    }
+
+}
+
