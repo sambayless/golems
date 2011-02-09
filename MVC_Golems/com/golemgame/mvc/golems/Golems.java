@@ -21,7 +21,7 @@ package com.golemgame.mvc.golems;
 
 public final class Golems {
 	
-	public final static String version = "0.56.102";
+	public final static String version = "0.57.0";
 
 	public static String getVersion() {
 		return version;
