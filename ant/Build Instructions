@@ -1,8 +1,0 @@
-1) Ensure all libraries in lib and distribution-dependncies are up to date
-2) run ant build script
-3) run golems-setup.nsi (increase the verison number to match up)
-4) create a zipped distribution version for windows and linux, including their associated installers
-Note: The zipped windows distrubition has the source jar files in the folder dist, inside a folder Golems-win containin the launchers
-The zipped linux source folder is renamed Golems-linux, and contains the root jar files AND the linux launcher
-
-5) from MacOS, update the golems-app with the newest jar files, add to a dmg, compress the dmg with disk utils

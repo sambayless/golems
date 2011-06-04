@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry excluding="support/BatchSaveFileConversion.java|support/ConvertSVGtoPercentage.java" kind="src" path="support"/>
 	<classpathentry kind="src" path="dataFolder"/>
-	<classpathentry excluding="com/jmex/physics/jme/collision/" kind="src" path="openSource"/>
 	<classpathentry kind="src" path="loading"/>
 	<classpathentry kind="src" path="platformSpecific"/>
 	<classpathentry kind="src" path="MVC"/>
@@ -17,14 +16,12 @@
 	<classpathentry kind="src" path="buoyancy"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commons-math-1.2-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/jme/lib/jinput.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="golems/lib/native"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/jmovieencoder.jar"/>
 	<classpathentry kind="lib" path="lib/simplemonkey.jar"/>
 	<classpathentry kind="lib" path="lib/jphya-lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/jinput.jar"/>
@@ -39,5 +36,6 @@
 	<classpathentry kind="lib" path="lib/FengGUI.jar"/>
 	<classpathentry kind="lib" path="lib/jphya.jar"/>
 	<classpathentry kind="lib" path="lib/odejava-jni.jar"/>
+	<classpathentry kind="lib" path="lib/jmovieencoder.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

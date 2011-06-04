@@ -35,8 +35,17 @@
 	</path>
 
 
+	<target name="build-mvc">
+		<subant target="dist">
+		       <fileset  dir="." includes="buildMVC.xml  buildMVCGolems.xml  buildMVC_Validate.xml"/>
+		 </subant>
+	</target>
 
-
+    <target name="clean-mvc">
+        <subant target="clean">
+               <fileset  dir="." includes="buildMVC.xml  buildMVCGolems.xml  buildMVC_Validate.xml"/>
+         </subant>
+    </target>
 
 	<target name="init">
 		<!-- Create the time stamp -->
@@ -47,7 +56,7 @@
 		<mkdir dir="${buildlauncher}" />
 	</target>
 
-	   <target name="clean">
+	   <target name="clean" depends="clean-mvc">
 	      
 	    <delete dir="${build}"/>
 	    <delete dir="${buildsettings}"/>
@@ -55,7 +64,7 @@
 	   	<delete dir="${dist}" />
 	    </target>
 	
-	<target name="compile" depends=" clean,init" description="compile the source ">
+	<target name="compile" depends=" clean,init,build-mvc" description="compile the source ">
 
 		<!-- Compile the java code from ${src} into ${build} -->
 		<javac srcdir="../" destdir="${build}">
@@ -123,7 +132,7 @@
 	<target name="dist" depends="compile" description="generate the distribution">
 		<!-- Put everything in ${build} into the jar file -->
 
-		<mkdir dir="${dist}/null" />
+		<mkdir dir="${dist}" />
 
 		<mkdir dir="${dist}/All" />
 		<mkdir dir="${dist}/Windows" />
@@ -137,15 +146,6 @@
 		<mkdir dir="${dist}/Windows/lib/native" />
 		<mkdir dir="${dist}/Mac/lib/native" />
 		<mkdir dir="${dist}/Linux/lib/native" />
-
-		<!-- keep this to overwrite previous installations -->
-		<jar destfile="${dist}/All/robotGame.jar" basedir="${dist}/null" filesetmanifest="mergewithoutmain" compress="true">
-			<manifest>
-				<attribute name="Created-By" value="Sam Bayless" />
-				<attribute name="Built-By" value="Sam Bayless" />
-
-			</manifest>
-		</jar>
 
 		<jar destfile="${dist}/All/golems.jar" basedir="${build}" filesetmanifest="mergewithoutmain" compress="true">
 			<manifest>
@@ -179,10 +179,7 @@
 
 		<copydir src="${nativedir}" dest="${dist}/All/lib/native/" />
 
-		<jar destfile="${dist}/All/opensource.jar" basedir="${opensource}" compress="true">
-
-		</jar>
-
+		
 
 
 		<jar destfile="${dist}/All/datafiles.jar" basedir="${data}" compress="true">
@@ -191,24 +188,22 @@
 		
 		<copyfile dest="${dist}/Windows/settings.jar" src="${dist}/All/settings.jar" />
 		<copyfile dest="${dist}/Windows/launcher.jar" src="${dist}/All/launcher.jar" />
-		<copyfile dest="${dist}/Windows/robotGame.jar" src="${dist}/All/robotGame.jar" />
+
 		<copyfile dest="${dist}/Windows/golems.jar" src="${dist}/All/golems.jar" />
 		<copyfile dest="${dist}/Windows/datafiles.jar" src="${dist}/All/datafiles.jar" />
-		<copyfile dest="${dist}/Windows/opensource.jar" src="${dist}/All//opensource.jar" />
-
+		
 		  <copyfile dest="${dist}/Mac/settings.jar" src="${dist}/All/settings.jar" />
 		<copyfile dest="${dist}/Mac/launcher.jar" src="${dist}/All/launcher.jar" />
-		<copyfile dest="${dist}/Mac/robotGame.jar" src="${dist}/All/robotGame.jar" />
+
 		<copyfile dest="${dist}/Mac/golems.jar" src="${dist}/All/golems.jar" />
 		<copyfile dest="${dist}/Mac/datafiles.jar" src="${dist}/All/datafiles.jar" />
-		<copyfile dest="${dist}/Mac/opensource.jar" src="${dist}/All//opensource.jar" />
-
+	
 		  <copyfile dest="${dist}/Linux/settings.jar" src="${dist}/All/settings.jar" />
 		<copyfile dest="${dist}/Linux/launcher.jar" src="${dist}/All/launcher.jar" />
-		<copyfile dest="${dist}/Linux/robotGame.jar" src="${dist}/All/robotGame.jar" />
+	
 		<copyfile dest="${dist}/Linux/golems.jar" src="${dist}/All/golems.jar" />
 		<copyfile dest="${dist}/Linux/datafiles.jar" src="${dist}/All/datafiles.jar" />
-		<copyfile dest="${dist}/Linux/opensource.jar" src="${dist}/All//opensource.jar" />
+		
 
 		<copyfile dest="${dist}/All/lib/LICENSE" src="LICENSE" />
 
@@ -310,7 +305,19 @@
 			</fileset>
 
 		</copy>
+		
+      <copy todir="${dist}/Linux/">
+            <fileset dir="linux-launcher/">
+                <include name="*" />
+            </fileset>
+        </copy>
 
+      <copy todir="${dist}/Windows/">
+            <fileset dir="windows-launcher/">
+                <include name="*" />
+            </fileset>
+        </copy>
+		
 	</target>
 
 

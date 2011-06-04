@@ -1,0 +1,16 @@
+Golems is distributed under the GPL v3; it also depends (and was made possible by) a large set of free libraries.
+These include: A modified version of JMonkeyEngine 1.0 (BSD), JME-Physics2 (BSD),
+LWJGL (BSD), OpenDynamicsEngine (BSD/LGPL 2.1),ODEJava(BSD),JInput(BSD),Simplemonkey(LGPL),
+FengGUI(LGPL),JPhya(BSD),ApacheCommonsMath(Apache 2.0), and JMovieEncoder (this is a repackaged version of by 'QuickTimeDemo' by Werner Randelshofer. CCBY 3.0)
+
+Artwork in dataFolder/com/golemgame/data/textures/* is Copyright Jacob Bayless (CC BY-SA 3.0),
+with the exception of the contents of the skybox subfolder, which contains public domain artwork. 
+
+Build with the following series of instructions, from the golems directory:
+
+$ cd ant
+$ ant 
+
+This will build Golems for Windows, Mac, and Linux, in the folder ant/dist/${PLATFORM}
+Note: if you are running on linux, then the linux launching script, "Golems.sh", will need to manually have its permissions set to executable.
+Or, on any platform, run "java -jar launcher.jar" from the distribution directory.
