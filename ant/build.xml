@@ -7,7 +7,9 @@
 	<property name="src" location="../src" />
 	<property name="platform" location="../platformSpecific" />
 	<property name="data" location="../dataFolder" />
+	<property name="support" location="../support" />
 	<property name="build" location="build" />
+	<property name="buildsupport" location="buildsupport" />
 	<property name="buildsettings" location="build-launch-settings/" />
 	<property name="buildlauncher" location="buildlauncher" />
 	<property name="dist" location="dist" />
@@ -54,6 +56,7 @@
 		<mkdir dir="${build}" />
 		  <mkdir dir="${buildsettings}" />
 		<mkdir dir="${buildlauncher}" />
+		<mkdir dir="${buildsupport}" />
 	</target>
 
 	   <target name="clean" depends="clean-mvc">
@@ -61,6 +64,7 @@
 	    <delete dir="${build}"/>
 	    <delete dir="${buildsettings}"/>
 	   <delete dir="${buildlauncher}"/>
+	   	<delete dir="${buildsupport}"/>
 	   	<delete dir="${dist}" />
 	    </target>
 	
@@ -77,6 +81,7 @@
 			<include name="platformSpecific/**/*.java" />
 			<include name="audio/**/*.java" />
 			<include name="localization/**/*.java" />
+	
 			<classpath>
 				<pathelement path="${classpath-base}" />
 				<fileset dir="">
@@ -85,8 +90,26 @@
 				</fileset>
 			</classpath>
 		</javac>
-
 	
+	    <javac srcdir="../support" destdir="${buildsupport}">
+
+	            <classpath>
+	                <pathelement path="${classpath-base}" />
+	                <fileset dir="">
+	                    <include name="**/*.jar" />
+
+	                </fileset>
+
+	                <pathelement path="${build}" />
+
+	                <fileset dir="">
+	                    <include name="**/*.class" />
+	                </fileset>
+
+
+	            </classpath>
+	        </javac>
+		
 		<javac srcdir="../settings" destdir="${buildsettings}">
 
 			<classpath>
@@ -179,9 +202,10 @@
 
 		<copydir src="${nativedir}" dest="${dist}/All/lib/native/" />
 
-		
-
-
+		<copy file="../support/support/translate/definition_template" tofile="${buildsupport}/support/translate/definition_template" />
+		        
+		<jar destfile="${dist}/All/support.jar" basedir="${buildsupport}" compress="true">
+		</jar>
 		<jar destfile="${dist}/All/datafiles.jar" basedir="${data}" compress="true">
 
 		</jar>
