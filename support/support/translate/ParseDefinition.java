@@ -79,8 +79,7 @@ public class ParseDefinition {
 
 	private static void parseDefinition(InputStream input, Collection<Character> alphabet) throws ParseException, FileNotFoundException, IOException, URISyntaxException
 	{
-		
-		
+				
 		try{
 		Translator.ReInit(input,"UTF8");
 		//t.Start().dump("");
@@ -88,7 +87,7 @@ public class ParseDefinition {
 		{
 			Translator t = new Translator(input,"UTF8");
 		}
-		Node root = Translator.Start();
+		Node root = Translator.Start();	
 		String language = null;
 		String country = null;
 		String variant = null;
@@ -113,8 +112,7 @@ public class ParseDefinition {
 					break;
 			}
 		}
-		
-		
+				
 		String fName = "Language";
 		if(language != null)
 			fName += "_" + language ;
@@ -126,17 +124,20 @@ public class ParseDefinition {
 		String dctDest = "dataFolder/com/golemgame/local/dct/";
 		String classDst = "localization/com/golemgame/local";
 		String packageName = "com.golemgame.local";
-		File base = new File( ParseDefinition.class.getResource("").toURI());
-		File dest = new File(base.getParentFile().getParentFile().getParent() + "/" + dctDest + "/" + fName + Language.DICTIONARY_EXT);
-		
-		File alpha = new File(base.getParentFile().getParentFile().getParent() + "/" + alphaDest + "/" + fName + Language.ALPHABET_EXT);
+	    File base = new File("support/support/translate/");
+
+		//File base = new File( ParseDefinition.class.getResource("").toURI());
+		File dest = new File( dctDest + "/" + fName + Language.DICTIONARY_EXT);	
+		File alpha = new File( alphaDest + "/" + fName + Language.ALPHABET_EXT);
+
 		alpha.delete();
+		
 		alpha.createNewFile();
+
 		writeAlphabet(alphabet,alpha);
 		
 		dest.delete();
 		dest.createNewFile();
-	
 		DataOutputStream output =new DataOutputStream(new GZIPOutputStream( new BufferedOutputStream(new FileOutputStream(dest))));
 		//Writer writer = new OutputStreamWriter(output,"UTF16");
 		construct(root,"",output);

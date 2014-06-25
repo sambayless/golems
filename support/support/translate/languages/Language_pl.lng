@@ -567,7 +567,7 @@ RACK_GEAR.TOOLTIP~
 
             RADIUS_INNER~Promień wewnętrzny
 
-            ARC~�?uk
+            ARC~�?uk
 
             INPUT~
 
@@ -628,7 +628,7 @@ RACK_GEAR.TOOLTIP~
 
         MOTOR{
 
-            BEARING~�?ożysko
+            BEARING~�?ożysko
 
             RADIUS_LEFT~Lewy promień
 

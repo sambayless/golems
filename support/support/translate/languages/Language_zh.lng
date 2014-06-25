@@ -117,29 +117,29 @@ GOLEMS{
     VERSION~版本
 
     MAIN_MENU~
-    #主�?��?�
+    #主�?��?�
 
     MAIN_MENU{  
        
         OK~确定
 
-        CANCEL~�?�消
+        CANCEL~�?�消
         
          YES~
          
          NO~
-        MAIN~主�?��?�
+        MAIN~主�?��?�
         FILE_MENU{
 
             NEW~新建机器
 
-            SAVE~�?存机器
+            SAVE~�?存机器
 
             LOAD~加载机器
 
             IMPORT~导入机器
 
-            RECORD~记录影�?
+            RECORD~记录影�?
 
             EXIT~退出
 
@@ -153,7 +153,7 @@ GOLEMS{
 
 SETTINGS~
 
-            QUALITY~显示质�?
+            QUALITY~显示质�?
 
             QUALITY_LOW~低
 
@@ -163,7 +163,7 @@ SETTINGS~
 
             RESOLUTION~分辨率
 
-            FULL_SCREEN~全�?
+            FULL_SCREEN~全�?
 
             FREQ~频率
 
@@ -171,31 +171,31 @@ SETTINGS~
 
             FPS~帧频
 
-            VSYNC~使用垂直�?�步
+            VSYNC~使用垂直�?�步
 
-            TOOLTIPS~工具�??示
+            TOOLTIPS~工具�??示
 
-            SHOW_TOOLTIPS~显示工具�??示
+            SHOW_TOOLTIPS~显示工具�??示
 
         }
 
-        KEYBOARD~键盘快�?�键
+        KEYBOARD~键盘快�?�键
 
         KEYBOARD{
 
-            SHORTCUTS~键盘快�?�键
+            SHORTCUTS~键盘快�?�键
 
             CTRL_POINTS~控制点
 
             ROTATE~旋转
 
-            XY_PLANE~XY平�?�
+            XY_PLANE~XY平�?�
 
-            YZ_PLANE~YZ平�?�
+            YZ_PLANE~YZ平�?�
 
             GRID_SNAP~快爬
 
-            AXIS_LOCK~轴�?
+            AXIS_LOCK~轴�?
 
             STATICS~
 
@@ -207,28 +207,28 @@ SETTINGS~
 
             PROPERTIES~显示对象属性
 
-            COPY~�?制
+            COPY~�?制
 
             DEL~删除
 
             FOCUS~对焦
 
-            ZOOM~�?�焦
+            ZOOM~�?�焦
 
-            NEXT_CAM~下一个摄�?机
+            NEXT_CAM~下一个摄�?机
 
-            PREV_CAM~上一个摄�?机
+            PREV_CAM~上一个摄�?机
 
-            DEF_CAM~默认摄�?机
+            DEF_CAM~默认摄�?机
 
-            MENU~�?��?�
+            MENU~�?��?�
 
-            SCREEN_SHOT~�?幕快�?
+            SCREEN_SHOT~�?幕快�?
             
 
         }
 
-        RECORDING~录�?选项
+        RECORDING~录�?选项
 
         RECORDING{
 
@@ -246,13 +246,13 @@ MEMORY~
 
 RESUME~
 
-            FORMAT~录�?格�?
+            FORMAT~录�?格�?
 
-            QUALITY~压缩�?(1%至100%)
+            QUALITY~压缩�?(1%至100%)
 
-            FPS~�?秒帧数
+            FPS~�?秒帧数
 
-            BEGIN~开始录�?
+            BEGIN~开始录�?
 
             STOP~
 
@@ -262,7 +262,7 @@ RESUME~
 
         MACHINE{
 
-            NAME~�??称
+            NAME~�??称
 
             DESCRIPTION~
 
@@ -276,13 +276,13 @@ SPEED_NORMAL~
 
             SPEED~速度
 
-            SPEED_PAUSED~(暂�?�)
+            SPEED_PAUSED~(暂�?�)
 
-            SPEED_HALF~�?�?�
+            SPEED_HALF~�?�?�
 
-            SPEED_DOUBLE~增�?
+            SPEED_DOUBLE~增�?
 
-            SPEED_UNLIMITED~(无�?)
+            SPEED_UNLIMITED~(无�?)
 
             GRAVITY~
 
